@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Networking Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+    
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+    
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+    
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+        }
+    
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+    
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+    
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+    
+        #next-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        #next-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e9;
+        }
+    
+        #error-message {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+    
+            h1 {
+                font-size: 1.8em;
+            }
+    
+            #question-text {
+                font-size: 1.1em;
+            }
+    
+            #next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <h1>Comprehensive Networking Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number"></p>
+        <p id="progress-display"></p>
+        <p id="score-display">Score: 0 / 0</p>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="error-message" style="display: none;"></p>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+        <button id="continue-btn" style="display: none;">Continue with More Questions</button>
+    </div>
+    <script>
+        const allQuestions = [
+    {
+        question: "What are the primary purposes of computer networks?",
+        options: ["Sharing cat photos", "Facilitating data sharing", "Sending handwritten letters", "Playing video games"],
+        correctIndex: 1
+    },
+    {
+        question: "How do computer networks support communication?",
+        options: ["By delivering pizzas", "By enabling data and resource sharing", "By predicting the weather", "By composing music"],
+        correctIndex: 1
+    },
+    {
+        question: "What is a common use of computer networks?",
+        options: ["Baking cookies", "Remote access and mobility", "Gardening", "Skydiving"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the role of computer networks in collaboration?",
+        options: ["Sharing secret recipes", "Enabling users to work together from different locations", "Solving crossword puzzles", "Creating origami art"],
+        correctIndex: 1
+    },
+    {
+        question: "What is a star topology known for?",
+        options: ["Redundancy", "Circular shape", "Mesh connections", "High collision rates"],
+        correctIndex: 0
+    },
+    {
+        question: "Which topology forms a closed-loop structure?",
+        options: ["Bus", "Ring", "Star", "Mesh"],
+        correctIndex: 1
+    },
+    {
+        question: "What topology offers high fault tolerance and redundancy?",
+        options: ["Bus", "Ring", "Star", "Mesh"],
+        correctIndex: 3
+    },
+    {
+        question: "In which topology do all devices share the same communication medium?",
+        options: ["Star", "Ring", "Bus", "Mesh"],
+        correctIndex: 2
+    },
+    {
+        question: "What is a collision domain in networking?",
+        options: ["A group of devices sharing the same MAC address", "A network segment where collisions can occur", "A domain for scheduling network tasks", "A domain for storing network data"],
+        correctIndex: 1
+    },
+    {
+        question: "How does the collision domain size affect network performance?",
+        options: ["It has no impact on performance", "Larger collision domains lead to better performance", "Smaller collision domains lead to better performance", "It determines the color of network cables"],
+        correctIndex: 2
+    },
+    {
+        question: "What mechanism helps prevent collisions in Ethernet networks?",
+        options: ["Collision detection", "Collision avoidance", "Collision celebration", "Collision prediction"],
+        correctIndex: 1
+    },
+    {
+        question: "What can be done to reduce collisions within a collision domain?",
+        options: ["Increase the collision domain size", "Add more devices to the domain", "Implement collision detection algorithms", "Segment the network into smaller collision domains"],
+        correctIndex: 3
+    },
+    {
+        question: "What is the role of a broadcast domain in network communication?",
+        options: ["It ensures secure communication", "It limits the size of network traffic", "It enables devices to communicate with each other", "It defines the area where broadcasts are heard"],
+        correctIndex: 3
+    },
+    {
+        question: "How does a switch reduce the size of a broadcast domain compared to a hub?",
+        options: ["By making coffee", "By forwarding broadcasts to all ports", "By isolating devices into separate domains", "By broadcasting louder"],
+        correctIndex: 2
+    },
+    {
+        question: "What do VLANs (Virtual LANs) do in terms of broadcast domains?",
+        options: ["Increase the broadcast domain size", "Reduce the broadcast domain size", "Convert broadcasts into unicasts", "Broadcast to all devices in a network"],
+        correctIndex: 1
+    },
+    {
+        question: "What are the implications of a large broadcast domain on network traffic?",
+        options: ["Faster data transfer", "Reduced network congestion", "Increased network traffic", "Improved network security"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the OSI model, and how many layers does it consist of?",
+        options: ["4 layers", "5 layers", "6 layers", "7 layers"],
+        correctIndex: 3
+    },
+    {
+        question: "In the OSI model, which layer is responsible for data encryption and decryption?",
+        options: ["Physical Layer", "Data Link Layer", "Presentation Layer", "Transport Layer"],
+        correctIndex: 2
+    },
+    {
+        question: "Which layer of the OSI model is primarily responsible for routing and logical addressing?",
+        options: ["Network Layer", "Transport Layer", "Session Layer", "Data Link Layer"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the primary function of the Transport Layer in the OSI model?",
+        options: ["Ensuring data integrity", "Physical data transmission", "Logical addressing", "Establishing and managing connections"],
+        correctIndex: 3
+    },
+    {
+        question: "Which layer of the OSI model deals with error detection and correction at the bit level?",
+        options: ["Data Link Layer", "Physical Layer", "Transport Layer", "Network Layer"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the purpose of the OSI model's Session Layer?",
+        options: ["Data encryption", "Managing user sessions", "Error detection", "Data compression"],
+        correctIndex: 1
+    },
+    {
+        question: "How many layers does the TCP/IP model consist of?",
+        options: ["4 layers", "5 layers", "6 layers", "7 layers"],
+        correctIndex: 0
+    },
+    {
+        question: "Which layer of the TCP/IP model corresponds to the OSI model's Transport Layer?",
+        options: ["Internet Layer", "Link Layer", "Transport Layer", "Application Layer"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the primary advantage of the TCP/IP model over the OSI model?",
+        options: ["Simplicity and widespread adoption", "Enhanced security features", "Improved physical layer standards", "Greater flexibility in data presentation"],
+        correctIndex: 0
+    },
+    {
+        question: "In the TCP/IP model, which layer is responsible for addressing and routing data packets?",
+        options: ["Internet Layer", "Link Layer", "Transport Layer", "Application Layer"],
+        correctIndex: 0
+    },
+    {
+        question: "How does the OSI model compare to the TCP/IP model in terms of layer definitions?",
+        options: ["The layers have different names and numbers", "The layers have the same names but different numbers", "The layers have the same names and numbers", "The OSI model has more layers than the TCP/IP model"],
+        correctIndex: 0
+    },
+    {
+        question: "Which model, OSI or TCP/IP, is more commonly used in practical network implementations today?",
+        options: ["OSI model", "TCP/IP model", "Both are equally popular", "Neither is used anymore"],
+        correctIndex: 1
+    },
+    {
+        question: "What are the primary functions of the Physical Layer in a network?",
+        options: ["Routing and addressing", "Data link control", "Bit-level transmission", "Logical addressing"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the main advantage of using fiber optic cables over copper cables for data transmission?",
+        options: ["Lower cost", "Faster transmission speeds", "Greater flexibility", "Easier installation"],
+        correctIndex: 1
+    },
+    {
+        question: "Which of the following is an example of guided transmission media?",
+        options: ["Wireless", "Optical fiber", "Infrared", "Microwave"],
+        correctIndex: 1
+    },
+    {
+        question: "In wireless communication, what is the purpose of modulation and demodulation (modem)?",
+        options: ["To convert digital data into analog signals for transmission", "To encrypt and decrypt data packets", "To route data packets between networks", "To establish Wi-Fi connections"],
+        correctIndex: 0
+    },
+    {
+        question: "What type of wireless transmission is used in cellular telephone networks?",
+        options: ["Infrared", "Microwave", "Radio waves", "Bluetooth"],
+        correctIndex: 2
+    },
+    {
+        question: "Which of the following wireless technologies is commonly used for satellite-based internet connections?",
+        options: ["4G LTE", "Wi-Fi", "VSAT (Very Small Aperture Terminal)", "NFC (Near Field Communication)"],
+        correctIndex: 2
+    },
+    {
+        question: "What are the advantages of using microwave transmission for long-distance communication?",
+        options: ["Low cost and ease of installation", "High data rates and low latency", "Immunity to interference and wide coverage", "Secure and encrypted communication"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the role of a transceiver in wireless communication?",
+        options: ["Data encryption", "Signal amplification", "Transmitting and receiving signals", "Routing data packets"],
+        correctIndex: 2
+    },
+    {
+        question: "What is latency in network communication, and how does it relate to the Physical Layer?",
+        options: ["Latency is the delay in data transmission, affected by the transmission medium.", "Latency is the data rate of a communication channel.", "Latency is the protocol used to establish connections.", "Latency is the distance between network devices."],
+        correctIndex: 0
+    },
+    {
+        question: "What is the key difference between half-duplex and full-duplex communication?",
+        options: ["Half-duplex can transmit data in both directions simultaneously, while full-duplex cannot.", "Half-duplex can only transmit data in one direction at a time, while full-duplex can transmit in both directions simultaneously.", "Half-duplex uses optical fibers, while full-duplex uses copper cables.", "Half-duplex is used in wireless communication, while full-duplex is used in wired communication."],
+        correctIndex: 1
+    },
+    {
+        question: "What are the common types of errors that can occur in data transmission over a network?",
+        options: ["Bit errors", "Link errors", "Frame errors", "All of the above"],
+        correctIndex: 3
+    },
+    {
+        question: "What is redundancy in the context of error detection and correction?",
+        options: ["The process of reducing data size for faster transmission", "The inclusion of extra information to detect and correct errors", "The removal of duplicate data from a message", "None of the above"],
+        correctIndex: 1
+    },
+    {
+        question: "Which error detection technique uses a polynomial division to calculate a remainder that is added to the data for error checking?",
+        options: ["CRC (Cyclic Redundancy Check)", "Checksum", "Parity bit", "Hamming code"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the purpose of a checksum in error detection?",
+        options: ["To count the number of bits in a message", "To check for errors in the data by comparing the sum of bits to a predefined value", "To encrypt the data for secure transmission", "None of the above"],
+        correctIndex: 1
+    },
+    {
+        question: "Which error correction technique can correct single-bit errors and detect double-bit errors in data?",
+        options: ["CRC", "Checksum", "Hamming code", "Parity bit"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the Hamming distance between two binary words of equal length?",
+        options: ["The number of bits that differ between the two words", "The total number of bits in the words", "The number of bits set to 1 in the words", "None of the above"],
+        correctIndex: 0
+    },
+    {
+        question: "Which error detection method involves adding an extra bit to the data so that the total number of 1s is always even (or odd)?",
+        options: ["CRC", "Checksum", "Parity bit", "Hamming code"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the purpose of error detection and correction at the Data Link Layer?",
+        options: ["To ensure data confidentiality", "To prevent unauthorized access to the network", "To detect and correct errors in data transmission", "To establish network connections"],
+        correctIndex: 2
+    },
+    {
+        question: "Which error detection technique is commonly used in Ethernet networks to detect errors in frames?",
+        options: ["CRC", "Checksum", "Parity bit", "Hamming code"],
+        correctIndex: 0
+    },
+    {
+        question: "In error detection, what is the purpose of the receiver's acknowledgment (ACK) to the sender?",
+        options: ["To request retransmission of the entire data", "To confirm successful receipt of data", "To notify the sender of an error in the data", "To terminate the data transmission"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the ALOHA protocol used for in computer networks?",
+        options: ["Error correction", "Multiple access control", "Data encryption", "Packet routing"],
+        correctIndex: 1
+    },
+    {
+        question: "In ALOHA, how is the transmission time divided into slots?",
+        options: ["Equally sized slots for all stations", "Unequally sized slots based on station priority", "Dynamically sized slots based on traffic load", "There are no slots in ALOHA"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the key disadvantage of the pure ALOHA protocol?",
+        options: ["High collision rate", "Low throughput", "Complex synchronization requirements", "Limited scalability"],
+        correctIndex: 0
+    },
+    {
+        question: "What does CSMA stand for in CSMA/CA and CSMA/CD?",
+        options: ["Centralized Synchronization Media Access", "Carrier Sense Multiple Access", "Collision-Free Media Allocation", "Controlled Synchronization Medium Allocation"],
+        correctIndex: 1
+    },
+    {
+        question: "In CSMA, what is the purpose of 'carrier sense'?",
+        options: ["To detect collisions", "To sense the presence of a carrier signal", "To encrypt data packets", "To regulate access to the medium"],
+        correctIndex: 1
+    },
+    {
+        question: "How does CSMA/CD (Carrier Sense Multiple Access with Collision Detection) handle collisions?",
+        options: ["Stations always transmit, and collisions are resolved by the central controller.", "Stations sense the collision and retransmit after a random backoff time.", "Collisions are prevented through strict time-slot allocation.", "Collisions are ignored, and the sender keeps transmitting."],
+        correctIndex: 1
+    },
+    {
+        question: "In CSMA/CA (Carrier Sense Multiple Access with Collision Avoidance), how are collisions avoided?",
+        options: ["Stations transmit simultaneously to reduce the chance of collision.", "Stations request permission before transmitting.", "Collisions are resolved by the central controller.", "Collisions are detected and corrected in real-time."],
+        correctIndex: 1
+    },
+    {
+        question: "What is the primary advantage of CSMA/CA over CSMA/CD in wireless networks?",
+        options: ["Lower latency", "Higher throughput", "Reduced collisions", "Simplicity of implementation"],
+        correctIndex: 2
+    },
+    {
+        question: "Which protocol is commonly used in Ethernet LANs and employs CSMA/CD?",
+        options: ["ALOHA", "Token Ring", "Wi-Fi", "Ethernet"],
+        correctIndex: 3
+    },
+    {
+        question: "What is the primary purpose of the contention window in CSMA/CA?",
+        options: ["To set the maximum data rate", "To specify the channel frequency", "To control the backoff time before retransmission", "To define the maximum frame size"],
+        correctIndex: 2
+    },
+    {
+        question: "What does FDMA stand for in the context of channelization protocols?",
+        options: ["Frequency Division Multiple Access", "Frequency Data Management Algorithm", "Fast Digital Modulation Analysis", "Frequency Data Modulation Array"],
+        correctIndex: 0
+    },
+    {
+        question: "In FDMA, how are multiple users allocated channels for communication?",
+        options: ["Users share the same frequency channel simultaneously.", "Each user is assigned a unique frequency channel.", "Users take turns transmitting on the same frequency.", "Channels are dynamically assigned based on demand."],
+        correctIndex: 1
+    },
+    {
+        question: "What is the primary advantage of FDMA in terms of channel allocation?",
+        options: ["High flexibility and adaptability", "Low susceptibility to interference", "Efficient use of available bandwidth", "Simple implementation and low cost"],
+        correctIndex: 2
+    },
+    {
+        question: "What does TDMA stand for in the context of channelization protocols?",
+        options: ["Time Division Media Allocation", "Time Division Multiple Access", "Transmission Data Management Algorithm", "Telecommunication Data Modulation Array"],
+        correctIndex: 1
+    },
+    {
+        question: "In TDMA, how is the transmission time divided among multiple users sharing the same channel?",
+        options: ["Users transmit simultaneously on different time slots.", "Users transmit sequentially one after another.", "Users transmit in random order to minimize collisions.", "Users transmit on separate frequency channels."],
+        correctIndex: 0
+    },
+    {
+        question: "What is the key benefit of TDMA in terms of spectrum efficiency?",
+        options: ["High resistance to interference", "Lower latency in data transmission", "Efficient use of available bandwidth", "Reduced complexity of synchronization"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the primary goal of the reservation protocol in controlled access?",
+        options: ["Minimize latency", "Maximize throughput", "Ensure fairness", "Reduce collision probability"],
+        correctIndex: 0
+    },
+    {
+        question: "In reservation-based protocols, how are time slots allocated to devices for transmission?",
+        options: ["Devices compete for slots in real-time.", "Slots are pre-allocated based on a reservation phase.", "Slots are allocated randomly to devices.", "Slots are assigned permanently to devices."],
+        correctIndex: 1
+    },
+    {
+        question: "What is a potential drawback of reservation-based protocols in dynamic networks?",
+        options: ["Inefficient use of bandwidth", "High collision rates", "Excessive overhead for slot allocation", "Limited scalability"],
+        correctIndex: 2
+    },
+    {
+        question: "In polling-based protocols, who controls the communication and polling process?",
+        options: ["Devices independently poll each other.", "A central controller polls devices sequentially.", "Devices send messages whenever they want.", "Devices poll each other randomly."],
+        correctIndex: 1
+    },
+    {
+        question: "What is the advantage of using polling in controlled access networks?",
+        options: ["Low latency due to simultaneous transmission", "High throughput for all devices", "Predictable access to the shared medium", "Minimal overhead in the communication process"],
+        correctIndex: 2
+    },
+    {
+        question: "What is a potential drawback of polling-based protocols in large networks with many devices?",
+        options: ["High collision rates", "Long waiting times for polling", "Difficulty in synchronization", "Inefficient use of bandwidth"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the fundamental concept behind token passing protocols in controlled access?",
+        options: ["Devices compete for access to the medium.", "Devices transmit when they have a token.", "Devices use polling to access the medium.", "Devices reserve time slots for transmission."],
+        correctIndex: 1
+    },
+    {
+        question: "In token passing, how is access to the shared medium controlled?",
+        options: ["Devices send requests for transmission.", "A token is passed sequentially among devices.", "Devices transmit data simultaneously.", "A central controller allocates time slots."],
+        correctIndex: 1
+    },
+    {
+        question: "What is a significant advantage of token passing protocols in controlled access networks?",
+        options: ["High flexibility in medium access", "Minimal collision probability", "Reduced overhead in communication", "Low latency due to parallel transmission"],
+        correctIndex: 1
+    },
+    {
+        question: "Which of the following is a valid IPv4 address format?",
+        options: ["256.1.1", "10.10.300", "31.256.0", "168.1.1000"],
+        correctIndex: 3
+    },
+    {
+        question: "Which network class is primarily used for large-scale organizations and provides over 16 million host addresses?",
+        options: ["e.g., 10.0.0.0", "e.g., 172.16.0.0", "e.g., 192.168.0.0", "e.g., 224.0.0.0"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the default subnet mask for a Class B network?",
+        options: ["255.0.0.0", "255.255.0.0", "255.255.255.0", "0.0.0.0"],
+        correctIndex: 1
+    },
+    {
+        question: "Which subnet mask does RIP v1 assume by default when sending route updates?",
+        options: ["255.255.255.0", "255.255.0.0", "255.0.0.0", "0.0.0.0"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the multicast address used by RIP v2 for sending route updates?",
+        options: ["224.0.0.5", "224.0.0.9", "255.255.255.255", "224.0.0.1"],
+        correctIndex: 1
+    },
+    {
+        question: "Which type of protocol does UDP (User Datagram Protocol) represent: connectionless or connection-oriented?",
+        options: ["Connectionless", "Connection-oriented", "Both connectionless and connection-oriented", "Neither connectionless nor connection-oriented"],
+        correctIndex: 0
+    },
+    {
+        question: "TCP (Transmission Control Protocol) is an example of which type of protocol: connectionless or connection-oriented?",
+        options: ["Connectionless", "Connection-oriented", "Both connectionless and connection-oriented", "Neither connectionless nor connection-oriented"],
+        correctIndex: 1
+    },
+    {
+        question: "In a connection-oriented protocol like TCP, what is the purpose of the three-way handshake during connection establishment?",
+        options: ["To confirm data delivery", "To exchange encryption keys", "To synchronize sequence numbers", "To establish a reliable connection"],
+        correctIndex: 2
+    },
+    {
+        question: "In a connection-oriented protocol like TCP, if a segment is not acknowledged by the receiver, what action does the sender take?",
+        options: ["Retransmits the segment", "Drops the segment and continues", "Reduces the transmission speed", "Sends an error message to the receiver"],
+        correctIndex: 0
+    },
+    {
+        question: "UDP is often used for real-time applications like streaming and online gaming. What advantage does UDP offer for these applications?",
+        options: ["Reliable data delivery is not required", "Lower latency and reduced overhead", "Greater error checking and correction", "Enhanced security and encryption"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the primary role of the Transport Layer protocols such as TCP and UDP?",
+        options: ["To transmit data between devices", "To establish network connections", "To encrypt data for secure transmission", "To manage the physical network"],
+        correctIndex: 0
+    },
+    {
+        question: "Which Transport Layer protocol is commonly used for secure, encrypted data transmission on the web?",
+        options: ["FTP", "HTTPS", "SNMP", "ICMP"],
+        correctIndex: 1
+    },
+    {
+        question: "Which Transport Layer protocol is designed for email communication and is responsible for sending and receiving emails?",
+        options: ["HTTP", "SMTP", "SNMP", "DNS"],
+        correctIndex: 1
+    },
+    {
+        question: "Which Transport Layer protocol is often used for file transfer and allows for efficient, bulk data transfer?",
+        options: ["FTP", "SNMP", "HTTP", "SMTP"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the purpose of port numbers in the Transport Layer protocols?",
+        options: ["To identify the physical interface of a device", "To specify the device's IP address", "To identify the application or service", "To determine the device's location"],
+        correctIndex: 2
+    },
+    {
+        question: "What does TCP stand for in the context of networking?",
+        options: ["Transmission Control Protocol", "Textual Communication Protocol", "Transport Control Protocol", "Telecommunication Connection Protocol"],
+        correctIndex: 0
+    },
+    {
+        question: "Which TCP flag is used to initiate the connection setup in the TCP three-way handshake?",
+        options: ["ACK (Acknowledgment)", "SYN (Synchronize)", "RST (Reset)", "FIN (Finish)"],
+        correctIndex: 1
+    },
+    {
+        question: "In TCP, what term refers to the process of ensuring that data segments are received by the destination and in the correct order?",
+        options: ["Segmentation", "Flow control", "Error correction", "Sequence control"],
+        correctIndex: 3
+    },
+    {
+        question: "In a TCP connection, which side, the sender or receiver, acknowledges the successful receipt of data segments?",
+        options: ["Only the sender", "Only the receiver", "Both the sender and receiver", "Neither the sender nor receiver"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the purpose of the TCP FIN (Finish) flag during the connection termination process?",
+        options: ["To acknowledge data receipt and continue communication", "To reset the connection", "To initiate the connection termination", "To establish a new connection"],
+        correctIndex: 2
+    },
+    {
+        question: "What does the term 'handshaking' refer to in the context of the TCP three-way handshake?",
+        options: ["A process of physical handshakes between devices", "An agreement to establish a connection", "An authentication method", "A security protocol"],
+        correctIndex: 1
+    },
+    {
+        question: "In the TCP three-way handshake, what does the SYN (Synchronize) segment indicate to the receiving device?",
+        options: ["The sender is ready to receive data", "The sender is terminating the connection", "The sender is synchronizing sequence numbers", "The sender is requesting encryption"],
+        correctIndex: 2
+    },
+    {
+        question: "In the TCP three-way handshake, after the client sends a SYN segment, what action does the server take?",
+        options: ["The server responds with a SYN-ACK segment", "The server sends data", "The server acknowledges the client's request", "The server terminates the connection"],
+        correctIndex: 0
+    },
+    {
+        question: "Which transport layer protocol uses a message format with no header checksum, providing minimal overhead?",
+        options: ["TCP", "UDP", "IP", "HTTP"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the maximum length, in bytes, of the UDP message payload (data) that can be accommodated in a single packet?",
+        options: ["512 bytes", "1,500 bytes", "65,535 bytes", "4,096 bytes"],
+        correctIndex: 2
+    },
+    {
+        question: "Which field in the TCP message header indicates the number of 32-bit words in the TCP header itself?",
+        options: ["Window size", "Data offset", "Checksum", "Acknowledgment number"],
+        correctIndex: 1
+    },
+    {
+        question: "What field in the TCP message format specifies the maximum number of bytes the sender is willing to accept in one message?",
+        options: ["Checksum", "Sequence number", "Window size", "Acknowledgment number"],
+        correctIndex: 2
+    },
+    {
+        question: "In the TCP message format, what is the purpose of the Urgent Pointer field?",
+        options: ["To indicate the start of a new message", "To specify the sender's IP address", "To identify the data sequence number", "To indicate the end of the message"],
+        correctIndex: 3
+    },
+    {
+        question: "In congestion control, what does 'window-based' congestion control refer to?",
+        options: ["Controlling congestion by limiting the number of packets sent", "Controlling congestion based on network latency", "Controlling congestion by adjusting window size", "Controlling congestion using traffic shaping"],
+        correctIndex: 2
+    },
+    {
+        question: "In QoS, what is 'jitter,' and why is it important to control in real-time communication?",
+        options: ["Jitter refers to network congestion", "Jitter is the variation in packet arrival times", "Jitter indicates the number of lost packets", "Jitter measures data throughput"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the primary purpose of a token bucket in traffic shaping for QoS?",
+        options: ["To store packets temporarily", "To prioritize voice traffic", "To control the rate of packet transmission", "To increase network capacity"],
+        correctIndex: 2
+    },
+    {
+        question: "Which QoS mechanism involves marking packets with different priority levels based on their importance or type of traffic?",
+        options: ["Packet switching", "Quality of Service (QoS)", "Traffic shaping", "Packet loss prevention"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the primary function of the Domain Name System (DNS) in computer networks?",
+        options: ["To encrypt data transmissions", "To resolve human-readable domain names to IP addresses", "To manage email communication", "To perform network monitoring"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the significance of a DNS cache in speeding up domain name resolution?",
+        options: ["It stores encrypted DNS records", "It stores frequently accessed DNS records", "It encrypts DNS traffic", "It manages email servers"],
+        correctIndex: 1
+    },
+    {
+        question: "What is a top-level domain (TLD) in the context of DNS?",
+        options: ["The highest level of the DNS hierarchy", "A domain that exclusively uses numeric characters", "The domain name of a web server", "A domain used for email addressing"],
+        correctIndex: 0
+    },
+    {
+        question: "Which DNS record type is used to specify the mail servers responsible for receiving email for a domain?",
+        options: ["A (Address)", "PTR (Pointer)", "MX (Mail Exchanger)", "CNAME (Canonical Name)"],
+        correctIndex: 2
+    },
+    {
+        question: "In remote logging, what is the role of a log collector?",
+        options: ["To encrypt log data", "To centralize and store log data from various sources", "To manage email servers", "To generate network traffic logs"],
+        correctIndex: 1
+    },
+    {
+        question: "Who is credited with inventing email, and when was it first introduced?",
+        options: ["Bill Gates in 1995", "Ray Tomlinson in the early 1970s", "Mark Zuckerberg in 2004", "Tim Berners-Lee in 1989"],
+        correctIndex: 1
+    },
+    {
+        question: "How does the Simple Mail Transfer Protocol (SMTP) play a role in email transmission?",
+        options: ["It encrypts email messages", "It defines the rules for routing and sending email", "It manages email storage", "It controls email access"],
+        correctIndex: 1
+    },
+    {
+        question: "How does email address formatting adhere to the username@domain.com structure?",
+        options: ["It uses IP addresses for email", "It separates username and domain with a period", "It encrypts email data", "It encrypts email headers"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the purpose of email aliases and distribution lists in email communication?",
+        options: ["To encrypt email headers", "To manage email attachments", "To route email traffic", "To simplify sending emails to groups"],
+        correctIndex: 3
+    },
+    {
+        question: "How does email support the concept of folders and organizational structures?",
+        options: ["By encrypting email contents", "By allowing users to categorize and store emails", "By compressing email headers", "By securing email attachments"],
+        correctIndex: 1
+    },
+    {
+        question: "What are the basic components of an FTP connection?",
+        options: ["Username, password, and email client", "Server, client, and encryption key", "Sender, receiver, and IP address", "Header, footer, and routing table"],
+        correctIndex: 1
+    },
+    {
+        question: "How does FTP handle file transfers between different operating systems?",
+        options: ["It converts email attachments", "It uses a universal format for all files", "It encrypts email messages", "It encrypts email headers"],
+        correctIndex: 1
+    },
+    {
+        question: "What are some common security risks associated with FTP, and how can they be mitigated?",
+        options: ["Lack of email encryption", "Unauthorized access and data interception", "Excessive email logs storage", "Slow email delivery due to FTP use"],
+        correctIndex: 1
+    },
+    {
+        question: "What are web servers, and how do they serve web content?",
+        options: ["Servers for secure email delivery", "Computers that store and distribute web pages", "Devices for email encryption", "Routers for FTP file transfers"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the purpose of HTML (Hypertext Markup Language) in web development?",
+        options: ["It encrypts email contents", "It defines the structure and content of web pages", "It manages email attachments", "It optimizes email routing"],
+        correctIndex: 1
+    },
+    {
+        question: "What is HTTP (Hypertext Transfer Protocol), and what is its primary purpose?",
+        options: ["A protocol for secure email delivery", "A protocol for transferring files", "A protocol for web communication", "A method of email encryption"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the purpose of cookies in HTTP, and how are they used?",
+        options: ["They are email attachments for web pages", "They store session information", "They encrypt email data", "They optimize email routing"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the role of HTTP headers in web communication, and what types of information do they convey?",
+        options: ["They are email headers for web pages", "They indicate the content type and length", "They manage email routing", "They encrypt email attachments"],
+        correctIndex: 1
+    },
+    {
+        question: "How does SMTP facilitate email transmission between email clients and email servers?",
+        options: ["It encrypts email headers", "It uses email attachments for transmission", "It relays email messages", "It optimizes email routing"],
+        correctIndex: 2
+    },
+    {
+        question: "Explain the roles of SMTP clients (MUAs) and their interactions with SMTP servers in sending emails.",
+        options: ["Clients compose email content", "Clients store email attachments", "Clients encrypt email headers", "Clients optimize email delivery"],
+        correctIndex: 0
+    },
+    {
+        question: "How does SMTP ensure the reliability of email delivery, and what mechanisms are in place for handling failed deliveries?",
+        options: ["It uses email encryption methods", "It tracks email logs for errors", "It implements retries and queuing", "It optimizes email routing"],
+        correctIndex: 2
+    },
+    {
+        question: "What are SNMP agents and managers, and how do they interact in network management?",
+        options: ["They are encryption methods for emails", "Agents collect and report data, managers", "They manage email routing", "They compress email attachments"],
+        correctIndex: 1
+    },
+    {
+        question: "What are SNMP community strings, and how do they control access to SNMP-managed devices?",
+        options: ["They are email attachments for web pages", "They are authentication keys for SNMP", "They are used to encrypt email data", "They specify SNMP server addresses"],
+        correctIndex: 1
+    },
+    {
+        question: "What types of information can SNMP provide about network devices and resources?",
+        options: ["It tracks email logs for errors", "Configuration settings, performance metrics", "It encrypts email headers", "It manages email logs"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the purpose of SNMP MIBs (Management Information Bases), and how are they organized?",
+        options: ["They are email logs for SNMP messages", "They store SNMP data and are organized hierarchically", "They encrypt email contents", "They manage email routing"],
+        correctIndex: 1
+    },
+    {
+        question: "How does network segmentation contribute to security services, and what are some common segmentation methods?",
+        options: ["It encrypts network traffic", "It improves network performance", "It isolates network segments", "It manages network authentication"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the role of disaster recovery planning in network security, and how does it ensure business continuity?",
+        options: ["It ensures data confidentiality", "It verifies user identities", "It restricts unauthorized access", "It prepares for unforeseen disruptions"],
+        correctIndex: 3
+    },
+    {
+        question: "How does encryption contribute to data security, and what are common encryption algorithms used in network security?",
+        options: ["It ensures data confidentiality", "It verifies user identities", "It restricts unauthorized access", "It optimizes network performance"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the purpose of digital signatures in network security, and how do they verify the authenticity of data?",
+        options: ["They encrypt network traffic", "They improve user authentication", "They authenticate the sender's identity", "They optimize network routing"],
+        correctIndex: 2
+    },
+    {
+        question: "Explain the significance of end-to-end encryption in securing data transmission across networks.",
+        options: ["It ensures data confidentiality", "It optimizes network routing", "It restricts unauthorized access", "It detects and responds to incidents"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the primary purpose of a digital signature in network security?",
+        options: ["To encrypt network traffic", "To restrict unauthorized access", "To verify the authenticity and integrity of data", "To optimize network routing"],
+        correctIndex: 2
+    },
+    {
+        question: "What cryptographic key is typically used for generating a digital signature?",
+        options: ["Public key", "Private key", "Symmetric key", "Session key"],
+        correctIndex: 1
+    },
+    {
+        question: "Explain the concept of a revocation list (CRL) in digital certificate management.",
+        options: ["It ensures data confidentiality", "It verifies user identities", "It restricts unauthorized access", "It lists revoked or expired digital certificates"],
+        correctIndex: 3
+    },
+    {
+        question: "What is the OSI Model, and how does it work?",
+        options: ["A protocol for wireless communication.", "A conceptual framework with seven layers that standardizes networking functions.", "A type of firewall used in enterprise networks.", "A software for network configuration."],
+        correctIndex: 1
+    },
+    {
+        question: "What is redundancy in the context of error detection and correction?",
+        options: ["The process of reducing data size for faster transmission", "The inclusion of extra information to detect and correct errors", "The removal of duplicate data from a message", "None of the above"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the purpose of a checksum in error detection?",
+        options: ["To count the number of bits in a message", "To check for errors in the data by comparing the sum of bits to a predefined value", "To encrypt the data for secure transmission", "None of the above"],
+        correctIndex: 1
+    },
+    {
+        question: "In ALOHA, how is the transmission time divided into slots?",
+        options: ["Equally sized slots for all stations", "Unequally sized slots based on station priority", "Dynamically sized slots based on traffic load", "There are no slots in ALOHA"],
+        correctIndex: 0
+    },
+    {
+        question: "What does CSMA stand for in CSMA/CA and CSMA/CD?",
+        options: ["Centralized Synchronization Media Access", "Carrier Sense Multiple Access", "Collision-Free Media Allocation", "Controlled Synchronization Medium Allocation"],
+        correctIndex: 1
+    },
+    {
+        question: "In CSMA/CA (Carrier Sense Multiple Access with Collision Avoidance), how are collisions avoided?",
+        options: ["Stations transmit simultaneously to reduce the chance of collision.", "Stations request permission before transmitting.", "Collisions are resolved by the central controller.", "Collisions are detected and corrected in real-time."],
+        correctIndex: 1
+    },
+    {
+        question: "What does TDMA stand for in the context of channelization protocols?",
+        options: ["Time Division Media Allocation", "Time Division Multiple Access", "Transmission Data Management Algorithm", "Telecommunication Data Modulation Array"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the primary goal of the reservation protocol in controlled access?",
+        options: ["Minimize latency", "Maximize throughput", "Ensure fairness", "Reduce collision probability"],
+        correctIndex: 0
+    },
+    {
+        question: "What is a potential drawback of reservation-based protocols in dynamic networks?",
+        options: ["Inefficient use of bandwidth", "High collision rates", "Excessive overhead for slot allocation", "Limited scalability"],
+        correctIndex: 2
+    },
+    {
+        question: "What is a potential drawback of polling-based protocols in large networks with many devices?",
+        options: ["High collision rates", "Long waiting times for polling", "Difficulty in synchronization", "Inefficient use of bandwidth"],
+        correctIndex: 1
+    },
+    {
+        question: "What is a significant advantage of token passing protocols in controlled access networks?",
+        options: ["High flexibility in medium access", "Minimal collision probability", "Reduced overhead in communication", "Low latency due to parallel transmission"],
+        correctIndex: 1
+    },
+    {
+        question: "In the Stop and Wait protocol, what is the role of the sender after sending a data frame?",
+        options: ["Continue sending data frames", "Wait for an acknowledgment (ACK) from the receiver", "Send the next data frame immediately", "Request retransmission of the data frame"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the major drawback of the Stop and Wait protocol in terms of efficiency?",
+        options: ["High throughput", "Low latency", "Inefficient use of bandwidth", "Minimal overhead"],
+        correctIndex: 2
+    },
+    {
+        question: "In the context of the Stop and Wait protocol, what is the significance of using timers?",
+        options: ["To synchronize sender and receiver", "To measure transmission speed", "To manage network congestion", "To handle timeouts and retransmissions"],
+        correctIndex: 3
+    },
+    {
+        question: "Which factor makes the Stop and Wait protocol less suitable for high-speed networks and long-distance communication?",
+        options: ["Reliability", "Simplicity", "Low overhead", "Efficiency"],
+        correctIndex: 3
+    },
+    {
+        question: "Which data link layer protocol is known for its simplicity and involves the sender waiting for an acknowledgment before sending the next frame?",
+        options: ["Go-Back-N", "Selective Repeat", "Stop and Wait", "Automatic Repeat Request (ARQ)"],
+        correctIndex: 2
+    },
+    {
+        question: "Which data link layer protocol uses a sliding window approach, allowing the sender to transmit multiple frames before waiting for acknowledgments?",
+        options: ["Go-Back-N", "Selective Repeat", "Stop and Wait", "Automatic Repeat Request (ARQ)"],
+        correctIndex: 0
+    },
+    {
+        question: "Which ARQ protocol provides more efficient error recovery by retransmitting only the frames with errors, rather than the entire window?",
+        options: ["Go-Back-N", "Selective Repeat", "Stop and Wait", "Automatic Repeat Request (ARQ)"],
+        correctIndex: 1
+    },
+    {
+        question: "In the Selective Repeat ARQ protocol, what is the key advantage over Go-Back-N in terms of efficiency and retransmissions?",
+        options: ["It retransmits only frames with errors", "It has a smaller window size", "It offers lower throughput", "It requires fewer acknowledgments"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the primary disadvantage of Selective Repeat ARQ compared to Go-Back-N in terms of complexity and implementation?",
+        options: ["Increased complexity of sender and receiver", "Smaller window size", "Lower efficiency", "Higher overhead for acknowledgment"],
+        correctIndex: 0
+    },
+    {
+        question: "Which of the following best describes an IP packet in the context of the Network Layer?",
+        options: ["A logical group of data bytes", "A physical network cable", "A data frame within a switch", "A wireless access point"],
+        correctIndex: 0
+    },
+    {
+        question: "In IPv4, how many bits are used to represent an IP address?",
+        options: ["8 bits", "16 bits", "32 bits", "64 bits"],
+        correctIndex: 2
+    },
+    {
+        question: "Which part of an IPv4 address designates the network portion?",
+        options: ["The first two octets", "The last two octets", "The third octet", "The fourth octet"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the maximum number of IPv4 addresses that can exist within a single subnet?",
+        options: ["255", "256", "2^32-1", "2^32-2"],
+        correctIndex: 2
+    },
+    {
+        question: "Which routing algorithm updates routing tables based on the number of hops to a destination and shares this information with neighboring routers?",
+        options: ["Distance Vector Routing (DVR)", "Link State Routing (LSR)", "Static Routing", "Default Routing (DR)"],
+        correctIndex: 0
+    },
+    {
+        question: "What is a routing metric in the context of routing algorithms?",
+        options: ["The number of routers in the network", "A value used to determine the best path", "The physical distance between routers", "The number of hops to the destination"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the key advantage of Link State Routing (LSR) over Distance Vector Routing (DVR)?",
+        options: ["Simplicity and ease of implementation", "Faster convergence", "Lower bandwidth consumption", "Resistance to routing loops and more accurate routing"],
+        correctIndex: 3
+    },
+    {
+        question: "ICMP (Internet Control Message Protocol) is primarily used for what purpose in IP networks?",
+        options: ["Network address translation (NAT)", "Error reporting and diagnostics", "Secure data transmission", "IP address allocation and management"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the purpose of IPv6 (Internet Protocol version 6) in comparison to IPv4?",
+        options: ["To reduce the number of available IP addresses", "To improve network security and encryption", "To enhance support for multimedia and IoT applications", "To provide backward compatibility with IPv4"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the maximum number of unique IP addresses that can be represented by IPv6?",
+        options: ["2^64 (approximately 18.4 quintillion addresses)", "2^16 (approximately 65,536 addresses)", "2^32 (approximately 4.3 billion addresses)", "2^128 (approximately 340 undecillion addresses)"],
+        correctIndex: 3
+    },
+    {
+        question: "In IPv6, what type of address is used to identify a group of devices that may belong to different networks?",
+        options: ["Unicast address", "Anycast address", "Multicast address", "Broadcast address"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the primary reason for the transition from IPv4 to IPv6 in modern networking?",
+        options: ["To improve network performance and speed", "To reduce the complexity of routing tables", "To increase backward compatibility with legacy systems", "To accommodate the growing number of internet-connected devices"],
+        correctIndex: 3
+    },
+    {
+        question: "In a Class C network, how many bits are assigned to the host portion of the IP address?",
+        options: ["8 bits", "16 bits", "24 bits", "32 bits"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the maximum number of host addresses that can be assigned in a Class C network with a subnet mask of 255.255.255.224?",
+        options: ["8", "16", "32", "64"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the primary purpose of a subnet mask in IP networking?",
+        options: ["To indicate the default gateway for the network", "To identify the network and host portions", "To encrypt data during transmission", "To assign unique hostnames to devices in the network"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the term for borrowing bits from the host portion of an IP address to create subnets?",
+        options: ["Subnet borrowing", "Network slicing", "Bit masking", "Subnetting"],
+        correctIndex: 3
+    },
+    {
+        question: "What is the primary characteristic of a static routing algorithm?",
+        options: ["It dynamically adjusts routes based on traffic", "It requires manual configuration", "It uses metrics like hop count for routing", "It adapts to network changes automatically"],
+        correctIndex: 1
+    },
+    {
+        question: "In a network topology where link costs represent delay, which routing algorithm is suitable for minimizing latency?",
+        options: ["RIP (Routing Information Protocol)", "BGP (Border Gateway Protocol)", "OSPF (Open Shortest Path First)", "EIGRP (Enhanced Interior Gateway Routing Protocol)"],
+        correctIndex: 2
+    },
+    {
+        question: "Which routing protocol typically uses the Bellman-Ford algorithm for path selection?",
+        options: ["OSPF (Open Shortest Path First)", "RIP (Routing Information Protocol)", "BGP (Border Gateway Protocol)", "EIGRP (Enhanced Interior Gateway Routing Protocol)"],
+        correctIndex: 1
+    },
+    {
+        question: "In dynamic routing, what does the term 'metric' refer to?",
+        options: ["The maximum hop count to a destination", "A unique identifier for each route", "A measurement used to determine route preference", "The number of routers in the network"],
+        correctIndex: 2
+    },
+    {
+        question: "Which type of routing algorithm adjusts routes based on real-time network conditions?",
+        options: ["Dynamic routing algorithms", "Static routing algorithms", "Shortest Path Routing algorithms", "Link-State routing algorithms"],
+        correctIndex: 0
+    },
+    {
+        question: "What does RIP stand for in the context of routing protocols?",
+        options: ["Routing Information Protocol", "Reliable Internet Protocol", "Routing Internet Protocol", "Remote Information Protocol"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the maximum hop count allowed in RIP v1 for a valid route?",
+        options: ["10 hops", "15 hops", "16 hops", "100 hops"],
+        correctIndex: 2
+    },
+    {
+        question: "Which metric does RIP use to measure the distance to a destination network?",
+        options: ["Hop count", "Bandwidth", "Delay", "Reliability"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the purpose of the RIP 'split horizon' rule?",
+        options: ["To prevent routing loops", "To optimize network traffic", "To split route updates into segments", "To ensure equal distribution of routes"],
+        correctIndex: 0
+    },
+    {
+        question: "What does OSPF stand for in the context of routing protocols?",
+        options: ["Open Shortest Path Forwarding", "Open System Path Finder", "Open Source Path Forwarding", "Open Shortest Path First"],
+        correctIndex: 3
+    },
+    {
+        question: "OSPF uses a link-state routing algorithm. What type of information is stored in OSPF's link-state database?",
+        options: ["The routing tables of all routers", "A list of all network IDs", "Information about the routers in the AS", "The number of hops to reach each router"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the purpose of OSPF's Designated Router (DR) and Backup Designated Router (BDR) in a multi-access network?",
+        options: ["To reduce OSPF routing overhead", "To maintain network stability", "To optimize the use of OSPF areas", "To increase OSPF's compatibility with RIP"],
+        correctIndex: 1
+    },
+    {
+        question: "What OSPF packet type is used by routers to discover neighbors and establish adjacencies?",
+        options: ["Link-state advertisements (LSAs)", "OSPF Hello packets", "OSPF Database Description (DBD) packets", "OSPF Link State Update (LSU) packets"],
+        correctIndex: 1
+    },
+    {
+        question: "In OSPF, what is an ASBR (Autonomous System Border Router)?",
+        options: ["A router that connects to the internet", "A router that connects to an OSPF area", "A router that connects to a different AS", "A router that connects to the backbone area"],
+        correctIndex: 2
+    },
+    {
+        question: "What does EIGRP stand for in the context of routing protocols?",
+        options: ["Enhanced Internet Gateway Routing Protocol", "Enhanced Interior Gateway Routing Protocol", "Efficient Internet Gateway Routing Protocol", "Enhanced Interior Gateway Routing Process"],
+        correctIndex: 1
+    },
+    {
+        question: "In EIGRP, what is a feasible successor?",
+        options: ["A backup route with a higher metric", "A loop-free backup route", "A route advertised by an ASBR", "A virtual link to a remote router"],
+        correctIndex: 1
+    },
+    {
+        question: "EIGRP uses a composite metric to calculate the best path to a destination. What is this metric called?",
+        options: ["Cost metric", "Bandwidth-delay product", "EIGRP metric", "Successor metric"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the administrative distance of EIGRP?",
+        options: ["90", "100", "110", "120"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the primary reason for using EIGRP in a Cisco network environment?",
+        options: ["Compatibility with other vendors' routers", "Scalability", "Support for classless routing", "Support for open-standard routing protocols"],
+        correctIndex: 2
+    },
+    {
+        question: "What does BGP stand for in the context of routing protocols?",
+        options: ["Border Gateway Protocol", "Best Gateway Protocol", "Border Gateway Process", "Basic Gateway Protocol"],
+        correctIndex: 0
+    },
+    {
+        question: "BGP is classified into two main categories based on its role in routing. What are these categories?",
+        options: ["Internal BGP (iBGP) and External BGP (eBGP)", "Border BGP and Core BGP", "Simple BGP and Complex BGP", "Basic BGP and Advanced BGP"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the administrative distance of BGP?",
+        options: ["90", "100", "110", "120"],
+        correctIndex: 1
+    },
+    {
+        question: "In the Transport Layer, what service ensures that data units are delivered error-free and in the correct order?",
+        options: ["Segmentation and reassembly", "Error detection and correction", "Flow control", "Multiplexing"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the primary purpose of segmentation in the Transport Layer?",
+        options: ["Data encryption", "Breaking large messages into smaller segments", "Error detection and correction", "End-to-end communication"],
+        correctIndex: 1
+    },
+    {
+        question: "What type of communication does the Transport Layer provide: connectionless or connection-oriented?",
+        options: ["Connectionless", "Connection-oriented", "Both connectionless and connection-oriented", "Neither connectionless nor connection-oriented"],
+        correctIndex: 2
+    },
+    {
+        question: "Which Transport Layer service allows the receiver to detect and correct errors in the data?",
+        options: ["Flow control", "Error detection and correction", "Multiplexing", "Segmentation and reassembly"],
+        correctIndex: 1
+    },
+    {
+        question: "Which Transport Layer service provides a means of multiplexing, demultiplexing, and identifying different data streams?",
+        options: ["Flow control", "Multiplexing", "Error detection and correction", "Segmentation and reassembly"],
+        correctIndex: 1
+    },
+    {
+        question: "In a connectionless protocol like UDP, are acknowledgments sent to confirm successful data transmission?",
+        options: ["Yes", "No", "It depends on the application", "Acknowledgments are optional"],
+        correctIndex: 1
+    },
+    {
+        question: "Which type of protocol provides reliable, error-checked, and ordered data delivery: connectionless or connection-oriented?",
+        options: ["Connectionless", "Connection-oriented", "Both connectionless and connection-oriented", "Neither connectionless nor connection-oriented"],
+        correctIndex: 1
+    },
+    {
+        question: "Which type of protocol is more suitable for applications that require low-latency communication?",
+        options: ["Connectionless", "Connection-oriented", "Both connectionless and connection-oriented", "Neither connectionless nor connection-oriented"],
+        correctIndex: 0
+    },
+    {
+        question: "Which type of protocol is less complex in terms of overhead and resource usage: connectionless or connection-oriented?",
+        options: ["Connectionless", "Connection-oriented", "Both connectionless and connection-oriented", "Neither connectionless nor connection-oriented"],
+        correctIndex: 0
+    },
+    {
+        question: "In a connection-oriented protocol like TCP, how are data segments organized and identified for proper sequencing at the receiver?",
+        options: ["Using sequence numbers", "Using port numbers and IP addresses", "Using timestamps and checksums", "Using packet identifiers"],
+        correctIndex: 0
+    },
+    {
+        question: "Which Transport Layer protocol provides a connectionless, unreliable, and low-overhead data transfer service?",
+        options: ["TCP", "SMTP", "UDP", "HTTP"],
+        correctIndex: 2
+    },
+    {
+        question: "In the Transport Layer, which protocol is responsible for reliable, error-checked data delivery with flow control?",
+        options: ["UDP", "ICMP", "HTTP", "TCP"],
+        correctIndex: 3
+    },
+    {
+        question: "What is the primary difference between TCP (Transmission Control Protocol) and UDP (User Datagram Protocol)?",
+        options: ["TCP provides reliable, ordered data delivery, while UDP offers connectionless, unreliable delivery.", "TCP is faster than UDP.", "UDP provides encryption, while TCP does not.", "TCP is used for video streaming, while UDP is used for web browsing."],
+        correctIndex: 0
+    },
+    {
+        question: "In a Transport Layer protocol like TCP, how is data sequencing achieved to ensure that packets are delivered in the correct order?",
+        options: ["Using sequence numbers", "Using timestamps", "Using encryption keys", "Using checksums"],
+        correctIndex: 0
+    },
+    {
+        question: "Which Transport Layer protocol is associated with the World Wide Web and is used for fetching web pages and data?",
+        options: ["FTP", "SMTP", "HTTP", "SNMP"],
+        correctIndex: 2
+    },
+    {
+        question: "What is the purpose of the TCP three-way handshake during the establishment of a connection?",
+        options: ["To synchronize sequence numbers", "To encrypt the data", "To establish a secure tunnel", "To transmit data"],
+        correctIndex: 0
+    },
+    {
+        question: "During the TCP three-way handshake, what happens after the client sends a SYN (Synchronize) segment to the server?",
+        options: ["The server responds with a SYN-ACK segment", "The client sends data", "The server acknowledges the client's request", "The client acknowledges the server's response"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the primary advantage of TCP's reliable data delivery mechanism over UDP's connectionless approach?",
+        options: ["Lower latency and reduced overhead", "Enhanced security", "Reliable and ordered data delivery", "Greater scalability and efficiency"],
+        correctIndex: 2
+    },
+    {
+        question: "Which TCP flag is used to indicate the end of data transmission and to initiate connection termination?",
+        options: ["ACK (Acknowledgment)", "SYN (Synchronize)", "RST (Reset)", "FIN (Finish)"],
+        correctIndex: 3
+    },
+    {
+        question: "In TCP, what is the purpose of the ACK (Acknowledgment) flag?",
+        options: ["To acknowledge successful data receipt", "To request data retransmission", "To reset the connection", "To synchronize sequence numbers"],
+        correctIndex: 0
+    },
+    {
+        question: "During the TCP three-way handshake, which side initiates the process by sending a SYN (Synchronize) segment?",
+        options: ["The server", "The client", "Both the server and client", "Neither the server nor client"],
+        correctIndex: 1
+    },
+    {
+        question: "Which routing algorithm calculates the shortest path based on the cumulative link costs?",
+        options: ["OSPF (Open Shortest Path First)", "RIP (Routing Information Protocol)", "BGP (Border Gateway Protocol)", "EIGRP (Enhanced Interior Gateway Routing Protocol)"],
+        correctIndex: 0
+    },
+    {
+        question: "Which dynamic routing protocol uses a distance-vector algorithm and broadcasts routing updates?",
+        options: ["OSPF (Open Shortest Path First)", "RIP (Routing Information Protocol)", "BGP (Border Gateway Protocol)", "EIGRP (Enhanced Interior Gateway Routing Protocol)"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the primary disadvantage of static routing in a large and complex network?",
+        options: ["High computational overhead", "Difficulty in initial configuration", "Inability to adapt to network changes", "High resource utilization"],
+        correctIndex: 2
+    },
+    {
+        question: "Which version of RIP sends routing updates using broadcast messages?",
+        options: ["RIP v1", "RIP v2", "Both RIP v1 and v2", "Neither RIP v1 nor v2"],
+        correctIndex: 0
+    },
+    {
+        question: "In RIP v2, what is the primary enhancement over RIP v1?",
+        options: ["Support for classless routing", "Faster convergence", "Compatibility with IPv6", "Increased hop count limit"],
+        correctIndex: 0
+    },
+    {
+        question: "What action does a RIP router take if it receives a route update with a higher metric than its own?",
+        options: ["It discards the route update", "It updates its routing table", "It compares the source IP address", "It sends an acknowledgment back to the sender"],
+        correctIndex: 1
+    },
+    {
+        question: "What is the administrative distance of RIP?",
+        options: ["90", "100", "110", "120"],
+        correctIndex: 3
+    },
+    {
+        question: "In OSPF, what is an Autonomous System (AS)?",
+        options: ["A group of routers using OSPF", "A collection of routers", "A network with a single administrator", "A type of routing algorithm"],
+        correctIndex: 2
+    },
+    {
+        question: "Which OSPF area type connects to the backbone area (Area 0)?",
+        options: ["Stub area", "Backbone area", "Transit area", "Virtual link area"],
+        correctIndex: 2
+    },
+    {
+        question: "Which OSPF area is typically used to connect multiple OSPF areas together?",
+        options: ["Backbone area", "Transit area", "Stub area", "Virtual link area"],
+        correctIndex: 0
+    },
+    {
+        question: "OSPF uses a cost metric to determine the best path to a destination. What does this metric represent?",
+        options: ["Bandwidth", "Delay", "Hop count", "Reliability"],
+        correctIndex: 0
+    },
+    {
+        question: "What is OSPF's default administrative distance?",
+        options: ["90", "100", "110", "120"],
+        correctIndex: 2
+    },
+    {
+        question: "EIGRP is a Cisco-proprietary routing protocol. What feature of EIGRP allows it to converge quickly after topology changes?",
+        options: ["DUAL (Diffusing Update Algorithm)", "Hello protocol", "Routing Information Protocol (RIP)", "Open Shortest Path First (OSPF)"],
+        correctIndex: 0
+    },
+    {
+        question: "What is the primary advantage of EIGRP over distance-vector routing protocols like RIP?",
+        options: ["Fast convergence", "Simplicity", "Compatibility with other routing protocols", "Support for large-scale networks"],
+        correctIndex: 0
+    }];
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    const questionNumberEl = document.getElementById("question-number");
+    const questionTextEl = document.getElementById("question-text");
+    const optionsContainer = document.getElementById("options-container");
+    const scoreDisplay = document.getElementById("score-display");
+    const progressDisplay = document.getElementById("progress-display");
+    const nextBtn = document.getElementById("next-btn");
+    const errorMessage = document.getElementById("error-message");
+
+    function loadQuestion() {
+        const questionObj = allQuestions[currentQuestionIndex];
+        questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+        progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+        questionTextEl.textContent = questionObj.question;
+        scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+        optionsContainer.innerHTML = "";
+        errorMessage.style.display = "none";
+        nextBtn.style.display = "none";
+
+        questionObj.options.forEach((option, index) => {
+            const button = document.createElement("button");
+            button.textContent = option;
+            button.addEventListener("click", () => selectAnswer(button, index));
+            optionsContainer.appendChild(button);
+        });
+    }
+
+    function selectAnswer(button, index) {
+        const buttons = optionsContainer.querySelectorAll("button");
+        buttons.forEach(btn => btn.disabled = true);
+
+        const correctIndex = allQuestions[currentQuestionIndex].correctIndex;
+        if (index === correctIndex) {
+            button.classList.add("correct");
+            score++;
+        } else {
+            button.classList.add("wrong");
+            buttons[correctIndex].classList.add("correct");
+        }
+
+        scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+        nextBtn.style.display = currentQuestionIndex < allQuestions.length - 1 ? "inline-block" : "none";
+    }
+
+    nextBtn.addEventListener("click", () => {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < allQuestions.length) {
+            loadQuestion();
+        }
+    });
+
+    // Initialize quiz
+    loadQuestion();
+    </script>
+</body>
+</html>

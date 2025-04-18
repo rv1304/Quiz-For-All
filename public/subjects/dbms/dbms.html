@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+    
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+    
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+    
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+        }
+    
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+    
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+    
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+    
+        #next-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        #next-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e9;
+        }
+    
+        #error-message {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+    
+            h1 {
+                font-size: 1.8em;
+            }
+    
+            #question-text {
+                font-size: 1.1em;
+            }
+    
+            #next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <h1>DBMS, PL/SQL, and SQL Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number"></p>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="error-message"></p>
+        <button id="next-btn" style="display: none;">Next</button>
+    </div>
+    <script>
+        // All 193 questions from the PDF
+        const questions = [
+            {
+                question: "Which of the following is NOT a benefit of using transactions?",
+                options: ["Data integrity", "High availability", "Data consistency", "Data durability"],
+                correctIndex: 1
+            },
+            {
+                question: "A transaction that violates the consistency property is considered to be:",
+                options: ["Serializable", "Inconsistent", "Isolate", "Error"],
+                correctIndex: 1
+            },
+            {
+                question: "Can you change the parameter values of a cursor after it has been declared and opened?",
+                options: ["Yes, parameter values can be modified at any time.", "No, parameter values are fixed once the cursor is declared and opened.", "Parameter values can only be changed during cursor declaration.", "Cursors cannot have parameter values."],
+                correctIndex: 1
+            },
+            {
+                question: "Can you declare a cursor without specifying the SELECT statement immediately?",
+                options: ["No, a SELECT statement must always be specified.", "Yes, a SELECT statement can be added later in the code.", "Cursors cannot be declared in PL/SQL.", "Cursors are automatically generated in PL/SQL."],
+                correctIndex: 0
+            },
+            {
+                question: "Can you declare multiple cursors with the same name but different parameters in the same PL/SQL block?",
+                options: ["Yes, as long as the cursor names are unique.", "No, cursor names must be unique regardless of the parameters.", "Multiple cursors are not allowed in the same PL/SQL block.", "Cursors with parameters cannot have the same name."],
+                correctIndex: 1
+            },
+            {
+                question: "Can you declare multiple cursors within the same PL/SQL block? If so, how do you differentiate them?",
+                options: ["No, only one cursor is allowed per block.", "Yes, multiple cursors can be declared, and they are differentiated by their data types.", "Yes, multiple cursors can be declared, and they are differentiated by their names.", "Multiple cursors cannot be used in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "Can you fetch data from a cursor into individual variables or into a record type?",
+                options: ["Data can only be fetched into individual variables.", "Data can only be fetched into a record type.", "Data can be fetched into both individual variables and a record type.", "Data cannot be fetched from a cursor."],
+                correctIndex: 2
+            },
+            {
+                question: "Can you nest a Cursor FOR Loop inside another Cursor FOR Loop? If so, why might you do so?",
+                options: ["No, nesting Cursor FOR Loops is not allowed.", "Yes, you can nest Cursor FOR Loops to perform complex data processing and handle related data hierarchies.", "Cursor FOR Loops can only be used individually, not nested.", "Nesting Cursor FOR Loops results in performance issues."],
+                correctIndex: 1
+            },
+            {
+                question: "Can you use a Cursor FOR Loop to update or delete records in a database table?",
+                options: ["No, Cursor FOR Loops are read-only.", "Yes, Cursor FOR Loops can update or delete records using the UPDATE and DELETE statements.", "Cursor FOR Loops can only insert records, not update or delete them.", "Cursor FOR Loops can only be used for reporting purposes."],
+                correctIndex: 1
+            },
+            {
+                question: "Describe the differences between an implicit cursor and an explicit cursor in PL/SQL.",
+                options: ["Implicit cursors are used for data modeling, while explicit cursors are used for data manipulation.", "Implicit cursors are automatically created for DML statements, while explicit cursors are user-defined.", "Implicit cursors are used for database connections, while explicit cursors are used for loop control.", "Implicit cursors are used for hardware design, while explicit cursors are used for web development."],
+                correctIndex: 1
+            },
+            {
+                question: "Describe the purpose of PL/SQL collections, and provide examples of their types.",
+                options: ["PL/SQL collections are used for defining variables.", "PL/SQL collections are used for database connections.", "PL/SQL collections are used for storing multiple values of the same data type.", "PL/SQL collections are used for creating triggers."],
+                correctIndex: 2
+            },
+            {
+                question: "Explain how cursor parameters can be used to create dynamic cursors.",
+                options: ["Cursor parameters have no role in creating dynamic cursors.", "By allowing parameterization of the WHERE clause in the cursor's SELECT statement, you can create dynamic cursors that retrieve specific data based on different criteria.", "Cursor parameters can only be used with static cursors.", "Cursor parameters can be used to create triggers."],
+                correctIndex: 1
+            },
+            {
+                question: "Explain the concept of triggers in a database context. How are they used in PL/SQL?",
+                options: ["Triggers are used for creating web applications.", "Triggers are used for hardware design.", "Triggers are used for automatically executing PL/SQL code in response to database events.", "Triggers are used for data modeling."],
+                correctIndex: 2
+            },
+            {
+                question: "Explain the difference between declaring a cursor and opening a cursor.",
+                options: ["Declaring a cursor retrieves data; opening a cursor defines its structure.", "Declaring a cursor defines its structure; opening a cursor retrieves data.", "Declaring a cursor and opening a cursor are the same.", "Declaring a cursor is not a PL/SQL concept."],
+                correctIndex: 1
+            },
+            {
+                question: "Explain the importance of transactions in PL/SQL and how they are managed.",
+                options: ["Transactions are used for web development.", "Transactions are used for data modeling.", "Transactions ensure data consistency and are managed using COMMIT and ROLLBACK statements.", "Transactions are not supported in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "Explain the purpose of a PL/SQL package and its components.",
+                options: ["PL/SQL packages are used for web development.", "PL/SQL packages are used for encapsulating procedures and functions.", "PL/SQL packages are used for data modeling.", "PL/SQL packages are used for hardware design."],
+                correctIndex: 1
+            },
+            {
+                question: "How can you pass parameters to a PL/SQL procedure or function?",
+                options: ["Parameters are passed using the CALL statement.", "Parameters are not supported in PL/SQL.", "Parameters are passed as input and output variables.", "Parameters are passed using the DECLARE statement."],
+                correctIndex: 2
+            },
+            {
+                question: "How can you resolve a deadlock in a database system?",
+                options: ["By terminating one of the transactions involved in the deadlock.", "By rolling back all transactions involved in the deadlock.", "By increasing the isolation level.", "Deadlocks cannot be resolved."],
+                correctIndex: 0
+            },
+            {
+                question: "How do you create and manipulate PL/SQL associative arrays (index-by tables)?",
+                options: ["Associative arrays are created using the ARRAY keyword.", "Associative arrays are created using the INDEX keyword.", "Associative arrays are not supported in PL/SQL.", "Associative arrays are created using the TYPE keyword."],
+                correctIndex: 3
+            },
+            {
+                question: "How do you declare a cursor, and what are the required components?",
+                options: ["Cursors are automatically declared in PL/SQL.", "Cursors are declared using the DECLARE CURSOR statement and require a SELECT statement.", "Cursors are declared using the DECLARE keyword.", "Cursors are declared using the OPEN statement."],
+                correctIndex: 1
+            },
+            {
+                question: "How do you declare a variable in PL/SQL, and what are the data types supported for variables?",
+                options: ["Variables are declared using the DECLARE keyword, and PL/SQL supports only one data type.", "Variables are declared using the VAR keyword, and PL/SQL supports multiple data types.", "Variables are declared using the VARIABLE keyword, and PL/SQL supports multiple data types.", "Variables are not supported in PL/SQL."],
+                correctIndex: 1
+            },
+            {
+                question: "How do you define and use PL/SQL records and record types?",
+                options: ["Records are used for creating tables in PL/SQL.", "Records are defined using the DECLARE RECORD statement.", "Records are used to hold data in a structured format.", "Records are not supported in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "How do you ensure that you've fetched all available data from a cursor?",
+                options: ["By using the CLOSE statement.", "By using the OPEN statement.", "By checking the cursor attribute %NOTFOUND.", "Cursors automatically fetch all available data."],
+                correctIndex: 2
+            },
+            {
+                question: "How do you handle database connections and transactions in PL/SQL?",
+                options: ["Database connections and transactions are automatically managed by the PL/SQL engine.", "Database connections and transactions are not supported in PL/SQL.", "Database connections are established using the CONNECT statement, and transactions are managed using COMMIT and ROLLBACK statements.", "Database connections are established using the DECLARE statement."],
+                correctIndex: 2
+            },
+            {
+                question: "How do you handle exceptions in PL/SQL? Provide an example.",
+                options: ["Exceptions are handled using the IF-ELSE statement.", "Exceptions are handled using the TRY-CATCH block.", "Exceptions are handled using the EXCEPTION block.", "Exceptions are not supported in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "How do you handle exceptions that may occur when working with cursors that have parameters?",
+                options: ["By using the FETCH statement.", "By ignoring exceptions and proceeding with the cursor operations.", "By using exception handling techniques such as WHEN OTHERS and specific exception handlers for cursor-related errors.", "Cursors with parameters do not raise exceptions."],
+                correctIndex: 2
+            },
+            {
+                question: "How do you name a cursor, and what are some best practices for naming conventions?",
+                options: ["Cursors are named automatically.", "Cursors can be named using any random string.", "Cursors should have meaningful names following naming conventions such as prefixing with CUR_.", "Cursors cannot have names in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "How do you open a cursor to make it ready for data retrieval?",
+                options: ["Use the DECLARE CURSOR statement.", "Use the OPEN CURSOR statement.", "Use the FETCH statement.", "Cursors are automatically opened in PL/SQL."],
+                correctIndex: 1
+            },
+            {
+                question: "How do you pass values to the cursor parameters when opening the cursor?",
+                options: ["Use the FETCH statement to provide parameter values.", "Use the SET PARAMETER statement.", "Use a separate ASSIGN statement to assign values to parameters before opening the cursor.", "Cursor parameters do not require values when opening."],
+                correctIndex: 2
+            },
+            {
+                question: "How does a Cursor FOR Loop handle exceptions compared to explicit cursor processing?",
+                options: ["Cursor FOR Loops do not support exception handling.", "Cursor FOR Loops handle exceptions more gracefully by providing built-in error handling mechanisms.", "Exception handling in Cursor FOR Loops is the same as in explicit cursor processing.", "Cursor FOR Loops handle exceptions less efficiently than explicit cursors."],
+                correctIndex: 1
+            },
+            {
+                question: "How does a cursor with parameters differ from a cursor without parameters in terms of flexibility?",
+                options: ["Cursors with parameters are less flexible.", "Cursors with parameters are more flexible because they can retrieve data based on varying conditions.", "There is no difference in flexibility between the two types of cursors.", "Cursors with parameters are slower."],
+                correctIndex: 1
+            },
+            {
+                question: "How is the declaration of a cursor different from a regular SQL query?",
+                options: ["Cursors cannot be used to retrieve data.", "Cursors have a SELECT statement, while regular SQL queries are standalone.", "Regular SQL queries cannot be used in PL/SQL.", "There is no difference; they are the same."],
+                correctIndex: 1
+            },
+            {
+                question: "In a multi-user database system, what does optimistic concurrency control aim to achieve?",
+                options: ["It aims to prevent transactions from running concurrently.", "It aims to avoid blocking and allow transactions to proceed concurrently, only checking for conflicts at the end.", "It aims to lock all records to avoid conflicts.", "It aims to roll back all transactions."],
+                correctIndex: 1
+            },
+            {
+                question: "In database recovery, what is the difference between forward recovery and backward recovery?",
+                options: ["Forward recovery restores the database to a previous state, while backward recovery recovers the database to its current state.", "Forward recovery is the same as database backup, while backward recovery restores the database to a previous state.", "Forward recovery involves log analysis, while backward recovery involves restoring database backups.", "There is no difference; the terms are used interchangeably."],
+                correctIndex: 2
+            },
+            {
+                question: "In database recovery, what is the purpose of a database log file?",
+                options: ["To store user data.", "To record changes made to the database for recovery purposes.", "To create database backups.", "To store database metadata."],
+                correctIndex: 1
+            },
+            {
+                question: "In order to undo the work of transaction after last commit which one should be used?",
+                options: ["View", "Commit", "Rollback", "Flashback"],
+                correctIndex: 2
+            },
+            {
+                question: "In SQL, what is the role of the ROLLBACK statement?",
+                options: ["To save pending changes.", "To begin a new transaction.", "To undo all changes made during the current transaction.", "To release locks on database records."],
+                correctIndex: 2
+            },
+            {
+                question: "Is it necessary to declare a cursor inside a PL/SQL block, or can it be declared globally in a package?",
+                options: ["Cursors can only be declared globally.", "Cursors can only be declared inside a PL/SQL block.", "Cursors can be declared both globally and inside a PL/SQL block.", "Cursors are not supported in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "What are database triggers, and when might you use them in PL/SQL?",
+                options: ["Database triggers are used for hardware design.", "Database triggers are used for declaring variables.", "Database triggers are used to automatically respond to database events and can be used for auditing or enforcing business rules.", "Database triggers are used for creating tables."],
+                correctIndex: 2
+            },
+            {
+                question: "What are some common use cases for using cursor parameters in PL/SQL?",
+                options: ["Cursor parameters are rarely used in practice.", "Common use cases include generating reports with different filter criteria, processing data based on user inputs, and customizing data retrieval based on changing conditions.", "Cursor parameters are mainly used for database administration tasks.", "Cursor parameters are only used in triggers."],
+                correctIndex: 1
+            },
+            {
+                question: "What are the advantages of using explicit cursors over implicit cursors in PL/SQL?",
+                options: ["Explicit cursors are faster in performance.", "Implicit cursors are more flexible.", "Explicit cursors are easier to use and provide more control.", "Implicit cursors are automatically managed by the database."],
+                correctIndex: 2
+            },
+            {
+                question: "What are the benefits of using PL/SQL for database programming compared to using SQL alone?",
+                options: ["PL/SQL allows for creating web applications.", "PL/SQL provides procedural capabilities for better control and encapsulation of logic in the database.", "PL/SQL is used for hardware design.", "PL/SQL is primarily used for data modeling."],
+                correctIndex: 1
+            },
+            {
+                question: "What does the isolation level READ COMMITTED mean?",
+                options: ["Reads data as it was when the transaction started.", "Reads uncommitted changes made by other transactions.", "Prevents any reads until the transaction is committed.", "Reads data from committed transactions only."],
+                correctIndex: 0
+            },
+            {
+                question: "What does the SAVEPOINT statement do in SQL?",
+                options: ["Marks a point in a transaction to be rolled back to later.", "Commits the transaction.", "Opens a new transaction.", "Locks the database."],
+                correctIndex: 0
+            },
+            {
+                question: "What happens when you fetch data from a cursor that has no more rows to retrieve?",
+                options: ["An error occurs.", "The cursor is automatically closed.", "The cursor remains open and ready for the next fetch.", "Cursors always have more rows to retrieve."],
+                correctIndex: 0
+            },
+            {
+                question: "What is a cursor in PL/SQL, and why is it used?",
+                options: ["A cursor is a database table.", "A cursor is used for looping through query results.", "A cursor is a data type in PL/SQL.", "A cursor is used for creating triggers."],
+                correctIndex: 1
+            },
+            {
+                question: "What is a database checkpoint?",
+                options: ["A physical location where the database is stored.", "A marker indicating the point in time up to which transactions are considered safe and can be recovered.", "A log file containing SQL statements.", "A password for accessing the database."],
+                correctIndex: 1
+            },
+            {
+                question: "What is a database lock in the context of concurrency control?",
+                options: ["A mechanism to block all database transactions.", "A mechanism to prevent data corruption.", "A mechanism to prevent multiple transactions from accessing the same data simultaneously.", "A mechanism to unlock databases."],
+                correctIndex: 2
+            },
+            {
+                question: "What is a database restore operation?",
+                options: ["A process that erases all data from the database.", "A process that removes the database log files.", "A process that brings a database back to a previous state by applying database backups and log files.", "A process that upgrades the database to a new version."],
+                correctIndex: 2
+            },
+            {
+                question: "What is a database transaction?",
+                options: ["A single SQL statement.", "A sequence of related SQL statements that are executed as a unit.", "A database schema.", "A database table."],
+                correctIndex: 1
+            },
+            {
+                question: "What is a deadlock in the context of concurrency control?",
+                options: ["A situation where a transaction is rolled back.", "A situation where two or more transactions are waiting for each other to release locks.", "A situation where a transaction is terminated.", "A situation where a transaction is committed."],
+                correctIndex: 1
+            },
+            {
+                question: "What is a distributed transaction in database management?",
+                options: ["A transaction that involves multiple databases.", "A transaction that is committed automatically.", "A transaction with a large number of SQL statements.", "A transaction without a COMMIT."],
+                correctIndex: 0
+            },
+            {
+                question: "What is a full database backup?",
+                options: ["A backup that includes only a subset of the database.", "A backup that includes all the data and structures in the database.", "A backup that contains only log files.", "A backup that is encrypted for security."],
+                correctIndex: 1
+            },
+            {
+                question: "What is a nested transaction in SQL?",
+                options: ["A transaction inside another transaction.", "A transaction without any nested SQL statements.", "A transaction that cannot be rolled back.", "A transaction with a SAVEPOINT."],
+                correctIndex: 0
+            },
+            {
+                question: "What is a PL/SQL function, and how does it differ from a procedure?",
+                options: ["A function is used for controlling database transactions.", "A function is used for encapsulating reusable logic and returns a value.", "A procedure is used for data modeling.", "A procedure is used for creating tables."],
+                correctIndex: 1
+            },
+            {
+                question: "What is concurrency control in database systems?",
+                options: ["Managing multiple database transactions simultaneously.", "Controlling access to the database using passwords.", "Rolling back transactions in case of errors.", "Creating indexes for database tables."],
+                correctIndex: 0
+            },
+            {
+                question: "What is cursor positioning, and how does it relate to fetching data?",
+                options: ["Cursor positioning determines the cursor's name.", "Cursor positioning is the process of opening a cursor.", "Cursor positioning refers to the current position of the cursor relative to the result set, affecting the next fetch operation.", "Cursor positioning is not relevant in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "What is database recovery in the context of database management systems?",
+                options: ["Backing up the database to prevent data loss.", "The process of restoring a database to a previous state after a failure.", "Increasing the database size to accommodate more data.", "Encrypting database files for security."],
+                correctIndex: 1
+            },
+            {
+                question: "What is dynamic SQL, and why might you use it in PL/SQL?",
+                options: ["Dynamic SQL is used for creating triggers in PL/SQL.", "Dynamic SQL allows you to generate and execute SQL statements at runtime.", "Dynamic SQL is used for web development.", "Dynamic SQL is used for hardware design."],
+                correctIndex: 1
+            },
+            {
+                question: "What is PL/SQL, and how does it differ from SQL?",
+                options: ["PL/SQL is a markup language for web development.", "PL/SQL is a procedural extension of SQL.", "PL/SQL is a data modeling language.", "PL/SQL is a hardware description language."],
+                correctIndex: 1
+            },
+            {
+                question: "What is the ACID property in the context of database transactions?",
+                options: ["Atomicity, Consistency, Isolation, Durability", "Aggregation, Continuity, Integrity, Durability", "Affinity, Consistency, Isolation, Durability", "Atomicity, Cancellation, Isolation, Division"],
+                correctIndex: 0
+            },
+            {
+                question: "What is the advantage of using a Cursor FOR Loop over traditional cursor processing?",
+                options: ["Cursor FOR Loops are slower than traditional cursors.", "Cursor FOR Loops offer less control.", "Cursor FOR Loops simplify cursor processing by handling cursor declaration, opening, fetching, and closing automatically.", "Cursor FOR Loops are not recommended in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the benefit of using cursor parameters when working with data retrieval?",
+                options: ["Cursor parameters make cursor declaration simpler.", "Cursor parameters allow for dynamic queries and customization of data retrieval based on varying conditions.", "Cursor parameters improve cursor performance.", "Cursor parameters are not useful in PL/SQL."],
+                correctIndex: 1
+            },
+            {
+                question: "What is the default behavior of a Cursor FOR Loop if there are no rows to process?",
+                options: ["It raises an error.", "It skips the loop and continues with the next statement.", "It automatically exits the loop.", "It waits for rows to be available."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the difference between a PL/SQL procedure and a PL/SQL function?",
+                options: ["A procedure returns a value, while a function does not.", "A procedure does not return a value, while a function does.", "A procedure and a function are the same.", "A procedure and a function are not supported in PL/SQL."],
+                correctIndex: 1
+            },
+            {
+                question: "What is the opposite of a COMMIT statement in SQL?",
+                options: ["ROLLBACK", "BEGIN TRANSACTION", "SAVEPOINT", "LOCK"],
+                correctIndex: 0
+            },
+            {
+                question: "What is the primary drawback of using pessimistic concurrency control in a database system?",
+                options: ["It can lead to data inconsistency.", "It can result in excessive locking and reduced concurrency.", "It is slower than optimistic concurrency control.", "It requires frequent COMMIT statements."],
+                correctIndex: 1
+            },
+            {
+                question: "What is the purpose of a differential backup in database recovery?",
+                options: ["To recover the database to a specific point in time.", "To restore only the data that has changed since the last full backup, reducing the recovery time.", "To make a copy of the entire database.", "To compress the database backup files."],
+                correctIndex: 1
+            },
+            {
+                question: "What is the purpose of declaring a cursor in PL/SQL?",
+                options: ["To insert data into a table.", "To define a variable in PL/SQL.", "To retrieve and manipulate query results in a controlled manner.", "To create a trigger in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the purpose of fetching data from a cursor in PL/SQL?",
+                options: ["To insert data into a table.", "To define a variable in PL/SQL.", "To retrieve and manipulate query results row by row.", "To create a trigger in PL/SQL."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the purpose of the COMMIT statement in SQL?",
+                options: ["To roll back a transaction.", "To save all pending changes permanently to the database.", "To lock database records.", "To create a new transaction."],
+                correctIndex: 1
+            },
+            {
+                question: "What is the purpose of the FOR loop in PL/SQL, and how is it used?",
+                options: ["The FOR loop is used for declaring variables.", "The FOR loop is used for defining exceptions.", "The FOR loop is used for iterative processing.", "The FOR loop is used for database connections."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the purpose of the LOCK TABLE statement in SQL?",
+                options: ["To unlock a table.", "To create a new table.", "To specify the locking mode for a table explicitly.", "To commit a transaction."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the purpose of the WHEN OTHERS exception handler in PL/SQL?",
+                options: ["It is used for declaring variables.", "It is used for defining custom exceptions.", "It is used to catch and handle unexpected exceptions.", "It is used for database connections."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the role of a database backup in recovery?",
+                options: ["It serves as a temporary storage location.", "It records changes made to the database.", "It provides a copy of the database that can be used to restore data in case of data loss or corruption.", "It ensures data consistency during concurrent transactions."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the role of the FETCH statement in cursor processing?",
+                options: ["It defines the cursor's name.", "It specifies the number of rows to fetch.", "It retrieves rows from the cursor into variables or records.", "It opens the cursor for data retrieval."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the significance of the %ROWTYPE attribute when declaring a cursor?",
+                options: ["It defines the cursor's name.", "It specifies the number of rows the cursor can fetch.", "It defines the structure of the result set the cursor will hold.", "It determines the data type of cursor variables."],
+                correctIndex: 2
+            },
+            {
+                question: "What is the significance of the recovery point objective (RPO) in database recovery planning?",
+                options: ["It defines the maximum number of recovery points allowed.", "It specifies the desired point in time to which a database should be recovered after a failure.", "It defines the number of database logs to retain.", "It measures the database's performance."],
+                correctIndex: 1
+            },
+            {
+                question: "Which ACID property ensures that a transaction is completed in its entirety or not at all?",
+                options: ["Atomicity", "Consistency", "Isolation", "Durability"],
+                correctIndex: 0
+            },
+            {
+                question: "Which concurrency control technique allows conflicts to be detected and resolved only at the commit time?",
+                options: ["Validation-based protocol", "Timestamp ordering", "Two-phase locking", "Three-phase locking"],
+                correctIndex: 0
+            },
+            {
+                question: "Which database recovery model allows for point-in-time recovery to any arbitrary moment?",
+                options: ["Simple recovery model", "Full recovery model", "Bulk-logged recovery model", "Incremental recovery model"],
+                correctIndex: 1
+            },
+            {
+                question: "Which isolation level in SQL provides the highest level of isolation but can lead to concurrency issues?",
+                options: ["READ COMMITTED", "SERIALIZABLE", "READ UNCOMMITTED", "REPEATABLE READ"],
+                correctIndex: 1
+            },
+            {
+                question: "Which of the following is not a concurrency control mechanism in DBMS?",
+                options: ["Locking", "Timestamp ordering", "Multiversion concurrency control", "Rollback and recovery"],
+                correctIndex: 3
+            },
+            {
+                question: "Which of the following recovery techniques is based on maintaining multiple copies of the database at different points in time?",
+                options: ["Replication", "Deferred update", "Redo logging", "Undo logging"],
+                correctIndex: 0
+            },
+            {
+                question: "Which SQL statement is used to set a SAVEPOINT within a transaction?",
+                options: ["BEGIN SAVEPOINT", "SAVEPOINT", "SET SAVEPOINT", "CREATE SAVEPOINT"],
+                correctIndex: 1
+            },
+            {
+                question: "Which technique allows concurrent transactions to access different parts of a database without conflicts?",
+                options: ["Pessimistic concurrency control", "Optimistic concurrency control", "Exclusive locking", "Distributed transactions"],
+                correctIndex: 1
+            },
+            {
+                question: "[ON table_name] specifies the name of the table associated with the trigger.",
+                options: ["Yes", "No", "Can be yes or no", "None of the above"],
+                correctIndex: 0
+            },
+            {
+                question: "____ are stored programs, which are automatically executed or fired when some events occur.",
+                options: ["Procedure", "Triggers", "Collection", "Transaction"],
+                correctIndex: 1
+            },
+            {
+                question: "A ____ consists of a sequence of query and/or update statements.",
+                options: ["Transaction", "Commit", "Rollback", "Flashback"],
+                correctIndex: 0
+            },
+            {
+                question: "A ____ is a special kind of a store procedure that executes in response to certain action on the table like insertion, deletion or updation of data.",
+                options: ["Procedures", "Triggers", "Functions", "None of the mentioned"],
+                correctIndex: 1
+            },
+            {
+                question: "A stored procedure in SQL is a",
+                options: ["Block of functions", "Group of Transact-SQL statements compiled into a single execution plan.", "Group of distinct SQL statementsboekfalsely: Block of functions", "Group of Transact-SQL statements compiled into a single execution plan.", "Group of distinct SQL statements.", "None of the mentioned"],
+                correctIndex: 1
+            },
+            {
+                question: "A view is actually a?",
+                options: ["composition of a table", "decomposition of a table", "associated to a table", "None of the above"],
+                correctIndex: 0
+            },
+            {
+                question: "All objects placed in the specification are called ____ objects.",
+                options: ["private", "protected", "public", "None of the above"],
+                correctIndex: 2
+            },
+            {
+                question: "Any subprogram not in the package specification but coded in the package body is called a ____ object.",
+                options: ["protected", "private", "self", "public"],
+                correctIndex: 1
+            },
+            {
+                question: "Boyce-Codd Normal Form (BCNF) is an extension of which normal form?",
+                options: ["First Normal Form (1NF)", "Second Normal Form (2NF)", "Third Normal Form (3NF)", "Fourth Normal Form (4NF)"],
+                correctIndex: 2
+            },
+            {
+                question: "Consider the following action: TRANSACTION..... Commit; ROLLBACK; What does Rollback do?",
+                options: ["Undoes the transactions before commit", "Clears all transactions", "Redoes the transactions before commit", "No action"],
+                correctIndex: 3
+            },
+            {
+                question: "Consider the following cursor declaration in SQL: DECLARE cursor1 CURSOR FOR SELECT FirstName, LastName FROM Employees WHERE Department = 'Sales' If you want to open and fetch rows from this cursor, what SQL statement should you use next?",
+                options: ["FETCH NEXT FROM cursor1;", "OPEN cursor1;", "CLOSE cursor1;", "DECLARE cursor1 CURSOR FOR..."],
+                correctIndex: 1
+            },
+            {
+                question: "Consider the following database schedule with two transactions, T1 and T2 S = r2(X); r1(X); r2(Y); w1(X); r1(Y); w2(X); a1; a2 where ri(Z) denotes a read operation by transaction Ti on a variable Z, wi(Z) denotes a write operation by Ti on a variable Z and ai denotes an abort by transaction Ti. Which one of the following statements about the above schedule is TRUE?",
+                options: ["S is non-recoverable", "S is recoverable, but has a cascading abort", "S does not have a cascading abort", "S is strict"],
+                correctIndex: 2
+            },
+            {
+                question: "Consider the following stored procedure in SQL: CREATE PROCEDURE CalculateTotalPrice @ProductID INT, @Quantity INT AS BEGIN DECLARE @Price DECIMAL(10, 2) SELECT @Price = UnitPrice FROM Products WHERE ProductID = @ProductID PRINT 'Total Price: ' + CAST(@Price * @Quantity AS VARCHAR) END If you call this stored procedure with @ProductID = 101 and @Quantity = 5, what will be printed?",
+                options: ["Total Price: 505", "Total Price: 25", "Total Price: 101", "Total Price: 5"],
+                correctIndex: 1
+            },
+            {
+                question: "Create function dept_count(dept_name varchar(20)) begin declare d_count integer; select count(*) into d_count from instructor where instructor.dept_name=dept_name return d_count; end Find the error in the above statement.",
+                options: ["Return type missing", "Dept_name is mismatched", "Reference relation is not mentioned", "All of the mentioned"],
+                correctIndex: 0
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION calculate_gpa( student_id NUMBER ) RETURN NUMBER IS total_points NUMBER := 0; total_credits NUMBER := 0; gpa NUMBER; BEGIN -- Calculate GPA for a student -- Assume the grade scale: A=4, B=3, C=2, D=1, F=0 -- Credits per subject: 3 credits -- GPA = (Total Points) / (Total Credits) RETURN gpa; END;",
+                options: ["Deletes students by age.", "Updates student's name.", "Calculates a student's GPA based on their grades.", "Retrieves students in a subject above average."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION calculate_gpa( student_id NUMBER ) RETURN NUMBER IS gpa NUMBER; BEGIN -- Calculate GPA for a student based on their grades and credit hours RETURN gpa; END;",
+                options: ["Deletes students by age.", "Updates student's name.", "Calculates a student's GPA based on their grades and credit hours.", "Transfers students from one batch to another."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION calculate_prelim",
+                options: ["Deletes students by age.", "Updates student information.", "Calculates the average grade in a specific subject.", "Returns a list of students with above-average grades in a subject."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION calculate_total_students RETURN NUMBER IS total_students NUMBER; BEGIN SELECT COUNT(*) INTO total_students FROM student; RETURN total_students; END;",
+                options: ["Deletes students by name.", "Updates student information.", "Calculates the total number of students.", "Returns a list of students by age range."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION count_students_by_age( age NUMBER ) RETURN NUMBER IS student_count NUMBER; BEGIN SELECT COUNT(*) INTO student_count FROM student WHERE age = age; RETURN student_count; END;",
+                options: ["Deletes students by age.", "Returns the total count of students by age.", "Enrolls students in multiple subjects.", "Deletes students by subject."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION count_students_in_subject( subject_name VARCHAR2 ) RETURN NUMBER IS student_count NUMBER; BEGIN SELECT COUNT(*) INTO student_count FROM student WHERE subject = subject_name; RETURN student_count; END;",
+                options: ["Retrieves students by subject count.", "Returns a list of students with the maximum number of subjects.", "Deletes students by age.", "Updates a student's batch."],
+                correctIndex: 0
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION find_students_with_max_age RETURN SYS_REFCURSOR IS students_cursor SYS_REFCURSOR; BEGIN OPEN students_cursor FOR SELECT student_id FROM student WHERE age = (SELECT MAX(age) FROM student); RETURN students_cursor; END;",
+                options: ["Retrieves students with the lowest age.", "Returns a list of students with the highest age.", "Deletes students by age.", "Awards scholarships to deserving students."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION find_students_with_max_subjects RETURN SYS_REFCURSOR IS students_cursor SYS_REFCURSOR; BEGIN OPEN students_cursor FOR SELECT student_id FROM ( SELECT student_id, COUNT(DISTINCT subject) AS subject_count FROM student GROUP BY student_id ORDER BY subject_count DESC ) WHERE ROWNUM = 1; RETURN students_cursor; END;",
+                options: ["Retrieves students with the highest grades.", "Returns a list of students with the maximum number of subjects.", "Enrolls students in multiple subjects.", "Deletes students by subject."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION find_students_with_subject_count( subject_count NUMBER ) RETURN SYS_REFCURSOR IS students_cursor SYS_REFCURSOR; BEGIN OPEN students_cursor FOR SELECT student_id FROM ( SELECT student_id, COUNT(DISTINCT subject) AS subject_count FROM student GROUP BY student_id ) WHERE subject_count = subject_count; RETURN students_cursor; END;",
+                options: ["Retrieves students by subject count.", "Returns a list of students with a specific subject count.", "Deletes students by age.", "Updates a student's subject and grade."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION find_subjects_with_min_students RETURN SYS_REFCURSOR IS subjects_cursor SYS_REFCURSOR; BEGIN OPEN subjects_cursor FOR SELECT subject FROM ( SELECT subject, COUNT(*) AS student_count FROM student GROUP BY subject ORDER BY student_count ASC ) WHERE ROWNUM = 1; RETURN subjects_cursor; END;",
+                options: ["Retrieves subjects with the highest grades.", "Returns a list of subjects with the lowest number of students.", "Enrolls students in multiple subjects.", "Deletes students by subject."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION get_highest_grade_by_subject( subject_name VARCHAR2 ) RETURN NUMBER IS highest_grade NUMBER; BEGIN SELECT MAX(grade) INTO highest_grade FROM student WHERE subject = subject_name; RETURN highest_grade; END;",
+                options: ["Returns the highest grade of all students.", "Enrolls students in a subject.", "Deletes students by subject.", "Returns the highest grade in a specific subject."],
+                correctIndex: 3
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION get_student_count_by_subject( subject_name VARCHAR2 ) RETURN NUMBER IS student_count NUMBER; BEGIN SELECT COUNT(*) INTO student_count FROM student WHERE subject = subject_name; RETURN student_count; END;",
+                options: ["Deletes a student by subject.", "Returns the count of students in a specific subject.", "Enrolls a student in a subject.", "Updates the student's subject."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION get_students_above_average( subject_name VARCHAR2 ) RETURN SYS_REFCURSOR IS students_cursor SYS_REFCURSOR; BEGIN OPEN students_cursor FOR SELECT student_id FROM student WHERE subject = subject_name AND grade > (SELECT AVG(grade) FROM student WHERE subject = subject_name); RETURN students_cursor; END;",
+                options: ["Retrieves all students.", "Returns a list of students with above-average grades in a specific subject.", "Enrolls students in a subject.", "Deletes students by subject."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION get_students_by_age_range( min_age NUMBER, max_age NUMBER ) RETURN SYS_REFCURSOR IS students_cursor SYS_REFCURSOR; BEGIN OPEN students_cursor FOR SELECT student_id FROM student WHERE age BETWEEN min_age AND max_age; RETURN students_cursor; END;",
+                options: ["Retrieves students by age range.", "Returns a list of students with above-average grades in a specific subject.", "Enrolls students in multiple subjects.", "Deletes students by subject."],
+                correctIndex: 0
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION get_students_by_grade_range( min_grade NUMBER, max_grade NUMBER ) RETURN SYS_REFCURSOR IS students_cursor SYS_REFCURSOR; BEGIN OPEN students_cursor FOR SELECT student_id FROM student WHERE grade BETWEEN min_grade AND max_grade; RETURN students_cursor; END;",
+                options: ["Retrieves students by grade range.", "Returns the total count of students by grade range.", "Awards scholarships to deserving students.", "Transfers students from one batch to another."],
+                correctIndex: 0
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION get_students_by_subject_and_grade( subject_name VARCHAR2, min_grade NUMBER ) RETURN SYS_REFCURSOR IS students_cursor SYS_REFCURSOR; BEGIN OPEN students_cursor FOR SELECT student_id FROM student WHERE subject = subject_name AND grade >= min_grade; RETURN students_cursor; END;",
+                options: ["Retrieves students by subject and minimum grade.", "Returns a list of subjects with specific grades.", "Enrolls students in multiple subjects.", "Deletes students by subject."],
+                correctIndex: 0
+            },
+            {
+                question: "CREATE OR REPLACE PACKAGE student_grading AS FUNCTION calculate_final_grade(student_id NUMBER, course_id NUMBER) RETURN CHAR; FUNCTION get_student_ranking(course_id NUMBER) RETURN NUMBER; END student_grading; What does the PL/SQL package 'student_grading' contain?",
+                options: ["It contains two PL/SQL functions, 'calculate_final_grade' and 'get_student_ranking', for calculating student grades and retrieving student rankings in a course.", "It contains two PL/SQL triggers, 'calculate_final_grade' and 'get_student_ranking', for calculating student grades and retrieving student rankings in a course.", "It contains two PL/SQL procedures, 'calculate_final_grade' and 'get_student_ranking', for calculating student grades and retrieving student rankings in a course.", "It contains one PL/SQL function, 'student_grading', and one PL/SQL procedure, 'student_grading', for calculating student grades and retrieving student rankings in a course."],
+                correctIndex: 0
+            },
+            {
+                question: "CREATE OR REPLACE PACKAGE medical_records AS FUNCTION get_patient_history(patient_id NUMBER) RETURN CLOB; FUNCTION analyze_patient_data(patient_id NUMBER) RETURN CLOB; END medical_records; What does the PL/SQL package 'medical_records' contain?",
+                options: ["It contains two PL/SQL functions, 'get_patient_history' and 'analyze_patient_data', for retrieving patient medical history and analyzing patient data.", "It contains two PL/SQL triggers, 'get_patient_history' and 'analyze_patient_data', for retrieving patient medical history and analyzing patient data.", "It contains two PL/SQL procedures, 'get_patient_history' and 'analyze_patient_data', for retrieving patient medical history and analyzing patient data.", "It contains one PL/SQL function, 'medical_records', and one PL/SQL procedure, 'medical_records', for retrieving patient medical history and analyzing patient data."],
+                correctIndex: 0
+            },
+            {
+                question: "DECLARE emp_cursor CURSOR FOR SELECT employee_name FROM employees; What does the SQL cursor 'emp_cursor' do?",
+                options: ["It retrieves all columns from the 'employees' table.", "It retrieves the 'employee_name' column from the 'employees' table.", "It updates the 'employee_name' column in the 'employees' table.", "It deletes records from the 'employees' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE product_cursor CURSOR FOR SELECT product_name, product_price FROM products; What does the SQL cursor 'product_cursor' do?",
+                options: ["It retrieves all columns from the 'products' table.", "It retrieves the 'product_name' and 'product_price' columns from the 'products' table.", "It updates the 'product_name' and 'product_price' columns in the 'products' table.", "It deletes records from the 'products' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE order_cursor CURSOR FOR SELECT order_id, order_date FROM orders; What does the SQL cursor 'order_cursor' do?",
+                options: ["It retrieves all columns from the 'orders' table.", "It retrieves the 'order_id' and 'order_date' columns from the 'orders' table.", "It updates the 'order_id' and 'order_date' columns in the 'orders' table.", "It deletes records from the 'orders' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE customer_cursor CURSOR FOR SELECT customer_name FROM customers; What does the SQL cursor 'customer_cursor' do?",
+                options: ["It retrieves all columns from the 'customers' table.", "It retrieves the 'customer_name' column from the 'customers' table.", "It updates the 'customer_name' column in the 'customers' table.", "It deletes records from the 'customers' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE employee_cursor CURSOR FOR SELECT employee_id, employee_name FROM employees; What does the SQL cursor 'employee_cursor' do?",
+                options: ["It retrieves all columns from the 'employees' table.", "It retrieves the 'employee_id' and 'employee_name' columns from the 'employees' table.", "It updates the 'employee_id' and 'employee_name' columns in the 'employees' table.", "It deletes records from the 'employees' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE product_cursor CURSOR FOR SELECT product_id FROM products WHERE product_price > 100; What does the SQL cursor 'product_cursor' do?",
+                options: ["It retrieves all columns from the 'products' table.", "It retrieves the 'product_id' column from the 'products' table for products with a price greater than 100.", "It updates the 'product_id' column in the 'products' table.", "It deletes records from the 'products' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE order_cursor CURSOR FOR SELECT order_date FROM orders WHERE order_status = 'Shipped'; What does the SQL cursor 'order_cursor' do?",
+                options: ["It retrieves all columns from the 'orders' table.", "It retrieves the 'order_date' column from the 'orders' table for orders with a status of 'Shipped'.", "It updates the 'order_date' column in the 'orders' table.", "It deletes records from the 'orders' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE customer_cursor CURSOR FOR SELECT customer_id FROM customers WHERE registration_date >= '2023-01-01'; What does the SQL cursor 'customer_cursor' do?",
+                options: ["It retrieves all columns from the 'customers' table.", "It retrieves the 'customer_id' column from the 'customers' table for customers registered on or after January 1, 2023.", "It updates the 'customer_id' column in the 'customers' table.", "It deletes records from the 'customers' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE employee_cursor CURSOR FOR SELECT department_id, COUNT(*) FROM employees GROUP BY department_id; What does the SQL cursor 'employee_cursor' do?",
+                options: ["It retrieves all columns from the 'employees' table.", "It retrieves the 'department_id' and the count of employees in each department from the 'employees' table.", "It updates the 'department_id' and employee counts in the 'employees' table.", "It deletes records from the 'employees' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE product_cursor CURSOR FOR SELECT product_name, product_category FROM products WHERE product_category = 'Electronics'; What does the SQL cursor 'product_cursor' do?",
+                options: ["It retrieves all columns from the 'products' table.", "It retrieves the 'product_name' and 'product_category' columns from the 'products' table for products in the 'Electronics' category.", "It updates the 'product_name' and 'product_category' columns in the 'products' table.", "It deletes records from the 'products' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE employee_cursor CURSOR FOR SELECT employee_id, employee_name, department_id FROM employees WHERE salary > (SELECT AVG(salary) FROM employees); What does the SQL cursor 'employee_cursor' do?",
+                options: ["It retrieves all columns from the 'employees' table.", "It retrieves the 'employee_id', 'employee_name', and 'department_id' columns from the 'employees' table for employees with salaries above the average salary in the company.", "It updates the 'employee_id', 'employee_name', and 'department_id' columns in the 'employees' table.", "It deletes records from the 'employees' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE order_cursor CURSOR FOR SELECT order_id, customer_id, order_date FROM orders WHERE EXISTS (SELECT 1 FROM order_items WHERE order_items.order_id = orders.order_id); What does the SQL cursor 'order_cursor' do?",
+                options: ["It retrieves all columns from the 'orders' table.", "It retrieves the 'order_id', 'customer_id', and 'order_date' columns from the 'orders' table for orders that have associated order items.", "It updates the 'order_id', 'customer_id', and 'order_date' columns in the 'orders' table.", "It deletes records from the 'orders' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE customer_cursor CURSOR FOR SELECT customer_id, COUNT(*) AS order_count FROM orders GROUP BY customer_id HAVING COUNT(*) > 5; What does the SQL cursor 'customer_cursor' do?",
+                options: ["It retrieves all columns from the 'orders' table.", "It retrieves the 'customer_id' and the count of orders placed by each customer from the 'orders' table for customers who have placed more than 5 orders.", "It updates the 'customer_id' and order counts in the 'orders' table.", "It deletes records from the 'orders' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE product_cursor CURSOR FOR SELECT product_id, product_name, product_price FROM products WHERE product_id IN (SELECT product_id FROM order_items GROUP BY product_id HAVING COUNT(*) >= 10); What does the SQL cursor 'product_cursor' do?",
+                options: ["It retrieves all columns from the 'products' table.", "It retrieves the 'product_id', 'product_name', and 'product_price' columns from the 'products' table for products that have been ordered at least 10 times.", "It updates the 'product_id', 'product_name', and 'product_price' columns in the 'products' table.", "It deletes records from the 'products' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE order_cursor CURSOR FOR SELECT order_id, order_date, SUM(order_total) AS total_amount FROM orders WHERE order_status = 'Shipped' GROUP BY order_id, order_date HAVING SUM(order_total) > 1000; What does the SQL cursor 'order_cursor' do?",
+                options: ["It retrieves all columns from the 'orders' table.", "It retrieves the 'order_id', 'order_date', and total order amount columns from the 'orders' table for shipped orders with a total amount greater than 1000.", "It updates the 'order_id', 'order_date', and total order amount columns in the 'orders' table.", "It deletes records from the 'orders' table."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER update_salary_trigger BEFORE UPDATE ON employees FOR EACH ROW BEGIN IF :NEW.salary > :OLD.salary THEN INSERT INTO salary_history (employee_id, old_salary, new_salary, change_date) VALUES (:OLD.employee_id, :OLD.salary, :NEW.salary, SYSDATE); END IF; END; What does the SQL trigger 'update_salary_trigger' do?",
+                options: ["It updates the salary of all employees in the 'employees' table.", "It inserts a record into the 'salary_history' table whenever an employee's salary is increased.", "It deletes records from the 'employees' table whenever an employee's salary is updated.", "It calculates the average salary of all employees."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER audit_employee_delete AFTER DELETE ON employees FOR EACH ROW BEGIN INSERT INTO audit_log (event_type, event_date, username, details) VALUES ('Employee Deletion', SYSDATE, USER, 'Employee ID: ' || :OLD.employee_id); END; What does the SQL trigger 'audit_employee_delete' do?",
+                options: ["It updates employee records in the 'employees' table.", "It inserts a record into the 'audit_log' table whenever an employee is deleted.", "It inserts a record into the 'employees' table whenever an employee is deleted.", "It calculates the total number of employees in the 'employees' table."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER calculate_avg_salary AFTER INSERT OR DELETE ON employees FOR EACH ROW BEGIN DECLARE total_salary NUMBER; num_employees NUMBER; BEGIN SELECT SUM(salary), COUNT(*) INTO total_salary, num_employees FROM employees; IF num_employees > 0 THEN INSERT INTO salary_stats (average_salary, total_employees, calculation_date) VALUES (total_salary / num_employees, num_employees, SYSDATE); END IF; END; END; What does the SQL trigger 'calculate_avg_salary' do?",
+                options: ["It updates the salary of all employees in the 'employees' table.", "It calculates the average salary and total number of employees whenever a new employee is inserted or an employee is deleted.", "It inserts a record into the 'salary_stats' table whenever an employee is deleted.", "It calculates the total number of employees in the 'employees' table."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER prevent_salary_reduction BEFORE UPDATE ON employees FOR EACH ROW BEGIN IF :NEW.salary < :OLD.salary THEN RAISE_APPLICATION_ERROR (-20001, 'Salary reduction is not allowed.'); END IF; END; What does the SQL trigger 'prevent_salary_reduction' do?",
+                options: ["It updates the salary of all employees in the 'employees' table.", "It prevents any attempt to reduce an employee's salary and raises a custom application error if such an update is detected.", "It inserts a record into the 'salary_history' table whenever an employee's salary is increased.", "It calculates the average salary of all employees."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER audit_table_changes AFTER INSERT OR UPDATE OR DELETE ON employees DECLARE change_description VARCHAR2(500); BEGIN change_description := 'Table \"employees\" was '; IF INSERTING THEN change_description := change_description || 'inserted into.'; ELSIF UPDATING THEN change_description := change_description || 'updated.'; ELSIF DELETING THEN change_description := change_description || 'deleted from.'; END IF; INSERT INTO audit_log (event_type, event_date, details) VALUES ('Table Change', SYSDATE, change_description); END; What does the SQL trigger 'audit_table_changes' do?",
+                options: ["It updates the 'employees' table whenever a change is made to it.", "It inserts a record into the 'audit_log' table whenever a change (insert, update, or delete) is made to the 'employees' table, including a description of the change.", "It calculates the total number of employees in the 'employees' table.", "It deletes records from the 'employees' table whenever a change is made to it."],
+                correctIndex: 1
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER enforce_manager_approval BEFORE INSERT ON purchase_orders FOR EACH ROW BEGIN IF :NEW.total_amount > 1000 AND :NEW.manager_approval IS NULL THEN RAISE_APPLICATION_ERROR (-20002, 'Manager approval is required for purchase orders over $1000.'); END IF; END; What does the SQL trigger 'enforce_manager_approval' do?",
+                options: ["It inserts records into the 'purchase_orders' table.", "It updates records in the 'purchase_orders' table.", "It prevents the insertion of purchase orders over $1000 without manager approval, raising a custom application error if such an insert is attempted.", "It calculates the total amount of purchase orders."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER calculate_total_order_amount AFTER INSERT OR UPDATE ON order_items FOR EACH ROW BEGIN UPDATE orders SET total_amount = (SELECT SUM(item_amount) FROM order_items WHERE order_id = :NEW.order_id) WHERE order_id = :NEW.order_id; END; What does the SQL trigger 'calculate_total_order_amount' do?",
+                options: ["It inserts records into the 'order_items' table.", "It updates records in the 'order_items' table.", "It calculates the total order amount for an order whenever a new order item is inserted or an existing order item is updated, and updates the 'total_amount' in the 'orders' table.", "It calculates the average order amount."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER prevent_duplicate_records BEFORE INSERT ON employees FOR EACH ROW BEGIN IF EXISTS (SELECT 1 FROM employees WHERE employee_id = :NEW.employee_id) THEN RAISE_APPLICATION_ERROR (-20003, 'Employee ID must be unique.'); END IF; END; What does the SQL trigger 'prevent_duplicate_records' do?",
+                options: ["It inserts records into the 'employees' table.", "It updates records in the 'employees' table.", "It prevents the insertion of duplicate employee records with the same 'employee_id', raising a custom application error if such an insert is attempted.", "It calculates the total number of employees in the 'employees' table."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE TRIGGER calculate_sales_bonus AFTER INSERT OR UPDATE ON sales FOR EACH ROW BEGIN DECLARE bonus_amount NUMBER; BEGIN IF :NEW.sale_amount > 10000 THEN bonus_amount := :NEW.sale_amount * 0.05; UPDATE sales SET bonus = bonus_amount WHERE sale_id = :NEW.sale_id; END IF; END; END; What does the SQL trigger 'calculate_sales_bonus' do?",
+                options: ["It inserts records into the 'sales' table.", "It updates records in the 'sales' table.", "It calculates a sales bonus for sales with an amount over $10,000 and updates the 'bonus' field in the 'sales' table whenever a new sale is inserted or an existing sale is updated.", "It calculates the average sale amount."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION get_last_name (full_name VARCHAR2) RETURN VARCHAR2 IS last_name VARCHAR2(50); BEGIN last_name := SUBSTR(full_name, INSTR(full_name, ' ') + 1); RETURN last_name; END; What does the PL/SQL function 'get_last_name' do?",
+                options: ["It calculates the average length of all words in the input 'full_name'.", "It calculates the length of the last word in the input 'full_name'.", "It retrieves the last name from the input 'full_name'.", "It checks if the input 'full_name' contains any digits and returns 'TRUE' if it does, 'FALSE' otherwise."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION square_number (num NUMBER) RETURN NUMBER IS square NUMBER; BEGIN square := num * num; RETURN square; END; What does the PL/SQL function 'square_number' do?",
+                options: ["It calculates the square root of the input number 'num'.", "It calculates the sum of two numbers.", "It calculates the square of the input number 'num'.", "It calculates the factorial of the input number 'num'."],
+                correctIndex: 2
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION is_prime (number NUMBER) RETURN BOOLEAN IS BEGIN IF number <= 1 THEN RETURN FALSE; END IF; FOR i IN 2..number-1 LOOP IF MOD(number, i) = 0 THEN RETURN FALSE; END IF; END LOOP; RETURN TRUE; END; What does the PL/SQL function 'is_prime' do?",
+                options: ["It checks if the input 'number' is a prime number and returns 'TRUE' if it is, 'FALSE' otherwise.", "It calculates the square root of the input 'number'.", "It calculates the factorial of the input 'number'.", "It checks if the input 'number' is even and returns 'TRUE' if it is, 'FALSE' otherwise."],
+                correctIndex: 0
+            },
+            {
+                question: "CREATE OR REPLACE FUNCTION get_day_of_week (date_value DATE) RETURN VARCHAR2 IS day_of_week VARCHAR2(15); BEGIN SELECT TO_CHAR(date_value, 'Day') INTO day_of_week FROM DUAL; RETURN day_of_week; END; What does the PL/SQL function 'get_day_of_week' do?",
+                options: ["It calculates the day of the week for the input 'date_value' and returns it as a string.", "It calculates the square root of the input 'date_value'.", "It calculates the average of multiple dates.", "It retrieves the month of the input 'date_value'."],
+                correctIndex: 0
+            },
+            {
+                question: "DECLARE product_cursor CURSOR FOR SELECT product_id, product_name FROM products WHERE product_id NOT IN (SELECT DISTINCT product_id FROM order_items); What does the SQL cursor 'product_cursor' do?",
+                options: ["It retrieves all columns from the 'products' table.", "It retrieves the 'product_id' and 'product_name' columns from the 'products' table for products that have not been ordered.", "It updates the 'product_id' and 'product_name' columns in the 'products' table.", "It deletes records from the 'products' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE customer_cursor CURSOR FOR SELECT customer_id, MAX(order_date) AS last_order_date FROM orders GROUP BY customer_id HAVING MAX(order_date) < TO_DATE('2023-01-01', 'YYYY-MM-DD'); What does the SQL cursor 'customer_cursor' do?",
+                options: ["It retrieves all columns from the 'orders' table.", "It retrieves the 'customer_id' and the last order date columns from the 'orders' table for customers whose last order date is before January 1, 2023.", "It updates the 'customer_id' and last order date columns in the 'orders' table.", "It deletes records from the 'orders' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE employee_cursor CURSOR FOR SELECT employee_id, employee_name, department_id FROM employees WHERE department_id = (SELECT department_id FROM departments WHERE department_name = 'Engineering'); What does the SQL cursor 'employee_cursor' do?",
+                options: ["It retrieves all columns from the 'employees' table.", "It retrieves the 'employee_id', 'employee_name', and 'department_id' columns from the 'employees' table for employees in the 'Engineering' department.", "It updates the 'employee_id', 'employee_name', and 'department_id' columns in the 'employees' table.", "It deletes records from the 'employees' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE product_cursor CURSOR FOR SELECT product_id, product_name FROM products WHERE product_price = (SELECT MAX(product_price) FROM products); What does the SQL cursor 'product_cursor' do?",
+                options: ["It retrieves all columns from the 'products' table.", "It retrieves the 'product_id' and 'product_name' columns from the 'products' table for products with the highest product price.", "It updates the 'product_id' and 'product_name' columns in the 'products' table.", "It deletes records from the 'products' table."],
+                correctIndex: 1
+            },
+            {
+                question: "DECLARE order_cursor CURSOR FOR SELECT order_id, order_date FROM orders WHERE order_id = (SELECT MAX(order_id) FROM orders); What does the SQL cursor 'order_cursor' do?",
+                options: ["It retrieves all columns from the 'orders' table.", "It retrieves the 'order_id' and 'order_date' columns from the 'orders' table for the order with the highest order ID.", "It updates the 'order_id' and 'order_date' columns in the 'orders' table.", "It deletes records from the 'orders' table."],
+                correctIndex: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                if (questions.length === 0) {
+                    throw new Error("No questions available.");
+                }
+                showQuestion();
+            } catch (error) {
+                displayError(error.message);
+            }
+
+            document.getElementById("next-btn").addEventListener("click", nextQuestion);
+        });
+
+        function showQuestion() {
+            try {
+                if (currentQuestionIndex >= questions.length) {
+                    document.getElementById("quiz-container").innerHTML = `
+                        <h2>Your Score: ${score} / ${questions.length}</h2>
+                        <button onclick="restartQuiz()">Restart Quiz</button>
+                    `;
+                    return;
+                }
+
+                const currentQuestion = questions[currentQuestionIndex];
+                if (!currentQuestion.question || !currentQuestion.options || currentQuestion.correctIndex == null) {
+                    throw new Error("Invalid question format.");
+                }
+
+                document.getElementById("question-number").innerText = `Question ${currentQuestionIndex + 1} of ${questions.length}`;
+                document.getElementById("question-text").innerText = currentQuestion.question;
+                document.getElementById("error-message").innerText = "";
+
+                const optionsContainer = document.getElementById("options-container");
+                optionsContainer.innerHTML = "";
+
+                currentQuestion.options.forEach((option, index) => {
+                    const button = document.createElement("button");
+                    button.innerText = option;
+                    button.onclick = () => handleAnswer(button, index === currentQuestion.correctIndex, currentQuestion.correctIndex);
+                    optionsContainer.appendChild(button);
+                });
+
+                document.getElementById("next-btn").style.display = "none";
+            } catch (error) {
+                displayError(error.message);
+            }
+        }
+
+        function handleAnswer(button, isCorrect, correctIndex) {
+            try {
+                const buttons = document.querySelectorAll("#options-container button");
+                buttons.forEach(btn => btn.disabled = true);
+
+                button.classList.add(isCorrect ? "correct" : "wrong");
+
+                if (!isCorrect) {
+                    buttons[correctIndex].classList.add("correct");
+                } else {
+                    score++;
+                }
+
+                document.getElementById("next-btn").style.display = "block";
+            } catch (error) {
+                displayError(error.message);
+            }
+        }
+
+        function nextQuestion() {
+            try {
+                currentQuestionIndex++;
+                showQuestion();
+            } catch (error) {
+                displayError(error.message);
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById("quiz-container").innerHTML = `
+                <p id="question-number"></p>
+                <p id="question-text"></p>
+                <div id="options-container"></div>
+                <p id="error-message"></p>
+                <button id="next-btn" style="display: none;">Next</button>
+            `;
+            document.getElementById("next-btn").addEventListener("click", nextQuestion);
+            showQuestion();
+        }
+
+        function displayError(message) {
+            document.getElementById("error-message").innerText = `Error: ${message}`;
+            document.getElementById("quiz-container").innerHTML += `<button onclick="restartQuiz()">Try Again</button>`;
+        }
+    </script>
+</body>
+</html>

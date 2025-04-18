@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Quiz Website</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #0d1117;
+            color: #d0d0d0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            background-image: radial-gradient(circle at top left, #1f2937 0%, #0d1117 100%);
+        }
+
+        .container {
+            background: rgba(30, 41, 59, 0.9);
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            text-align: center;
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 0.8s ease;
+        }
+
+        h1 {
+            font-size: 2.8em;
+            color: #06b6d4;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            color: #3b82f6;
+            margin-bottom: 20px;
+        }
+
+        select, button {
+            padding: 12px 18px;
+            margin: 10px auto;
+            font-size: 1em;
+            background-color: #1e3a8a;
+            color: #d0d0d0;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+        }
+
+        select {
+            background-color: #111827;
+            border: 1px solid #374151;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        button:hover {
+            background-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        #quizList {
+            margin-top: 20px;
+        }
+
+        #quizList button {
+            margin-top: 10px;
+        }
+
+        p {
+            color: #9ca3af;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 2.2em;
+            }
+
+            h2 {
+                font-size: 1.4em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Quiz Website</h1>
+        <h2>Select a Subject</h2>
+        <select id="subjectSelect" onchange="loadQuizzes()">
+            <option value="">Select Subject</option>
+        </select>
+        <div id="quizList"></div>
+    </div>
+
+    <script>
+        // Load subjects on page load
+        fetch('/api/subjects')
+            .then(response => response.json())
+            .then(subjects => {
+                const subjectSelect = document.getElementById('subjectSelect');
+                subjects.forEach(subject => {
+                    const option = document.createElement('option');
+                    option.value = subject;
+                    option.textContent = subject.toUpperCase();
+                    subjectSelect.appendChild(option);
+                });
+            });
+
+        // Load quizzes for selected subject
+        function loadQuizzes() {
+            const subject = document.getElementById('subjectSelect').value;
+            const quizList = document.getElementById('quizList');
+            quizList.innerHTML = '';
+
+            if (subject) {
+                fetch(`/api/quizzes/${subject}`)
+                    .then(response => response.json())
+                    .then(quizzes => {
+                        if (quizzes.length === 0) {
+                            quizList.innerHTML = '<p>No quizzes available for this subject.</p>';
+                            return;
+                        }
+                        quizzes.forEach(quiz => {
+                            const button = document.createElement('button');
+                            button.textContent = `Start ${quiz.replace('.html', '')}`;
+                            button.onclick = () => window.location.href = `/subjects/${subject}/${quiz}`;
+                            quizList.appendChild(button);
+                        });
+                    });
+            }
+        }
+    </script>
+</body>
+</html>

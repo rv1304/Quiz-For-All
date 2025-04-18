@@ -1,0 +1,12 @@
+{
+    "name": "quiz-website",
+    "version": "1.0.0",
+    "description": "A scalable quiz website with subject-wise organization",
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
+    }
+}

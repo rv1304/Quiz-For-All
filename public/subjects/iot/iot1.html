@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive IoT Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+    
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+    
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+    
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+        }
+    
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+    
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+    
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+    
+        #next-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        #next-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e9;
+        }
+    
+        #error-message {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+    
+            h1 {
+                font-size: 1.8em;
+            }
+    
+            #question-text {
+                font-size: 1.1em;
+            }
+    
+            #next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+    
+    
+</head>
+<body>
+    <h1>Comprehensive IoT Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number"></p>
+        <p id="progress-display"></p>
+        <p id="score-display">Score: 0 / 0</p>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="error-message" style="display: none;"></p>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+        <button id="continue-btn" style="display: none;">Continue with More Questions</button>
+    </div>
+    <script>
+        const allQuestions = [
+            {
+                question: "What is the main role of a sensor in an IoT system?",
+                options: ["Display data", "Connect to the internet", "Collect data from the environment", "Make decisions"],
+                correctIndex: 2
+            },
+            {
+                question: "What type of IoT component performs actions based on commands?",
+                options: ["Sensor", "Gateway", "Processor", "Actuator"],
+                correctIndex: 3
+            },
+            {
+                question: "Sensors can work autonomously or as per user commands.",
+                options: ["True", "False"],
+                correctIndex: 0
+            },
+            {
+                question: "What is the main function of the processor in an IoT system?",
+                options: ["Collect data", "Process and analyze data", "Connect devices", "Display results to users"],
+                correctIndex: 1
+            },
+            {
+                question: "Which term refers to doing data processing locally on the device?",
+                options: ["Cloud processing", "Data transmission", "Edge computing", "Actuation"],
+                correctIndex: 2
+            },
+            {
+                question: "The processor also provides data encryption and decryption.",
+                options: ["True", "False"],
+                correctIndex: 0
+            },
+            {
+                question: "What is the main job of a gateway in IoT?",
+                options: ["Actuate devices", "Process sensor data", "Route data to its destination", "Store data permanently"],
+                correctIndex: 2
+            },
+            {
+                question: "Which of the following can act as a gateway?",
+                options: ["IR Sensor", "Smart Hub", "Dashboard", "Actuator"],
+                correctIndex: 1
+            },
+            {
+                question: "Gateway works as a bridge between sensor and cloud.",
+                options: ["True", "False"],
+                correctIndex: 0
+            },
+            {
+                question: "What is the main role of an application in an IoT system?",
+                options: ["Store raw data", "Collect sensor readings", "Provide user interface & control", "Encrypt data"],
+                correctIndex: 2
+            },
+            {
+                question: "Which of these is a type of IoT application interface?",
+                options: ["Ultrasonic sensor", "Smart plug", "Mobile App", "Router"],
+                correctIndex: 2
+            },
+            {
+                question: "Applications are the frontend of an IoT system.",
+                options: ["True", "False"],
+                correctIndex: 1
+            },
+            {
+                question: "Which characteristic of IoT allows devices to talk to each other regardless of brand?",
+                options: ["Safety", "Scalability", "Inter-operability", "Intelligence"],
+                correctIndex: 2
+            },
+            {
+                question: "What helps IoT systems handle more and more devices over time?",
+                options: ["Architecture", "Scalability", "Safety", "Connectivity"],
+                correctIndex: 1
+            },
+            {
+                question: "IoT devices need user help every time they update.",
+                options: ["True", "False"],
+                correctIndex: 1
+            },
+            {
+                question: "What ensures IoT devices keep personal data safe during transmission?",
+                options: ["Self-adapting", "Connectivity", "Safety", "Intelligence"],
+                correctIndex: 2
+            },
+            {
+                question: "Which term describes the ability of IoT devices to adjust to light, temperature, etc.?",
+                options: ["Intelligence", "Connectivity", "Dynamic & Self-Adapting", "Scalability"],
+                correctIndex: 2
+            },
+            {
+                question: "Which of the following is not an application of IoT?",
+                options: ["Smart cities", "Smart farming", "Manual typewriters", "Smart wearables"],
+                correctIndex: 2
+            },
+            {
+                question: "In which application area does IoT help in remote patient monitoring and health tracking?",
+                options: ["Smart manufacturing", "Smart cities", "Healthcare", "Smart farming"],
+                correctIndex: 2
+            },
+            {
+                question: "IoT in smart cities is used for:",
+                options: ["Playing games", "Monitoring traffic and pollution", "Printing newspapers", "Farming automation"],
+                correctIndex: 1
+            },
+            {
+                question: "Which of the following uses IoT for precision agriculture, soil monitoring, and crop tracking?",
+                options: ["Smart wearables", "Smart farming", "Smart home automation", "Automotive"],
+                correctIndex: 1
+            },
+            {
+                question: "What kind of IoT application includes smart watches, fitness bands, and smart glasses?",
+                options: ["Smart cities", "Smart waste management", "Smart wearables", "Healthcare"],
+                correctIndex: 2
+            },
+            {
+                question: "IoT-based smart manufacturing improves efficiency by:",
+                options: ["Hiring more workers", "Automating processes and monitoring machines", "Using paper logs", "Ignoring machine status"],
+                correctIndex: 1
+            },
+            {
+                question: "Smart waste management systems use IoT to:",
+                options: ["Increase garbage", "Track garbage trucks and bin levels", "Manufacture plastic", "Run games"],
+                correctIndex: 1
+            },
+            {
+                question: "Building & home automation includes which of the following?",
+                options: ["Automated lighting and security systems", "Farm irrigation", "Vehicle tracking", "Traffic lights"],
+                correctIndex: 0
+            },
+            {
+                question: "Which of the following is a major security concern in IoT?",
+                options: ["Long battery life", "Automated cleaning", "Unauthorized access to data", "Fast cooking"],
+                correctIndex: 2
+            },
+            {
+                question: "The large amount of data collected by IoT devices creates challenges in:",
+                options: ["Color correction", "Video playback", "Data volume and interpretation", "Software licensing"],
+                correctIndex: 2
+            },
+            {
+                question: "Which challenge refers to the ability of an IoT system to keep working even if some components fail?",
+                options: ["Power supply", "Fault tolerance", "Scalability", "Connectivity"],
+                correctIndex: 1
+            },
+            {
+                question: "IoT devices need to work even with low energy sources, making __________ a challenge.",
+                options: ["Technology standardization", "Power supply", "Interoperability", "Software debugging"],
+                correctIndex: 1
+            },
+            {
+                question: "What makes global communication and compatibility between IoT devices difficult?",
+                options: ["Strong Wi-Fi", "Technology standardization", "Color schemes", "Signal boosters"],
+                correctIndex: 1
+            },
+            {
+                question: "When many devices are added to a network, it creates a challenge known as:",
+                options: ["Software complexity", "Short-range communication", "Scalability", "Interaction"],
+                correctIndex: 2
+            },
+            {
+                question: "Ensuring consistent and stable connections among devices is part of which IoT challenge?",
+                options: ["Connectivity and awareness", "Smart farming", "User Interface", "Cloud printing"],
+                correctIndex: 0
+            },
+            {
+                question: "Why is software complexity a challenge in IoT?",
+                options: ["Software is free to use", "Managing and updating multiple systems is difficult", "There is no software in IoT", "Software runs automatically"],
+                correctIndex: 1
+            },
+            {
+                question: "What is a challenge in IoT that involves devices communicating within short distances?",
+                options: ["Data visualization", "Interaction and short-range communication", "Software updates", "Battery life"],
+                correctIndex: 1
+            },
+            {
+                question: "What is the main focus of Consumer IoT?",
+                options: ["Making industrial operations efficient", "Convenience and comfort for individual users", "Machine-to-machine communication", "Predictive maintenance"],
+                correctIndex: 1
+            },
+            {
+                question: "What is the relationship of M2M communication with IIoT?",
+                options: ["M2M is a completely different technology", "M2M is a subset of IIoT, focused on machine communication", "M2M is only used for consumer IoT", "M2M and IIoT are the same thing"],
+                correctIndex: 1
+            },
+            {
+                question: "What is a major benefit of IIoT?",
+                options: ["Enhancing social media connectivity", "Reducing downtime through predictive maintenance", "Increasing personal entertainment options", "Improving battery life"],
+                correctIndex: 1
+            },
+            {
+                question: "What is essential for an IIoT system?",
+                options: ["High-resolution cameras", "Cloud computing for data storage and analytics", "Offline processing only", "Manual data entry"],
+                correctIndex: 1
+            },
+            {
+                question: "What are smart factories connected to?",
+                options: ["Consumer IoT devices", "Industry 4.0 and IIoT", "Gaming industry", "Social networking platforms"],
+                correctIndex: 1
+            },
+            {
+                question: "Which business model is becoming popular through IIoT?",
+                options: ["Subscription-based apps", "Outcome-based economy", "Free software distribution", "Hardware-only sales"],
+                correctIndex: 1
+            },
+            {
+                question: "Why is security important in IIoT systems?",
+                options: ["To make the user interface attractive", "To protect against cyberattacks and data breaches", "To reduce hardware costs", "To improve battery efficiency"],
+                correctIndex: 1
+            },
+            {
+                question: "Which concept is included in Factories of the Future?",
+                options: ["Virtual factories with digital twins", "Manual production processes", "Single-machine operations", "Offline data storage"],
+                correctIndex: 0
+            },
+            {
+                question: "Which device is an example of Consumer IoT?",
+                options: ["Industrial robotic arm", "Smart thermostat (e.g., Nest)", "Predictive maintenance sensor", "Smart meter for utilities"],
+                correctIndex: 1
+            },
+            {
+                question: "Which protocol is used for the Industrial Internet?",
+                options: ["HTTP", "IEEE 802.15.4e", "FTP", "SMTP"],
+                correctIndex: 1
+            },
+            {
+                question: "What is the primary purpose of real-time analytics in IoT?",
+                options: ["To store data for long-term analysis", "To process data instantly for timely insights and actions", "To reduce the number of IoT devices", "To increase cloud storage capacity"],
+                correctIndex: 1
+            },
+            {
+                question: "Why is real-time analytics critical for a hospital heart monitor?",
+                options: ["To reduce hardware costs", "To enable instant detection of anomalies for patient safety", "To increase data storage", "To improve device battery life"],
+                correctIndex: 1
+            },
+            {
+                question: "Where is real-time analytics typically performed in Fog Computing?",
+                options: ["On centralized cloud servers", "On IoT devices or local gateways", "On third-party databases", "On external APIs"],
+                correctIndex: 1
+            },
+            {
+                question: "Which IoT layer collects data from the physical environment?",
+                options: ["Transport Layer", "Processing Layer", "Perception Layer", "Application Layer"],
+                correctIndex: 2
+            },
+            {
+                question: "What is the role of the Transport Layer in IoT?",
+                options: ["Data processing and storage", "Data transmission using Wi-Fi, Bluetooth, etc.", "Providing user applications", "Collecting sensor data"],
+                correctIndex: 1
+            },
+            {
+                question: "Which layer uses Fog or Cloud Computing for data processing?",
+                options: ["Perception Layer", "Transport Layer", "Processing Layer", "Application Layer"],
+                correctIndex: 2
+            },
+            {
+                question: "What does the Application Layer in IoT provide?",
+                options: ["Data transmission over networks", "Raw sensor data collection", "Value-added services and applications", "Local data processing"],
+                correctIndex: 2
+            },
+            {
+                question: "What is the main goal of SOA in IoT?",
+                options: ["To increase device power consumption", "To create reusable services for interoperability", "To reduce data variety", "To limit scalability"],
+                correctIndex: 1
+            },
+            {
+                question: "Which SOA component stores details of available services?",
+                options: ["Service Provider", "Service Consumer", "Service Registry", "Service Interface"],
+                correctIndex: 2
+            },
+            {
+                question: "What is a major benefit of SOA in IoT?",
+                options: ["Increased hardware costs", "Cost reduction through service reuse", "Limited device connectivity", "Higher latency"],
+                correctIndex: 1
+            },
+            {
+                question: "What is the primary function of APIs in IoT?",
+                options: ["To increase data latency", "To enable data sharing and remote device control", "To reduce device scalability", "To manage hardware maintenance"],
+                correctIndex: 1
+            },
+            {
+                question: "Which type of API is accessible to all users?",
+                options: ["Private API", "Partner API", "Public API", "Composite API"],
+                correctIndex: 2
+            },
+            {
+                question: "How does an API differ from a GUI in IoT?",
+                options: ["API is for users; GUI is for developers", "API enables programmatic data access; GUI provides visual interaction", "API increases latency; GUI reduces it", "API is hardware-based; GUI is software-based"],
+                correctIndex: 1
+            },
+            {
+                question: "What is a key security challenge in IoT?",
+                options: ["High bandwidth availability", "Vulnerability to cyberattacks and data breaches", "Excessive device scalability", "Low power consumption"],
+                correctIndex: 1
+            },
+            {
+                question: "Which IoT challenge arises from inconsistent network connectivity?",
+                options: ["Scalability Issues", "Connectivity and Network Issues", "Power Consumption", "Data Storage"],
+                correctIndex: 1
+            },
+            {
+                question: "Why is scalability a challenge in IoT?",
+                options: ["Due to low data volumes", "Due to complexity in managing millions of devices", "Due to excessive bandwidth", "Due to high device power efficiency"],
+                correctIndex: 1
+            },
+            {
+                question: "What causes bandwidth constraints in IoT?",
+                options: ["Low device connectivity", "High-density device connections causing congestion", "Excessive local processing", "Reduced data variety"],
+                correctIndex: 1
+            },
+            {
+                question: "What is the main advantage of Edge Computing in IoT?",
+                options: ["High latency", "Low latency due to local processing", "High cloud dependency", "Limited scalability"],
+                correctIndex: 1
+            },
+            {
+                question: "Which feature makes Edge Computing reliable in IoT?",
+                options: ["High bandwidth usage", "Ability to operate offline or during cloud outages", "Centralized processing", "High initial cost"],
+                correctIndex: 1
+            },
+            {
+                question: "Which computing type is a hybrid of Edge and Cloud Computing?",
+                options: ["Public Cloud", "Private Cloud", "Hybrid Cloud", "Fog Computing"],
+                correctIndex: 3
+            },
+            {
+                question: "What is the primary role of Cloud Computing in IoT?",
+                options: ["Local data processing", "Centralized data processing, analysis, and storage", "Offline data collection", "Reducing device connectivity"],
+                correctIndex: 1
+            },
+            {
+                question: "Which Cloud Computing characteristic supports large IoT datasets?",
+                options: ["Limited scalability", "Powerful data processing and storage", "High latency", "Low reliability"],
+                correctIndex: 1
+            },
+            {
+                question: "What is a major challenge of Cloud Computing in IoT?",
+                options: ["Low bandwidth usage", "Latency issues for real-time applications", "Excessive offline capability", "Limited data storage"],
+                correctIndex: 1
+            },
+            {
+                question: "What is a disadvantage of Cloud Computing in IoT?",
+                options: ["High scalability", "Dependency on stable internet connectivity", "Low cost", "Global accessibility"],
+                correctIndex: 1
+            },
+            {
+                question: "Which Cloud Computing service provides virtualized computing resources?",
+                options: ["SaaS", "PaaS", "IaaS", "FaaS"],
+                correctIndex: 2
+            },
+            {
+                question: "What is the primary benefit of PaaS for IoT developers?",
+                options: ["Managing hardware infrastructure", "Simplifying app development by abstracting infrastructure", "Running software without updates", "Increasing latency"],
+                correctIndex: 1
+            },
+            {
+                question: "Which Cloud Computing service delivers software via a subscription model?",
+                options: ["IaaS", "PaaS", "SaaS", "FaaS"],
+                correctIndex: 2
+            },
+            {
+                question: "What is a key feature of FaaS in IoT?",
+                options: ["Fixed resource allocation", "Event-driven, serverless code execution", "High hardware management", "Limited scalability"],
+                correctIndex: 1
+            },
+            {
+                question: "Why is MQTT ideal for IoT applications?",
+                options: ["High power consumption", "Lightweight, low-power, low-bandwidth protocol", "Centralized processing", "High latency"],
+                correctIndex: 1
+            },
+            {
+                question: "Which IoT applications benefit most from MQTT?",
+                options: ["High-bandwidth video streaming", "Low-power, low-data-rate sensor networks", "Offline data storage", "Complex AI computations"],
+                correctIndex: 1
+            },
+            {
+                question: "Which is NOT a characteristic of Big Data?",
+                options: ["Volume", "Velocity", "Veracity", "Visibility"],
+                correctIndex: 3
+            },
+            {
+                question: "What does 'Variety' in Big Data refer to?",
+                options: ["Speed of data generation", "Types of data (structured, semi-structured, unstructured)", "Accuracy of data", "Size of data"],
+                correctIndex: 1
+            },
+            {
+                question: "Which Big Data technology is used for real-time data streaming in IoT?",
+                options: ["Spark", "Kafka", "HDOP", "Data Lakes"],
+                correctIndex: 1
+            },
+            {
+                question: "What is the role of Data Lakes in IoT?",
+                options: ["Real-time data processing", "Storing raw, unprocessed data for analytics", "Managing device hardware", "Reducing data variety"],
+                correctIndex: 1
+            },
+            {
+                question: "What is the primary use of Cellular Communication in IoT?",
+                options: ["Short-range device pairing", "Long-distance, high-speed data transfer", "Low-power sensor connectivity", "Wired network connections"],
+                correctIndex: 1
+            },
+            {
+                question: "What is the maximum range of NFC in IoT applications?",
+                options: ["4 cm", "100 meters", "10 km", "50 km"],
+                correctIndex: 0
+            },
+            {
+                question: "Which technology is specifically designed for smart home automation?",
+                options: ["Cellular", "NFC", "Z-Wave", "Sigfox"],
+                correctIndex: 2
+            },
+            {
+                question: "What is the main function of RFID in IoT?",
+                options: ["High-speed data streaming", "Identifying and tracking objects using radio waves", "Providing wired connectivity", "Processing big data"],
+                correctIndex: 1
+            },
+            {
+                question: "Which technology connects wireless devices to a wired network via Wi-Fi?",
+                options: ["Ethernet", "Wireless Access Point (WAP)", "LPWAN", "LoRaWAN"],
+                correctIndex: 1
+            },
+            {
+                question: "Which LPWAN technology is known for ultra-narrowband communication?",
+                options: ["Cellular", "Sigfox", "Z-Wave", "NFC"],
+                correctIndex: 1
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplay = document.getElementById("score-display");
+        const progressDisplay = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+        const continueBtn = document.getElementById("continue-btn");
+        const errorMessage = document.getElementById("error-message");
+
+        function loadQuestion() {
+            const questionObj = allQuestions[currentQuestionIndex];
+            questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+            progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+            questionTextEl.textContent = questionObj.question;
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            optionsContainer.innerHTML = "";
+            errorMessage.style.display = "none";
+            nextBtn.style.display = "none";
+            restartBtn.style.display = "none";
+            continueBtn.style.display = "none";
+
+            questionObj.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.addEventListener("click", () => selectAnswer(button, index));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, index) {
+            const buttons = optionsContainer.querySelectorAll("button");
+            buttons.forEach(btn => btn.disabled = true);
+
+            const correctIndex = allQuestions[currentQuestionIndex].correctIndex;
+            if (index === correctIndex) {
+                button.classList.add("correct");
+                score++;
+            } else {
+                button.classList.add("wrong");
+                buttons[correctIndex].classList.add("correct");
+            }
+
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                nextBtn.style.display = "inline-block";
+            } else {
+                restartBtn.style.display = "inline-block";
+            }
+        }
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
