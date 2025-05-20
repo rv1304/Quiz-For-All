@@ -1,0 +1,2721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Linux Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+    
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+    
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+    
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+        }
+    
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+    
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+    
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+    
+        #next-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        #next-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e8;
+        }
+    
+        #error-message {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+    
+            h1 {
+                font-size: 1.8em;
+            }
+    
+            #question-text {
+                font-size: 1.1em;
+            }
+    
+            #next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Linux Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number"></p>
+        <p id="progress-display"></p>
+        <p id="score-display">Score: 0 / 0</p>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="error-message" style="display: none;"></p>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <script>
+        const allQuestions =[
+            {
+    "id": 1,
+    "question": "What does the 'vgextend' command do in LVM?",
+    "options": [
+      "Creates a new volume group",
+      "Adds a physical volume to an existing volume group",
+      "Resizes a logical volume",
+      "Removes a volume group"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 2,
+    "question": "Which file contains information about LVM volume groups?",
+    "options": [
+      "/etc/fstab",
+      "/etc/lvm.conf",
+      "/etc/vg.conf",
+      "/etc/volgrp"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 3,
+    "question": "What is the purpose of the 'lvreduce' command?",
+    "options": [
+      "Remove a logical volume",
+      "Extend a logical volume",
+      "Shrink a logical volume",
+      "Create a volume group"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 4,
+    "question": "Which command shows the attributes of logical volumes?",
+    "options": [
+      "lvscan",
+      "lvdisplay",
+      "vgdisplay",
+      "pvdisplay"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 5,
+    "question": "Which of the following steps is necessary before using a new LVM volume?",
+    "options": [
+      "Reboot the system",
+      "Format the volume with a file system",
+      "Mount the physical volume",
+      "Run fsck"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 6,
+    "question": "Which command is used to synchronize files and directories between two locations?",
+    "options": [
+      "scp",
+      "cp",
+      "rsync",
+      "tar"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 7,
+    "question": "What does the '-a' option in rsync stand for?",
+    "options": [
+      "Archive mode",
+      "All files",
+      "Append mode",
+      "Auto mode"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 8,
+    "question": "Which tar option is used to create an archive?",
+    "options": [
+      "-x",
+      "-v",
+      "-c",
+      "-t"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 9,
+    "question": "How do you extract files from a tar archive?",
+    "options": [
+      "tar -c",
+      "tar -x",
+      "tar -z",
+      "tar -u"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 10,
+    "question": "Which rsync option is used to show progress during transfer?",
+    "options": [
+      "--info",
+      "--verbose",
+      "--progress",
+      "--stats"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 11,
+    "question": "What does the 'z' option in tar do?",
+    "options": [
+      "Encrypts the archive",
+      "Splits the archive",
+      "Compresses the archive using gzip",
+      "Appends to archive"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 12,
+    "question": "Which option in rsync preserves symbolic links?",
+    "options": [
+      "-S",
+      "-l",
+      "--links",
+      "-H"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 13,
+    "question": "Which command creates a compressed archive using tar and gzip?",
+    "options": [
+      "tar -xvf backup.tar",
+      "tar -czf backup.tar.gz /folder",
+      "tar -tvf backup.tar.gz",
+      "tar -zcf backup /folder"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 14,
+    "question": "How can you exclude a directory while using rsync?",
+    "options": [
+      "--ignore-dir",
+      "--omit",
+      "--exclude",
+      "--no-copy"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 15,
+    "question": "What does the rsync '-n' option do?",
+    "options": [
+      "Runs in verbose mode",
+      "Creates a new archive",
+      "Dry run (no changes made)",
+      "Only sync new files"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 16,
+    "question": "What is the primary purpose of the fsck command in Linux?",
+    "options": [
+      "To format a disk",
+      "To check and repair file systems",
+      "To list mounted file systems",
+      "To create new partitions"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 17,
+    "question": "When should you generally run fsck on a file system?",
+    "options": [
+      "When the file system is mounted",
+      "When a disk is full",
+      "When the FS is unmounted or read-only",
+      "After installing new software"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 18,
+    "question": "What does the dmesg command display?",
+    "options": [
+      "System log files",
+      "Network activity logs",
+      "Kernel ring buffer messages",
+      "User command history"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 19,
+    "question": "What flag should be used with fsck to automatically repair FS without prompting?",
+    "options": [
+      "-p",
+      "-f",
+      "-n",
+      "-r"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 20,
+    "question": "What kind of information is typically found in dmesg output?",
+    "options": [
+      "User login attempts",
+      "Kernel boot messages and hardware errors",
+      "Web server access logs",
+      "System resource usage"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 21,
+    "question": "Which file system is supported by fsck.ext4?",
+    "options": [
+      "FAT32",
+      "XFS",
+      "EXT4",
+      "NTFS"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 22,
+    "question": "What does fsck -n do?",
+    "options": [
+      "Repairs the file system",
+      "Performs a dry run without making changes",
+      "Forces checking",
+      "Automatically fixes errors"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 23,
+    "question": "What is a common use of `dmesg`?",
+    "options": [
+      "Check for software updates",
+      "Search logs for user activity",
+      "Look for hardware or disk errors",
+      "View cron job outputs"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 24,
+    "question": "What is the command to check an unmounted EXT4 file system?",
+    "options": [
+      "fsck /dev/sda1",
+      "dmesg /mnt/sda1",
+      "mount -t ext4 /dev/sda1",
+      "df -h /dev/sda1"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 25,
+    "question": "What is the risk of running fsck on a mounted file system?",
+    "options": [
+      "No risk at all",
+      "Increases read/write speed",
+      "Can cause FS corruption",
+      "Automatically unmounts FS"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 26,
+    "question": "What is the main purpose of netplan in Ubuntu?",
+    "options": [
+      "Manage user accounts",
+      "Configure network interfaces",
+      "Scan for Wi-Fi networks",
+      "Monitor network traffic"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 27,
+    "question": "Which file format does netplan use for configuration?",
+    "options": [
+      "JSON",
+      "XML",
+      "YAML",
+      "INI"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 28,
+    "question": "What command is used to apply changes in a netplan configuration file?",
+    "options": [
+      "netplan start",
+      "netplan apply",
+      "netplan enable",
+      "netplan set"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 29,
+    "question": "Which backend does netplan typically use on desktop Ubuntu systems?",
+    "options": [
+      "systemd-networkd",
+      "ifupdown",
+      "NetworkManager",
+      "resolvconf"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 30,
+    "question": "What does the nmcli command do?",
+    "options": [
+      "Configures Apache",
+      "Manages firewall rules",
+      "Manages NetworkManager via CLI",
+      "Views kernel logs"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 31,
+    "question": "How can you show active network connections using nmcli?",
+    "options": [
+      "nmcli dev show",
+      "nmcli con mod",
+      "nmcli net start",
+      "nmcli con edit"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 32,
+    "question": "In a netplan config, what key defines the interface name?",
+    "options": [
+      "interface",
+      "id",
+      "eth",
+      "ethernets"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 33,
+    "question": "Which nmcli command brings up a network interface?",
+    "options": [
+      "nmcli con down <name>",
+      "nmcli dev status",
+      "nmcli con up <name>",
+      "nmcli net reload"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 34,
+    "question": "What is the default location for netplan configuration files in Ubuntu?",
+    "options": [
+      "/etc/network/interfaces",
+      "/etc/netplan/",
+      "/etc/sysconfig/network-scripts",
+      "/etc/NetworkManager/"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 35,
+    "question": "What does nmcli dev disconnect do?",
+    "options": [
+      "Deletes the device",
+      "Removes all saved connections",
+      "Disconnects a device from the network",
+      "Formats the device"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 36,
+    "question": "What is the primary function of ufw in Ubuntu?",
+    "options": [
+      "Manage user sessions",
+      "Control access to network ports",
+      "Analyze disk usage",
+      "Create user accounts"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 37,
+    "question": "Which command enables the UFW firewall?",
+    "options": [
+      "ufw allow",
+      "ufw enable",
+      "ufw on",
+      "ufw start"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 38,
+    "question": "What does ufw status show?",
+    "options": [
+      "The version of the Linux kernel",
+      "Running processes",
+      "Current firewall rules and status",
+      "Logged-in users"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 39,
+    "question": "Which UFW rule allows incoming SSH connections?",
+    "options": [
+      "ufw allow http",
+      "ufw allow ssh",
+      "ufw enable ssh",
+      "ufw allow tcp 25"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 40,
+    "question": "What does the command ufw deny 80 do?",
+    "options": [
+      "Opens port 80",
+      "Denies access to port 80",
+      "Restarts the firewall",
+      "Blocks all outgoing connections"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 41,
+    "question": "What is the function of tcpdump?",
+    "options": [
+      "Modify IP settings",
+      "Capture and analyze network packets",
+      "Scan for Wi-Fi networks",
+      "Configure firewalls"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 42,
+    "question": "Which flag in tcpdump specifies the interface to capture on?",
+    "options": [
+      "-p",
+      "-v",
+      "-i",
+      "-t"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 43,
+    "question": "What is Wireshark primarily used for?",
+    "options": [
+      "Creating IP addresses",
+      "Real-time network traffic monitoring & analysis",
+      "Formatting file systems",
+      "Controlling USB devices"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 44,
+    "question": "Which tool provides a graphical interface: tcpdump or wireshark?",
+    "options": [
+      "tcpdump",
+      "netstat",
+      "wireshark",
+      "nmap"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 45,
+    "question": "What does tcpdump -w capture.pcap do?",
+    "options": [
+      "Plays audio",
+      "Writes captured packets to a file",
+      "Downloads pcap files",
+      "Sends test packets"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 46,
+    "question": "What does the top command display?",
+    "options": [
+      "File system usage",
+      "Running kernel modules",
+      "Real-time system processes and resource usage",
+      "Mounted file systems"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 47,
+    "question": "What is the advantage of htop over top?",
+    "options": [
+      "Supports USB monitoring",
+      "Displays graphical interface and navigation",
+      "Works in recovery mode only",
+      "Only shows disk usage"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 48,
+    "question": "What does iostat monitor?",
+    "options": [
+      "CPU and I/O statistics",
+      "Running users",
+      "DNS traffic",
+      "Network devices"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 49,
+    "question": "Which tool reports information about memory and CPU usage efficiently?",
+    "options": [
+      "tcpdump",
+      "vmstat",
+      "iptables",
+      "dig"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 50,
+    "question": "What is the purpose of sysctl in Linux?",
+    "options": [
+      "Set permissions",
+      "Tune kernel parameters at runtime",
+      "Launch services",
+      "Monitor user activity"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 51,
+    "question": "Which file is commonly used with sysctl for persistent settings?",
+    "options": [
+      "/etc/hosts",
+      "/etc/sysconfig/sysctl.conf",
+      "/etc/sysctl.conf",
+      "/etc/profile"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 52,
+    "question": "What is tuned used for?",
+    "options": [
+      "Wireless configuration",
+      "User management",
+      "Performance tuning profiles",
+      "Backup scheduling"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 53,
+    "question": "What does journalctl access in systemd-based systems?",
+    "options": [
+      "Bash history",
+      "Kernel logs",
+      "System logs from journal daemon",
+      "BIOS settings"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 54,
+    "question": "What does syslog provide on traditional Linux systems?",
+    "options": [
+      "Real-time memory usage",
+      "Network logs only",
+      "Centralized logging system",
+      "Task scheduling"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 55,
+    "question": "What option in htop lets you kill a process?",
+    "options": [
+      "F1",
+      "F2",
+      "F9",
+      "F10"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 56,
+    "question": "What is the default port for SSH on Linux systems?",
+    "options": [
+      "22",
+      "80",
+      "443",
+      "21"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 57,
+    "question": "What does fail2ban primarily protect against?",
+    "options": [
+      "Brute-force attacks",
+      "Data loss",
+      "System reboots",
+      "File corruption"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 58,
+    "question": "Which command is used to start the SSH service on most Linux systems?",
+    "options": [
+      "service ssh run",
+      "start ssh",
+      "systemctl start ssh",
+      "ssh -start"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 59,
+    "question": "What is a strong practice to secure SSH access?",
+    "options": [
+      "Allow root login",
+      "Use public/private key authentication",
+      "Open SSH to all IPs",
+      "Use the default password"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 60,
+    "question": "What does UFW stand for in Ubuntu?",
+    "options": [
+      "User Firewall",
+      "Unified Firewall",
+      "Uncomplicated Firewall",
+      "Ubuntu Firewall"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 61,
+    "question": "Which ufw command blocks an IP address?",
+    "options": [
+      "ufw enable",
+      "ufw block ip",
+      "ufw deny from <IP>",
+      "ufw shutdown"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 62,
+    "question": "Which configuration file controls SSH server settings?",
+    "options": [
+      "/etc/ssh/sshd_config",
+      "/etc/ssh/ssh_client.conf",
+      "/etc/systemd/ssh.conf",
+      "/etc/security/ssh.conf"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 63,
+    "question": "What does fail2ban use to determine banned IPs?",
+    "options": [
+      "DNS logs",
+      "UFW configuration",
+      "Log files with regex rules",
+      "CPU usage logs"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 64,
+    "question": "Which of the following is a Linux security best practice?",
+    "options": [
+      "Use weak passwords",
+      "Disable firewalls",
+      "Disable automatic updates",
+      "Apply least privilege principle"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 65,
+    "question": "What is the purpose of PermitRootLogin no in sshd_config?",
+    "options": [
+      "Allows passwordless login",
+      "Denies root login over SSH",
+      "Enables UFW",
+      "Enables logging over SSH"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 66,
+    "question": "What keyword is used to define a function in a bash script?",
+    "options": [
+      "function",
+      "define",
+      "proc",
+      "method"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 67,
+    "question": "How do you call a function named greet in bash?",
+    "options": [
+      "run greet()",
+      "call greet",
+      "greet",
+      "execute greet()"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 68,
+    "question": "Which syntax is valid for defining a function in bash?",
+    "options": [
+      "func() { echo Hello; }",
+      "function = func() => {}",
+      "def func: echo Hello",
+      "func: echo Hello end"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 69,
+    "question": "What does ${#var} return in bash?",
+    "options": [
+      "First character of var",
+      "Last character of var",
+      "Length of var",
+      "Number of words in var"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 70,
+    "question": "What is the output of ${var:2:3} if var=\"abcdefg\"?",
+    "options": [
+      "bcd",
+      "cde",
+      "def",
+      "abc"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 71,
+    "question": "Which syntax removes the shortest match from the beginning of a string?",
+    "options": [
+      "${var#pattern}",
+      "${var%pattern}",
+      "${var%%pattern}",
+      "${var##pattern}"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 72,
+    "question": "How can you return a value from a function in bash?",
+    "options": [
+      "Use return followed by a string",
+      "Use echo and capture with command substitution",
+      "Use yield",
+      "Use out= keyword"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 73,
+    "question": "What does ${var%%.*} do if var=\"file.name.txt\"?",
+    "options": [
+      "Removes extension",
+      "Extracts only extension",
+      "Replaces dots with spaces",
+      "Deletes full filename"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 74,
+    "question": "How can you pass arguments to a bash function?",
+    "options": [
+      "Using global variables",
+      "Use read inside the function",
+      "Using $1, $2, etc.",
+      "Declare in a file header"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 75,
+    "question": "Which command converts a string to lowercase in bash?",
+    "options": [
+      "tr 'A-Z' 'a-z'",
+      "tolower()",
+      "awk '{lower($0)}'",
+      "echo ${str,,}"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 76,
+    "question": "Which file lists user cron jobs in Linux?",
+    "options": [
+      "/etc/crontab",
+      "/etc/passwd",
+      "/etc/init.d/cron",
+      "/var/log/cron"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 77,
+    "question": "What does the following cron syntax mean: 0 2 * * *?",
+    "options": [
+      "Run every 2 hours",
+      "Run daily at 2:00 AM",
+      "Run every 2 minutes",
+      "Run weekly at 2:00 AM"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 78,
+    "question": "What is the at command used for in Linux?",
+    "options": [
+      "Schedule recurring tasks",
+      "Monitor running services",
+      "Schedule one-time future tasks",
+      "Send alerts to users"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 79,
+    "question": "Which command lists jobs scheduled by at?",
+    "options": [
+      "atq",
+      "ats",
+      "crontab -l",
+      "jobs -a"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 80,
+    "question": "What does systemctl start nginx do?",
+    "options": [
+      "Reboots the system",
+      "Starts the nginx service",
+      "Installs nginx",
+      "Lists nginx dependencies"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 81,
+    "question": "What is the purpose of systemctl enable?",
+    "options": [
+      "Run service only once",
+      "Start service immediately",
+      "Enable service at boot",
+      "Schedule service for shutdown"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 82,
+    "question": "Which of the following is a good shell scripting practice?",
+    "options": [
+      "Avoid comments",
+      "Hardcode all file paths",
+      "Check exit status of commands",
+      "Ignore input validation"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 83,
+    "question": "What does systemctl status display?",
+    "options": [
+      "Active user sessions",
+      "Running background jobs",
+      "Current status of a service",
+      "Network usage statistics"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 84,
+    "question": "Which directory holds cron job definitions for specific intervals?",
+    "options": [
+      "/etc/cron.conf",
+      "/var/spool/cron",
+      "/etc/cron.d",
+      "/opt/cron.daily"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 85,
+    "question": "What command is used to reload systemd daemon configs?",
+    "options": [
+      "systemctl reread",
+      "systemctl daemon-reload",
+      "systemctl refresh",
+      "systemctl update"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 86,
+    "question": "What is the primary purpose of KVM in Linux?",
+    "options": [
+      "Filesystem backup",
+      "Kernel-based Virtualization",
+      "Log monitoring",
+      "Memory encryption"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 87,
+    "question": "Which package provides the KVM module on Ubuntu?",
+    "options": [
+      "qemu-kvm",
+      "docker",
+      "libguestfs",
+      "kvm-switch"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 88,
+    "question": "Which command verifies if your system supports virtualization?",
+    "options": [
+      "lscpu",
+      "vmstat",
+      "virt-check",
+      "lsmod"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 89,
+    "question": "What command lists all Docker containers?",
+    "options": [
+      "docker ps -a",
+      "docker list",
+      "docker show",
+      "docker info"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 90,
+    "question": "What is a Docker image?",
+    "options": [
+      "A running instance of a container",
+      "A blueprint to create containers",
+      "A virtual machine",
+      "A backup of system logs"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 91,
+    "question": "What does docker exec -it container bash do?",
+    "options": [
+      "Starts a new container",
+      "Deletes a container",
+      "Attaches to container interactively via bash",
+      "Restarts the container"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 92,
+    "question": "What is the primary difference between LXC and LXD?",
+    "options": [
+      "LXD is the kernel module",
+      "LXC is a VM hypervisor",
+      "LXD is a system container manager over LXC",
+      "LXC is a GUI interface"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 93,
+    "question": "Which command launches a new LXD container?",
+    "options": [
+      "lxc-create",
+      "lxd-run",
+      "lxc launch",
+      "lxd init"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 94,
+    "question": "What is the default networking mode for LXD containers?",
+    "options": [
+      "Bridged",
+      "Host-only",
+      "NAT",
+      "VPN"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 95,
+    "question": "Which tool provides lightweight system containers with near-VM isolation?",
+    "options": [
+      "VirtualBox",
+      "VMware",
+      "LXC",
+      "rsync"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 96,
+    "question": "What is MicroK8s?",
+    "options": [
+      "A full OS distribution",
+      "A container image format",
+      "A lightweight Kubernetes distribution",
+      "A virtual firewall"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 97,
+    "question": "What command lists enabled MicroK8s addons?",
+    "options": [
+      "microk8s show",
+      "microk8s status",
+      "microk8s addons",
+      "microk8s config"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 98,
+    "question": "Which MicroK8s command is used to start Kubernetes dashboard?",
+    "options": [
+      "microk8s launch dashboard",
+      "kubectl dashboard",
+      "microk8s enable dashboard",
+      "microk8s start dash"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 99,
+    "question": "Which CLI tool is used to interact with Kubernetes clusters?",
+    "options": [
+      "docker",
+      "kubectl",
+      "k8sctl",
+      "kubeadmin"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 100,
+    "question": "What is a pod in Kubernetes?",
+    "options": [
+      "A user login shell",
+      "A backup file",
+      "A group of one or more containers",
+      "A configuration rule"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 101,
+    "question": "How do you allow port 8080 using UFW?",
+    "options": [
+      "ufw allow 8080",
+      "ufw open port 8080",
+      "ufw accept 8080",
+      "ufw permit 8080"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 102,
+    "question": "What command disables UFW?",
+    "options": [
+      "ufw disable",
+      "ufw stop",
+      "ufw shutdown",
+      "ufw kill"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 103,
+    "question": "What is the function of AppArmor in Linux?",
+    "options": [
+      "Disk encryption",
+      "Process-level access control",
+      "Managing disk partitions",
+      "Installing packages"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 104,
+    "question": "Which command shows loaded AppArmor profiles?",
+    "options": [
+      "apparmor-show",
+      "aa-status",
+      "app-status",
+      "aa-log"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 105,
+    "question": "What happens if a process violates an AppArmor profile in enforce mode?",
+    "options": [
+      "It's allowed but logged",
+      "The system reboots",
+      "It's denied and logged",
+      "Nothing happens"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 106,
+    "question": "What does DNS stand for?",
+    "options": [
+      "Domain Name System",
+      "Dynamic Name Server",
+      "Data Network Service",
+      "Domain Network System"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 107,
+    "question": "Which symbol is used for piping in Linux?",
+    "options": [
+      ">",
+      "|",
+      ">>",
+      "<"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 108,
+    "question": "Which file stores user account information?",
+    "options": [
+      "/etc/passwd",
+      "/etc/group",
+      "/etc/shadow",
+      "/etc/hosts"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 109,
+    "question": "Which of the following options is used with echo to disable the newline character at the end of the output?",
+    "options": [
+      "-n",
+      "-e",
+      "-s",
+      "-l"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 110,
+    "question": "Which file contains system log messages in Linux?",
+    "options": [
+      "/var/log/messages",
+      "/etc/log/system.log",
+      "/log/syslog",
+      "/var/system/messages"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 111,
+    "question": "Which command is used to update the package repository and install software in Ubuntu?",
+    "options": [
+      "yum",
+      "apt-get",
+      "dnf",
+      "installpkg"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 112,
+    "question": "What is the purpose of the `grep` command in shell scripting?",
+    "options": [
+      "To define variables",
+      "To search for patterns in files",
+      "To redirect output",
+      "To loop through items"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 113,
+    "question": "To recursively copy a directory and its contents, preserving ownership and permissions, which command should you use?",
+    "options": [
+      "cp -pR",
+      "cp -a",
+      "cp -p",
+      "cp -rO"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 114,
+    "question": "What is the primary purpose of the `ls` command in Linux?",
+    "options": [
+      "List system hardware information",
+      "Display the contents of a directory",
+      "Create a new directory",
+      "List running processes"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 115,
+    "question": "What is the extension of a shell script file?",
+    "options": [
+      ".bash",
+      ".sh",
+      ".script",
+      ".txt"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 116,
+    "question": "You execute the `ls -S` command. What does the `-S` flag do in this context?",
+    "options": [
+      "Lists files and directories in order of file size, largest first.",
+      "Shows hidden files and directories.",
+      "Sorts files and directories by file type.",
+      "An error, as `-S` is an invalid option for `ls`."
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 117,
+    "question": "What is the correct syntax to define a variable in shell scripting?",
+    "options": [
+      "var=value",
+      "var := value",
+      "var = value",
+      "set var = value"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 118,
+    "question": "What does the \"/dev\" directory in the Linux file system hierarchy contain?",
+    "options": [
+      "User home directories",
+      "Device files",
+      "System binaries",
+      "Configuration files"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 119,
+    "question": "Which command in Linux is used to display the first few lines of a text file?",
+    "options": [
+      "head",
+      "tail",
+      "cat",
+      "more"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 120,
+    "question": "If you run `chmod 755 file.txt`, what is the permission set for `file.txt`?",
+    "options": [
+      "-rwxr-xr-x",
+      "-rw-r--r--",
+      "-rwx------",
+      "-rw-------"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 121,
+    "question": "You run the `df -i` command. What does the `-i` flag indicate?",
+    "options": [
+      "Displays information about inodes.",
+      "Shows inode numbers for files.",
+      "Lists the largest files on the filesystem.",
+      "An error, as `-i` is an invalid option for `df`."
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 122,
+    "question": "Which file system is typically used for USB drives?",
+    "options": [
+      "fat32",
+      "ext4",
+      "xfs",
+      "btrfs"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 123,
+    "question": "Which command is used to check disk I/O performance?",
+    "options": [
+      "iostat",
+      "df",
+      "fdisk",
+      "du"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 124,
+    "question": "Which command in nano is used to save changes?",
+    "options": [
+      "Ctrl + S",
+      "Ctrl + X",
+      "Ctrl + Z",
+      "Ctrl + C"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 125,
+    "question": "If a process becomes unresponsive, what command can you use to terminate it?",
+    "options": [
+      "kill",
+      "stop",
+      "terminate",
+      "endprocess"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 126,
+    "question": "What is the command to mount a file system?",
+    "options": [
+      "mount",
+      "umount",
+      "fdisk",
+      "parted"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 127,
+    "question": "Which command is used to resize a partition?",
+    "options": [
+      "mount",
+      "fdisk",
+      "mkfs",
+      "resize2fs"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 128,
+    "question": "What is the purpose of the `xfs` file system?",
+    "options": [
+      "To provide high performance",
+      "To encrypt files",
+      "To compress files",
+      "To manage partitions"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 129,
+    "question": "What is the purpose of the `sed` command in shell scripting?",
+    "options": [
+      "To loop through items",
+      "To define variables",
+      "To redirect output",
+      "To perform text transformations"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 130,
+    "question": "What does the `$$` symbol represent in a shell script?",
+    "options": [
+      "The exit status of the last command",
+      "The process ID of the current script",
+      "The current working directory",
+      "The number of command-line arguments"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 131,
+    "question": "What does the `head -n 5` command do?",
+    "options": [
+      "Displays the first 5 lines of a file",
+      "Displays the last 5 lines",
+      "Displays 5 lines in reverse order",
+      "Displays lines containing '5'"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 132,
+    "question": "How do you list all installed packages using APT?",
+    "options": [
+      "apt-get show",
+      "apt list --installed",
+      "apt-get installed",
+      "dpkg -show"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 133,
+    "question": "In Linux, what is the purpose of the `/mnt` directory?",
+    "options": [
+      "Storing user home directories",
+      "Mounting temporary filesystems",
+      "Managing user groups",
+      "System backups"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 134,
+    "question": "Which command is used to paginate output?",
+    "options": [
+      "less",
+      "cat",
+      "head",
+      "echo -p"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 135,
+    "question": "How can you make the script accept a number as a command-line argument instead of prompting the user?",
+    "options": [
+      "Replace `read number` with `number=$1`",
+      "Add a new line `number=$1` before the `read` statement",
+      "Use the command `set number=$1` before the `if` statement",
+      "Replace `echo \"Enter a number:\"` with `number=$1`"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 136,
+    "question": "What is the purpose of the `pam_tally2` module?",
+    "options": [
+      "To delete a user",
+      "To manage login attempts",
+      "To change ownership",
+      "To create a group"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 137,
+    "question": "Which command is used to set a user's password expiration date?",
+    "options": [
+      "chpasswd",
+      "usermod",
+      "passwd",
+      "chage -E"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 138,
+    "question": "In terms of file path structure, Linux uses:",
+    "options": [
+      "Backslashes",
+      "Drive letters (C:, D:)",
+      "Forward slashes (/)",
+      "Colons (:)"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 139,
+    "question": "What is the purpose of the `top` command?",
+    "options": [
+      "Lists top-level directories",
+      "Shows real-time process information",
+      "Displays file sizes",
+      "Updates software"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 140,
+    "question": "Which command is used to check network connectivity?",
+    "options": [
+      "traceroute",
+      "ip",
+      "netstat",
+      "ping"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 141,
+    "question": "What is the purpose of the `echo` command?",
+    "options": [
+      "To create a file",
+      "To execute a script",
+      "To redirect output",
+      "To display text"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 142,
+    "question": "What is the command to change file ownership?",
+    "options": [
+      "usermod",
+      "chmod",
+      "chown",
+      "groupadd"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 143,
+    "question": "Which symbol is used for output redirection?",
+    "options": [
+      ">",
+      ">>",
+      "<",
+      "|"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 144,
+    "question": "Which command is used to delete a group?",
+    "options": [
+      "groupdel",
+      "delgroup",
+      "usermod",
+      "chown"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 145,
+    "question": "What is the purpose of the `/etc/group` file?",
+    "options": [
+      "To store group information",
+      "To store user passwords",
+      "To configure DNS",
+      "To list open ports"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 146,
+    "question": "Which command is used to change a user's password?",
+    "options": [
+      "usermod",
+      "chpasswd",
+      "passwd",
+      "chown"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 147,
+    "question": "Which command is used to concatenate files in a shell script?",
+    "options": [
+      "cat",
+      "echo",
+      "read",
+      "write"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 148,
+    "question": "What is the purpose of the `/etc/hosts` file?",
+    "options": [
+      "To list users",
+      "To store DNS settings",
+      "To configure network interfaces",
+      "To map hostnames to IP addresses"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 149,
+    "question": "What is the purpose of the `/etc/shadow` file?",
+    "options": [
+      "To store encrypted passwords",
+      "To list users",
+      "To configure groups",
+      "To map hostnames"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 150,
+    "question": "Which command is used to add a user to a group?",
+    "options": [
+      "usermod -aG",
+      "groupadd",
+      "adduser",
+      "chown"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 151,
+    "question": "Which command lists files and directories in reverse order?",
+    "options": [
+      "ls -r",
+      "ls -R",
+      "ls -t",
+      "ls -S"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 152,
+    "question": "What is the purpose of the `ip` command?",
+    "options": [
+      "To list open ports",
+      "To test network speed",
+      "To trace packets",
+      "To configure network interfaces"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 153,
+    "question": "Which file system hierarchy level contains user home directories?",
+    "options": [
+      "/home",
+      "/usr",
+      "/opt",
+      "/var"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 154,
+    "question": "How do you make a shell script executable?",
+    "options": [
+      "chmod +x script.sh",
+      "exec script.sh",
+      "run script.sh",
+      "sh script.sh"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 155,
+    "question": "In Linux, what is the purpose of the `/bin` directory?",
+    "options": [
+      "Storing binary executables and essential system programs",
+      "Storing temporary files",
+      "User home directories",
+      "System configuration files"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 156,
+    "question": "What does the `kill -9` command do in Linux?",
+    "options": [
+      "Gracefully stops a process",
+      "Forces termination of a process",
+      "Pauses a process",
+      "Renames a process"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 157,
+    "question": "Which command reads the first 10 lines of a file?",
+    "options": [
+      "head",
+      "tail",
+      "cat -n 10",
+      "less -10"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 158,
+    "question": "Which file system is not supported natively by Linux?",
+    "options": [
+      "NTFS",
+      "ext4",
+      "xfs",
+      "btrfs"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 159,
+    "question": "Which file system is the default for most Linux distributions?",
+    "options": [
+      "ext4",
+      "xfs",
+      "ntfs",
+      "btrfs"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 160,
+    "question": "Which command is used to unmount a file system?",
+    "options": [
+      "fdisk",
+      "mount",
+      "umount",
+      "parted"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 161,
+    "question": "Which command is used to check the integrity of a file system?",
+    "options": [
+      "fdisk",
+      "fsck",
+      "mkfs",
+      "mount"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 162,
+    "question": "What is the purpose of the `tune2fs` command?",
+    "options": [
+      "To adjust file system parameters",
+      "To partition disks",
+      "To format disks",
+      "To mount file systems"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 163,
+    "question": "What is the purpose of the `nmcli` command?",
+    "options": [
+      "To manage network connections",
+      "To configure DNS",
+      "To test network speed",
+      "To trace packets"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 164,
+    "question": "Which command is used to display routing tables?",
+    "options": [
+      "ping",
+      "netstat -r",
+      "traceroute",
+      "ip route"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 165,
+    "question": "What is the purpose of the `mount` command?",
+    "options": [
+      "To attach a file system to a directory",
+      "To detach a file system",
+      "To partition disks",
+      "To format disks"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 166,
+    "question": "What is the purpose of the `e2fsck` command?",
+    "options": [
+      "To check and repair an `ext2/ext3/ext4` file system",
+      "To partition disks",
+      "To format disks",
+      "To mount file systems"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 167,
+    "question": "What does the `chmod 755` command do?",
+    "options": [
+      "Gives all permissions to everyone",
+      "Gives read, write, execute to owner and read, execute to others",
+      "Revokes all permissions",
+      "Grants execute only"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 168,
+    "question": "What does the `-l` option do in the `ls` command?",
+    "options": [
+      "List files in a long format",
+      "Display files in a single column",
+      "Sort files by size",
+      "List only directories"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 169,
+    "question": "Which command is used to change the owner of a file?",
+    "options": [
+      "chown",
+      "chmod",
+      "own",
+      "fileown"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 170,
+    "question": "What does the 'umount' command do?",
+    "options": [
+      "Unmounts a file system",
+      "Mounts a file system",
+      "Formats a disk",
+      "Checks disk usage"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 171,
+    "question": "Which command shows disk space usage of a file system?",
+    "options": [
+      "df",
+      "du",
+      "lsblk",
+      "blkid"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 172,
+    "question": "What happens when executing ls -a /home/user2 in Linux?",
+    "options": [
+      "Lists all files and directories in \"/home/user2\"",
+      "Lists only the directories in \"/home/user2\"",
+      "Lists files in alphabetical order in \"/home/user2\"",
+      "Lists all files and directories except hidden ones in \"/home/user2\""
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 173,
+    "question": "What is the command which changes the working directory from root(/) to home(~)?",
+    "options": [
+      "cd ../..",
+      "cd",
+      "Both A and B",
+      "None of these"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 174,
+    "question": "What is the purpose of the loop in the script: while [ $number -gt 0 ]?",
+    "options": [
+      "Reverses the digits of the number",
+      "Checks if the number is positive",
+      "Determines the length of the number",
+      "Calculates the sum of the digits"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 175,
+    "question": "What is the default loopback IP address?",
+    "options": [
+      "10.0.0.1",
+      "192.168.1.1",
+      "127.0.0.1",
+      "172.16.0.1"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 176,
+    "question": "What does the echo -e option do?",
+    "options": [
+      "Enables interpretation of backslash-escaped characters",
+      "Prints text in uppercase",
+      "Suppresses the output",
+      "Prints text in bold"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 177,
+    "question": "Which command is used to modify user properties?",
+    "options": [
+      "groupadd",
+      "adduser",
+      "deluser",
+      "usermod"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 178,
+    "question": "What is the command to execute a shell script?",
+    "options": [
+      "./script.sh",
+      "bash script.sh",
+      "sh script.sh",
+      "All of the above"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 179,
+    "question": "Which command is used to display information about a user, including their user ID (UID) and group ID (GID)?",
+    "options": [
+      "who",
+      "id",
+      "last",
+      "w"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 180,
+    "question": "What is the purpose of the `ext4` file system?",
+    "options": [
+      "To encrypt files",
+      "To provide a journaling file system",
+      "To compress files",
+      "To manage partitions"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 181,
+    "question": "What is the purpose of the `awk` command in shell scripting?",
+    "options": [
+      "To redirect output",
+      "To define variables",
+      "To process and analyze text",
+      "To loop through items"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 182,
+    "question": "How can you list files and directories in a specified directory other than the current one using `ls`?",
+    "options": [
+      "Use the `-p` option",
+      "Provide the directory path as an argument",
+      "Use the `-d` option",
+      "You cannot specify a directory with `ls`"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 183,
+    "question": "Which command is used to display the IP address of a system?",
+    "options": [
+      "ip addr",
+      "ping",
+      "traceroute",
+      "netstat"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 184,
+    "question": "You execute the `rm -v file.txt` command. What is the purpose of the `-v` option?",
+    "options": [
+      "Removes the file quietly without any confirmation.",
+      "Renames the file.",
+      "Moves the file to the Trash for later recovery.",
+      "Displays the removal process with a verbose message."
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 185,
+    "question": "Which Linux command is used to rename a file?",
+    "options": [
+      "mv",
+      "rename",
+      "filemove",
+      "chname"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 186,
+    "question": "What is the role of the kill command?",
+    "options": [
+      "Terminates a process",
+      "Starts a process",
+      "Lists all processes",
+      "Pauses a process"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 187,
+    "question": "Which symbol is used for input redirection in shell scripting?",
+    "options": [
+      ">",
+      "<",
+      "|",
+      ">>"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 188,
+    "question": "Which command is used to print output in a shell script?",
+    "options": [
+      "echo",
+      "print",
+      "display",
+      "show"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 189,
+    "question": "You copy a file named `file.txt` to a directory called `backup/`. What is the command to do this?",
+    "options": [
+      "cp file.txt backup/",
+      "mv file.txt backup/",
+      "cp backup/ file.txt",
+      "mv backup/ file.txt"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 190,
+    "question": "What is the purpose of the `/etc/networks` file?",
+    "options": [
+      "To list users",
+      "To store DNS settings",
+      "To configure network interfaces",
+      "To map network names to IP addresses"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 191,
+    "question": "Which command is used to list all groups a user belongs to?",
+    "options": [
+      "groups",
+      "id",
+      "usermod",
+      "chown"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 192,
+    "question": "What is the purpose of the 'du' command?",
+    "options": [
+      "Displays disk usage of files and directories",
+      "Shows disk partitions",
+      "Formats a disk",
+      "Unmounts a file system"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 193,
+    "question": "Which command creates a new file system on a partition?",
+    "options": [
+      "mkfs",
+      "mount",
+      "fdisk",
+      "lsblk"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 194,
+    "question": "How do you check the type of file system used by a partition?",
+    "options": [
+      "blkid",
+      "df",
+      "du",
+      "fdisk"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 195,
+    "question": "Which command is used to partition disks?",
+    "options": [
+      "df",
+      "fdisk",
+      "du",
+      "mount"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 196,
+    "question": "What is the purpose of the `parted` command?",
+    "options": [
+      "To mount file systems",
+      "To partition disks",
+      "To check disk usage",
+      "To unmount file systems"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 197,
+    "question": "What is the purpose of the `vgcreate` command?",
+    "options": [
+      "To create a volume group",
+      "To partition disks",
+      "To format disks",
+      "To mount file systems"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 198,
+    "question": "Which command is used to list all users on a system?",
+    "options": [
+      "ls /home",
+      "cat /etc/passwd",
+      "userlist",
+      "listusers"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 199,
+    "question": "What does the command \"chmod +x script.sh\" do?",
+    "options": [
+      "Removes execute permission",
+      "Adds execute permission",
+      "Changes ownership",
+      "Renames the script"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 200,
+    "question": "You run the `rm -i file.txt` command. What is the purpose of the `-i` option?",
+    "options": [
+      "Remove the file without any confirmation.",
+      "Rename the file.",
+      "Move the file to the Trash for later recovery.",
+      "Prompt for confirmation before deletion."
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 201,
+    "question": "What does the `cd -` command do in Linux?",
+    "options": [
+      "Navigates to the previous directory.",
+      "Changes to the root directory.",
+      "Lists hidden files.",
+      "Moves to the user's home directory."
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 202,
+    "question": "What happens if you run the `cat document.txt` command?",
+    "options": [
+      "The content of `document.txt`",
+      "Nothing; it opens the text editor",
+      "\"document.txt\" displayed on the screen",
+      "An error message"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 203,
+    "question": "You execute the `mkdir mydir` command. What is the result?",
+    "options": [
+      "Creates a new directory named \"mydir\"",
+      "Deletes the \"mydir\" directory",
+      "Renames an existing directory to \"mydir\"",
+      "Lists the contents of \"mydir\""
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 204,
+    "question": "You want to set the permissions of a file example.txt to rw-r--r-- using the chmod command. Which command will you use?",
+    "options": [
+      "chmod 755 example.txt",
+      "chmod 644 example.txt",
+      "chmod 600 example.txt",
+      "chmod 777 example.txt"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 205,
+    "question": "Which chmod command sets a file script.sh to be executable by everyone but writable only by the owner?",
+    "options": [
+      "chmod 755 script.sh",
+      "chmod 775 script.sh",
+      "chmod 744 script.sh",
+      "chmod 666 script.sh"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 206,
+    "question": "Which file system is optimized for large-scale storage systems?",
+    "options": [
+      "xfs",
+      "ext4",
+      "ntfs",
+      "fat32"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 207,
+    "question": "Which command is used to display information about the currently running processes?",
+    "options": [
+      "top",
+      "ps",
+      "pgrep",
+      "processinfo"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 208,
+    "question": "What does the pwd command display?",
+    "options": [
+      "Path to the current working directory",
+      "List of files",
+      "System information",
+      "Current user"],
+      "correctAnswer": 1,
+    "subject": "Linux"
+    }
+
+];
+    
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplay = document.getElementById("score-display");
+        const progressDisplay = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+        const errorMessage = document.getElementById("error-message");
+
+        function loadQuestion() {
+            const questionObj = allQuestions[currentQuestionIndex];
+            questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+            progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+            questionTextEl.textContent = questionObj.question;
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            optionsContainer.innerHTML = "";
+            errorMessage.style.display = "none";
+            nextBtn.style.display = "none";
+            restartBtn.style.display = "none";
+
+            questionObj.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.addEventListener("click", () => selectAnswer(button, index));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, index) {
+    const buttons = optionsContainer.querySelectorAll("button");
+    buttons.forEach(btn => btn.disabled = true);
+
+    const correctIndex = allQuestions[currentQuestionIndex].correctAnswer;
+    if (index === correctIndex) {
+        button.classList.add("correct");
+        score++;
+    } else {
+        button.classList.add("wrong");
+        buttons[correctIndex].classList.add("correct");
+    }
+
+    scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+    if (currentQuestionIndex < allQuestions.length - 1) {
+        nextBtn.style.display = "inline-block";
+    } else {
+        restartBtn.style.display = "inline-block";
+    }
+}
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
