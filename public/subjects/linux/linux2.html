@@ -1,0 +1,2509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Linux Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+    
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+    
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+    
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+        }
+    
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+    
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+    
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+    
+        #next-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        #next-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e8;
+        }
+    
+        #error-message {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+    
+            h1 {
+                font-size: 1.8em;
+            }
+    
+            #question-text {
+                font-size: 1.1em;
+            }
+    
+            #next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Linux Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number"></p>
+        <p id="progress-display"></p>
+        <p id="score-display">Score: 0 / 0</p>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="error-message" style="display: none;"></p>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <script>
+        const allQuestions =[
+  {
+    "id": 1,
+    "question": "How do you list all processes for all users using the ps command?",
+    "options": {
+      "A": "ps -a",
+      "B": "ps -u",
+      "C": "ps -e",
+      "D": "ps --all"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 2,
+    "question": "What does the ps -f option display?",
+    "options": {
+      "A": "Full command line and additional details",
+      "B": "Only the process ID (PID)",
+      "C": "Parent process ID (PPID)",
+      "D": "Running processes in the foreground"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 3,
+    "question": "How do you display a process tree with ps?",
+    "options": {
+      "A": "ps -t",
+      "B": "ps --tree",
+      "C": "ps -p",
+      "D": "ps --hierarchy"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 4,
+    "question": "What is the purpose of the ps -aux command?",
+    "options": {
+      "A": "Display all processes with user details",
+      "B": "Show active and inactive processes",
+      "C": "List processes for all users in a detailed format",
+      "D": "Display system status information"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 5,
+    "question": "How do you sort the ps output by CPU usage in descending order?",
+    "options": {
+      "A": "ps -c",
+      "B": "ps --cpu",
+      "C": "ps -r",
+      "D": "ps -sort=cpu"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 6,
+    "question": "How do you move a process to the background in a terminal using bg?",
+    "options": {
+      "A": "bg [process ID]",
+      "B": "bg -m",
+      "C": "bg --move",
+      "D": "bg %1"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 7,
+    "question": "What does the jobs command display in a terminal?",
+    "options": {
+      "A": "A list of background jobs",
+      "B": "A list of foreground jobs",
+      "C": "A list of all running processes",
+      "D": "A list of terminated processes"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 8,
+    "question": "How do you bring a background process to the foreground using fg?",
+    "options": {
+      "A": "fg [process ID]",
+      "B": "fg --foreground",
+      "C": "fg %1",
+      "D": "fg -r"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 9,
+    "question": "What is the purpose of the bg command in Linux?",
+    "options": {
+      "A": "Start a new background process",
+      "B": "Display the background color of the terminal",
+      "C": "List background processes",
+      "D": "Display the system boot information"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 10,
+    "question": "How do you suspend a foreground process in the terminal?",
+    "options": {
+      "A": "Press Ctrl + S",
+      "B": "Type suspend",
+      "C": "Use the kill command with SIGSTOP",
+      "D": "Press Ctrl + Z"
+    },
+    "correctAnswer": 3,
+ "subject": "Linux"
+  },
+  {
+    "id": 11,
+    "question": "How do you display network interface information using ifconfig?",
+    "options": {
+      "A": "ifconfig -a",
+      "B": "ifconfig --all",
+      "C": "ifconfig -1",
+      "D": "ifconfig --list"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 12,
+    "question": "What is the purpose of the ifconfig eth0 up command?",
+    "options": {
+      "A": "Enable the network interface eth0",
+      "B": "Disable the network interface eth0",
+      "C": "Assign an IP address to eth0",
+      "D": "Display detailed information about eth0"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 13,
+    "question": "How do you assign an IP address to a network interface using ifconfig?",
+    "options": {
+      "A": "ifconfig eth0 ip_address",
+      "B": "ifconfig eth0 addr ip_address",
+      "C": "ifconfig eth0 address ip_address",
+      "D": "ifconfig eth0 ip ip_address"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 14,
+    "question": "In ifconfig, what does the -s option display?",
+    "options": {
+      "A": "Summary information for all interfaces",
+      "B": "Status of all network interfaces",
+      "C": "Speed and duplex settings of the interfaces",
+      "D": "Subnet information for a specific interface"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 15,
+    "question": "How do you disable a network interface using ifconfig?",
+    "options": {
+      "A": "ifconfig eth0 down",
+      "B": "ifconfig --disable eth0",
+      "C": "ifconfig disable eth0",
+      "D": "ifconfig eth0 disable"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 16,
+    "question": "What does the ping command do?",
+    "options": {
+      "A": "Send ICMP packets to a destination host",
+      "B": "Measure network latency",
+      "C": "Check the status of network interfaces",
+      "D": "Establish a secure connection to a remote server"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 17,
+    "question": "How do you specify the number of ping packets to send with ping?",
+    "options": {
+      "A": "ping -n count",
+      "B": "ping --number count",
+      "C": "ping -c count",
+      "D": "ping --count=count"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 18,
+    "question": "What is the purpose of the ping -i option?",
+    "options": {
+      "A": "Set the source IP address for ping packets",
+      "B": "Specify the interval between ping packets",
+      "C": "Enable IPv6 support",
+      "D": "Set the ICMP packet size"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 19,
+    "question": "How do you ping a host continuously until manually stopped?",
+    "options": {
+      "A": "ping -s host",
+      "B": "ping --stop host",
+      "C": "ping -t host",
+      "D": "ping --continuous host"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 20,
+    "question": "What does the TTL expired in transit message indicate in a ping result?",
+    "options": {
+      "A": "The destination host is unreachable",
+      "B": "The ping packet has exceeded its time-to-live value",
+      "C": "The network interface is down",
+      "D": "The ping request has timed out"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 21,
+    "question": "How do you perform a traceroute to a destination host?",
+    "options": {
+      "A": "traceroute host",
+      "B": "traceroute --destination host",
+      "C": "traceroute -d host",
+      "D": "traceroute --to host"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 22,
+    "question": "What information does the traceroute command provide?",
+    "options": {
+      "A": "Number of hops to the destination",
+      "B": "Round-trip time for each hop",
+      "C": "IP address of each intermediate router",
+      "D": "All of the above"
+    },
+    "correctAnswer": 3,
+ "subject": "Linux"
+  },
+  {
+    "id": 23,
+    "question": "How do you specify the maximum number of hops in a traceroute?",
+    "options": {
+      "A": "traceroute -m max_hops host",
+      "B": "traceroute --max-hops max_hops host",
+      "C": "traceroute --limit max_hops host",
+      "D": "traceroute --ttl max_hops host"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 24,
+    "question": "In the traceroute output, what does an asterisk (*) indicate?",
+    "options": {
+      "A": "The destination host is unreachable",
+      "B": "A network congestion or timeout occurred",
+      "C": "A successful response from the destination host",
+      "D": "The time-to-live value exceeded"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 25,
+    "question": "How do you perform a traceroute using IPv6?",
+    "options": {
+      "A": "traceroute -6 host",
+      "B": "traceroute --ipv6 host",
+      "C": "traceroute --version=6 host",
+      "D": "traceroute --ip-version=6 host"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 26,
+    "question": "How do you specify a delimiter for the cut command?",
+    "options": {
+      "A": "-d",
+      "B": "-delimiter",
+      "C": "--delimiter",
+      "D": "--delim"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 27,
+    "question": "What is the purpose of the -f option in the cut command?",
+    "options": {
+      "A": "Select the fields to cut",
+      "B": "Set the file delimiter",
+      "C": "Force the use of fixed-size fields",
+      "D": "Specify the output file"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 28,
+    "question": "How do you cut characters 2-5 from each line of a file using cut?",
+    "options": {
+      "A": "cut -c 2-5 file.txt",
+      "B": "cut -d 2-5 file.txt",
+      "C": "cut --characters 2-5 file.txt",
+      "D": "cut -f 2-5 file.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 29,
+    "question": "In the cut command, how do you specify multiple delimiters?",
+    "options": {
+      "A": "cut -d, ;:",
+      "B": "cut -m, ;:",
+      "C": "cut --multi, ;:",
+      "D": "cut -s, ;:"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 30,
+    "question": "What does the --complement option do in the cut command?",
+    "options": {
+      "A": "Select the complement of the specified fields",
+      "B": "Exclude lines that match the specified fields",
+      "C": "Invert the order of the output fields",
+      "D": "Include lines that match the specified fields"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 31,
+    "question": "How do you print the second field of a space-separated file using awk?",
+    "options": {
+      "A": "awk -f 'print $2' file.txt",
+      "B": "awk '{print $2}' file.txt",
+      "C": "awk --field=2 '{print $2}' file.txt",
+      "D": "awk -s '{print $2}' file.txt"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 32,
+    "question": "What does the NF variable represent in awk?",
+    "options": {
+      "A": "New Field",
+      "B": "Not Found",
+      "C": "Number of Fields",
+      "D": "Next File"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 33,
+    "question": "How do you specify a custom field separator in awk?",
+    "options": {
+      "A": "awk -f','",
+      "B": "awk -FS','",
+      "C": "awk -field-separator=','",
+      "D": "awk -s','"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 34,
+    "question": "What is the purpose of the BEGIN and END blocks in awk?",
+    "options": {
+      "A": "Define the main program",
+      "B": "Execute code before processing any input",
+      "C": "Specify the field separator for the entire program",
+      "D": "Mark the beginning and end of a code block"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 35,
+    "question": "How do you calculate the sum of values in the third column using awk?",
+    "options": {
+      "A": "awk '{sum += $3} END {print sum}' file.txt",
+      "B": "awk -s '{sum += $3} END {print sum}' file.txt",
+      "C": "awk -f 'sum += $3 END {print sum}' file.txt",
+      "D": "awk '{print sum += $3}' file.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 36,
+    "question": "How do you perform a case-insensitive search with grep?",
+    "options": {
+      "A": "grep -i 'pattern' file.txt",
+      "B": "grep --ignore-case 'pattern' file.txt",
+      "C": "grep --case-insensitive 'pattern' file.txt",
+      "D": "grep -c 'pattern' file.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 37,
+    "question": "What does the -n option do in the grep command?",
+    "options": {
+      "A": "Display line numbers of matching lines",
+      "B": "Show only the matching part of the lines",
+      "C": "Include non-matching lines in the output",
+      "D": "Suppress output except for summary information"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 38,
+    "question": "How do you search for lines not containing a specific pattern with grep?",
+    "options": {
+      "A": "grep --exclude 'pattern' file.txt",
+      "B": "grep --invert 'pattern' file.txt",
+      "C": "grep -v 'pattern' file.txt",
+      "D": "grep --exclude-match 'pattern' file.txt"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 39,
+    "question": "What is the purpose of the -o option in the grep command?",
+    "options": {
+      "A": "Show only the matching part of the lines",
+      "B": "Display output in color",
+      "C": "Search for patterns in binary files",
+      "D": "Limit the number of matches per line"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 40,
+    "question": "How do you sort a file in reverse order using sort?",
+    "options": {
+      "A": "sort -r file.txt",
+      "B": "sort --reverse file.txt",
+      "C": "sort --descending file.txt",
+      "D": "sort -d file.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 41,
+    "question": "What does the -t option do in the sort command?",
+    "options": {
+      "A": "Specify the output file",
+      "B": "Set the time format",
+      "C": "Define the field separator",
+      "D": "Enable numeric sorting"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 42,
+    "question": "How do you remove consecutive duplicate lines from a sorted file with uniq?",
+    "options": {
+      "A": "uniq -c file.txt",
+      "B": "uniq -u file.txt",
+      "C": "uniq --unique file.txt",
+      "D": "uniq -d file.txt"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 43,
+    "question": "What is the purpose of the -c option in the uniq command?",
+    "options": {
+      "A": "Count the number of occurrences of each line",
+      "B": "Compress adjacent blanks into a single blank",
+      "C": "Ignore differences in case during comparisons",
+      "D": "Display only the first occurrence of each line"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 44,
+    "question": "How do you display only the repeated lines from a sorted file with uniq?",
+    "options": {
+      "A": "uniq -d file.txt",
+      "B": "uniq --duplicates file.txt",
+      "C": "uniq -r file.txt",
+      "D": "uniq --repeated file.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 45,
+    "question": "What does the -l option do in the wc command?",
+    "options": {
+      "A": "Count words",
+      "B": "Count lines",
+      "C": "Display only the total count",
+      "D": "Include file names in the output"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 46,
+    "question": "How do you count the number of characters in a file using wc?",
+    "options": {
+      "A": "wc -m file.txt",
+      "B": "wc --chars file.txt",
+      "C": "wc --characters file.txt",
+      "D": "wc -c file.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 47,
+    "question": "In the wc command, what does the -w option do?",
+    "options": {
+      "A": "Count lines",
+      "B": "Display only the total count",
+      "C": "Count words",
+      "D": "Include file names in the output"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 48,
+    "question": "How do you count the number of bytes in a file using wc?",
+    "options": {
+      "A": "wc -b file.txt",
+      "B": "wc --bytes file.txt",
+      "C": "wc -c file.txt",
+      "D": "wc --characters file.txt"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 49,
+    "question": "What is the purpose of the -q option in the wc command?",
+    "options": {
+      "A": "Display only the total count",
+      "B": "Quiet mode, suppress output",
+      "C": "Count the number of characters",
+      "D": "Include file names in the output"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 50,
+    "question": "How do you use the diff command to compare two files?",
+    "options": {
+      "A": "diff file1.txt file2.txt",
+      "B": "diff -c file1.txt file2.txt",
+      "C": "diff --compare file1.txt file2.txt",
+      "D": "diff -r file1.txt file2.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 51,
+    "question": "What does the -i option do in the diff command?",
+    "options": {
+      "A": "Ignore changes in case",
+      "B": "Include the context of changes",
+      "C": "Ignore changes in whitespace",
+      "D": "Limit the number of context lines"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 52,
+    "question": "How do you use the cmp command to compare two files?",
+    "options": {
+      "A": "cmp -s file1.txt file2.txt",
+      "B": "cmp --silent file1.txt file2.txt",
+      "C": "cmp -q file1.txt file2.txt",
+      "D": "cmp --quiet file1.txt file2.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 53,
+    "question": "In the cmp command, what does the -b option do?",
+    "options": {
+      "A": "Display only the number of differing bytes",
+      "B": "Ignore changes in whitespace",
+      "C": "Compare files as binary",
+      "D": "Print differences in a brief format"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 54,
+    "question": "What does the -s option do in the cmp command?",
+    "options": {
+      "A": "Print differences in a brief format",
+      "B": "Display only the number of differing bytes",
+      "C": "Suppress output, only return exit status",
+      "D": "Compare files as binary"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 55,
+    "question": "How do you create a tar archive of a directory?",
+    "options": {
+      "A": "tar --create -f archive.tar directory/",
+      "B": "tar -cf archive.tar directory/",
+      "C": "tar -c -f archive.tar directory/",
+      "D": "tar --file archive.tar --directory directory/"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 56,
+    "question": "What does the -z option do in the tar command?",
+    "options": {
+      "A": "Compress the archive using gzip",
+      "B": "Specify the compression level",
+      "C": "Create a compressed archive",
+      "D": "Decompress the archive using gzip"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 57,
+    "question": "How do you extract the contents of a tar.gz file?",
+    "options": {
+      "A": "tar --extract -f archive.tar.gz",
+      "B": "tar -xf archive.tar.gz",
+      "C": "tar -x -f archive.tar.gz",
+      "D": "tar -czf archive.tar.gz"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 58,
+    "question": "What does the -v option do in the tar command?",
+    "options": {
+      "A": "Enable verbose mode",
+      "B": "Verify the integrity of the archive",
+      "C": "Display the version of the tar command",
+      "D": "View the contents of the archive"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 59,
+    "question": "How do you compress a file using gzip?",
+    "options": {
+      "A": "gzip file.txt",
+      "B": "gzip -c file.txt",
+      "C": "gzip -z file.txt",
+      "D": "gzip --compress file.txt"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 60,
+    "question": "What is the purpose of the mount command in Linux?",
+    "options": {
+      "A": "Display disk space usage",
+      "B": "Mount a filesystem",
+      "C": "Create a new directory",
+      "D": "Copy files"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 61,
+    "question": "In the context of file systems, what does umount do?",
+    "options": {
+      "A": "Unmount a filesystem",
+      "B": "Update file timestamps",
+      "C": "Display disk usage",
+      "D": "Remove a directory"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 62,
+    "question": "What does the touch command do in Linux?",
+    "options": {
+      "A": "Copy files",
+      "B": "Create an empty file",
+      "C": "Display file content",
+      "D": "Remove a file"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 63,
+    "question": "Which command is used to copy files or directories in Linux?",
+    "options": {
+      "A": "mv",
+      "B": "cp",
+      "C": "mkdir",
+      "D": "df"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 64,
+    "question": "The command mkdir is used to:",
+    "options": {
+      "A": "Move files",
+      "B": "Create a new directory",
+      "C": "Display file size",
+      "D": "Copy files"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 65,
+    "question": "What does the df command display in Linux?",
+    "options": {
+      "A": "Disk free space",
+      "B": "Directory files",
+      "C": "Disk format",
+      "D": "Display file content"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 66,
+    "question": "In the context of file systems, what does du stand for?",
+    "options": {
+      "A": "Disk Usage",
+      "B": "Display Updates",
+      "C": "Directory Utility",
+      "D": "Disk Format"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 67,
+    "question": "What does the fdisk command do?",
+    "options": {
+      "A": "Format a disk",
+      "B": "File display",
+      "C": "File search",
+      "D": "Disk partitioning"
+    },
+    "correctAnswer": 3,
+ "subject": "Linux"
+  },
+  {
+    "id": 68,
+    "question": "The cp command in Linux is used to:",
+    "options": {
+      "A": "Change directory",
+      "B": "Copy files",
+      "C": "Create a new file",
+      "D": "Display file content"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 69,
+    "question": "What is the purpose of the touch command?",
+    "options": {
+      "A": "Update file timestamps",
+      "B": "Create an empty file",
+      "C": "Display file size",
+      "D": "Remove a directory"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 70,
+    "question": "Which command is used to create a new directory in Linux?",
+    "options": {
+      "A": "mkdir",
+      "B": "rmdir",
+      "C": "cp",
+      "D": "touch"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 71,
+    "question": "The umount command is used to:",
+    "options": {
+      "A": "Mount a filesystem",
+      "B": "Display disk space",
+      "C": "Unmount a filesystem",
+      "D": "Copy files"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 72,
+    "question": "What does the df command display specifically?",
+    "options": {
+      "A": "Directory files",
+      "B": "Disk free space",
+      "C": "Disk format",
+      "D": "File permissions"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 73,
+    "question": "In Linux, what does the du command show?",
+    "options": {
+      "A": "Disk format",
+      "B": "Disk Usage",
+      "C": "Directory files",
+      "D": "Display Updates"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 74,
+    "question": "What is the primary purpose of the fdisk command?",
+    "options": {
+      "A": "Display disk space usage",
+      "B": "File search",
+      "C": "File display",
+      "D": "Disk partitioning"
+    },
+    "correctAnswer": 3,
+ "subject": "Linux"
+  },
+  {
+    "id": 75,
+    "question": "Which command is used to copy a directory in Linux?",
+    "options": {
+      "A": "cp",
+      "B": "mv",
+      "C": "mkdir",
+      "D": "rmdir"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 76,
+    "question": "The touch command is primarily used for:",
+    "options": {
+      "A": "Display file content",
+      "B": "Update file timestamps",
+      "C": "Create an empty file",
+      "D": "Remove a directory"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 77,
+    "question": "What does the mkdir command do?",
+    "options": {
+      "A": "Copy files",
+      "B": "Create a new directory",
+      "C": "Move files",
+      "D": "Remove a file"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 78,
+    "question": "The command umount -a is used to:",
+    "options": {
+      "A": "Mount all filesystems",
+      "B": "Unmount all filesystems",
+      "C": "Update file content",
+      "D": "Display disk usage"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 79,
+    "question": "What is the primary function of the cp command?",
+    "options": {
+      "A": "Move files",
+      "B": "Copy files",
+      "C": "Create a new file",
+      "D": "Display file size"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 80,
+    "question": "Which command is used to display the disk usage of a file?",
+    "options": {
+      "A": "df",
+      "B": "du",
+      "C": "fdisk",
+      "D": "touch"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 81,
+    "question": "The touch command with no arguments does what?",
+    "options": {
+      "A": "Display file content",
+      "B": "Update file timestamps",
+      "C": "Create an empty file",
+      "D": "Remove a directory"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 82,
+    "question": "What is the purpose of the -r option in the cp command?",
+    "options": {
+      "A": "Recursive copy",
+      "B": "Remove files",
+      "C": "Rename files",
+      "D": "Resize filesystem"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 83,
+    "question": "Which command is used to remove a directory in Linux?",
+    "options": {
+      "A": "rm",
+      "B": "rmdir",
+      "C": "mv",
+      "D": "umount"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 84,
+    "question": "The df command without any options displays:",
+    "options": {
+      "A": "File permissions",
+      "B": "Disk free space",
+      "C": "Disk format",
+      "D": "Directory files"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 85,
+    "question": "In Linux, what does the du -h command do?",
+    "options": {
+      "A": "Display hidden files",
+      "B": "Human-readable sizes",
+      "C": "Disk Usage",
+      "D": "Directory Updates"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 86,
+    "question": "What does the fdisk -l command do?",
+    "options": {
+      "A": "List all files",
+      "B": "List all partitions",
+      "C": "List all directories",
+      "D": "List all processes"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 87,
+    "question": "The cp command with the -u option does what?",
+    "options": {
+      "A": "Update only newer files",
+      "B": "Copy files",
+      "C": "Create a new file",
+      "D": "Display file content"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 88,
+    "question": "Which command is used to display the disk space usage of a file?",
+    "options": {
+      "A": "du",
+      "B": "df",
+      "C": "touch",
+      "D": "fdisk"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 89,
+    "question": "What is the purpose of the -i option in the cp command?",
+    "options": {
+      "A": "Interactive mode",
+      "B": "Ignore errors",
+      "C": "Include timestamp",
+      "D": "Inherit permissions"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 90,
+    "question": "What is the primary function of the Linux kernel in the operating system?",
+    "options": {
+      "A": "File System Management",
+      "B": "Process and Memory Management",
+      "C": "Disk Partitioning",
+      "D": "User Authentication"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 91,
+    "question": "In Linux, what is the purpose of the inodes in the file system?",
+    "options": {
+      "A": "Store file names and directories",
+      "B": "Maintain file ownership and permissions",
+      "C": "Manage file timestamps",
+      "D": "Track file metadata changes"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 92,
+    "question": "The command fdisk is commonly used for:",
+    "options": {
+      "A": "File Display",
+      "B": "Disk Partitioning",
+      "C": "File Compression",
+      "D": "File Encryption"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 93,
+    "question": "What is the significance of the /etc/fstab file in Linux?",
+    "options": {
+      "A": "Stores file permissions",
+      "B": "Manages disk partitions",
+      "C": "Configures file system mount points",
+      "D": "Tracks system resource usage"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 94,
+    "question": "Which Linux command is used to create a swap partition?",
+    "options": {
+      "A": "mkswap",
+      "B": "swapon",
+      "C": "mkfs",
+      "D": "mount"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 95,
+    "question": "The inode number of a file is associated with:",
+    "options": {
+      "A": "File size",
+      "B": "File content",
+      "C": "File permissions",
+      "D": "File metadata"
+    },
+    "correctAnswer": 3,
+ "subject": "Linux"
+  },
+  {
+    "id": 96,
+    "question": "What is the purpose of the dd command in Linux?",
+    "options": {
+      "A": "Display disk space usage",
+      "B": "Data duplication and conversion",
+      "C": "Disk defragmentation",
+      "D": "Directory deletion"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 97,
+    "question": "In Linux, the tar command is primarily used for:",
+    "options": {
+      "A": "File compression",
+      "B": "File archiving and extraction",
+      "C": "Disk formatting",
+      "D": "File Encryption"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 98,
+    "question": "The find command in Linux is used for:",
+    "options": {
+      "A": "File search",
+      "B": "File display",
+      "C": "File Compression",
+      "D": "File Encryption"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 99,
+    "question": "What is the purpose of the stat command in Linux?",
+    "options": {
+      "A": "Display file permissions",
+      "B": "Display file system information",
+      "C": "Display file content",
+      "D": "Display file size"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 100,
+    "question": "Which command is used to display the contents of a compressed file?",
+    "options": {
+      "A": "cat",
+      "B": "zcat",
+      "C": "grep",
+      "D": "tar"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 101,
+    "question": "The Linux command head is used to:",
+    "options": {
+      "A": "Display the first lines of a file",
+      "B": "Display the last lines of a file",
+      "C": "Display file permissions",
+      "D": "Display file content"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 102,
+    "question": "The chattr command in Linux is used for:",
+    "options": {
+      "A": "Change file attributes",
+      "B": "Change file ownership and permissions",
+      "C": "Change file timestamps",
+      "D": "Change file content"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 103,
+    "question": "What is the purpose of the sync command in Linux?",
+    "options": {
+      "A": "Synchronize file content",
+      "B": "Synchronize system clock",
+      "C": "Synchronize file timestamps",
+      "D": "Synchronize file permissions"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 104,
+    "question": "In Linux, the nice command is used to:",
+    "options": {
+      "A": "Adjust file permissions",
+      "B": "Adjust process priority",
+      "C": "Adjust file timestamps",
+      "D": "Adjust file ownership"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 105,
+    "question": "The command ps in Linux is used for:",
+    "options": {
+      "A": "File search",
+      "B": "Process display",
+      "C": "File Compression",
+      "D": "File archiving"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 106,
+    "question": "The ulimit command in Linux is used to:",
+    "options": {
+      "A": "Limit file size",
+      "B": "Limit process resources",
+      "C": "Limit file permissions",
+      "D": "Limit disk space"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 107,
+    "question": "What does the sar command display in Linux?",
+    "options": {
+      "A": "System activity report",
+      "B": "File system information",
+      "C": "System resource usage",
+      "D": "Search and replace"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 108,
+    "question": "Which file in Linux contains information about the system's architecture?",
+    "options": {
+      "A": "/etc/fstab",
+      "B": "/etc/hostname",
+      "C": "/proc/cpuinfo",
+      "D": "/var/log/system.log"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 109,
+    "question": "The Linux command lspci is used to:",
+    "options": {
+      "A": "List all processes",
+      "B": "List all system configurations",
+      "C": "List all installed PCI devices",
+      "D": "List all logged-in users"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 110,
+    "question": "In Linux, what does the /proc directory contain?",
+    "options": {
+      "A": "Process information",
+      "B": "System configuration files",
+      "C": "Temporary files",
+      "D": "Log files"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 111,
+    "question": "The fdisk command with the -l option does what?",
+    "options": {
+      "A": "List all files",
+      "B": "List all partitions",
+      "C": "List all directories",
+      "D": "List all processes"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 112,
+    "question": "What is the function of the blkid command in Linux?",
+    "options": {
+      "A": "Display block device information",
+      "B": "Block device formatting",
+      "C": "Block device encryption",
+      "D": "Block device compression"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 113,
+    "question": "The xfs_info command in Linux is used to:",
+    "options": {
+      "A": "Display file system information",
+      "B": "Display file permissions",
+      "C": "Display disk usage",
+      "D": "Display file content"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 114,
+    "question": "What does the fuser command do in Linux?",
+    "options": {
+      "A": "Display file system usage",
+      "B": "Identify processes using a file",
+      "C": "File system formatting",
+      "D": "File system encryption"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 115,
+    "question": "In Linux, what does the quota command display?",
+    "options": {
+      "A": "Disk quota information",
+      "B": "File system usage",
+      "C": "User quota information",
+      "D": "File permissions"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 116,
+    "question": "The diff command in Linux is used for:",
+    "options": {
+      "A": "File compression",
+      "B": "File archiving and extraction",
+      "C": "File comparison",
+      "D": "File Encryption"
+    },
+    "correctAnswer": 2,
+ "subject": "Linux"
+  },
+  {
+    "id": 117,
+    "question": "What is the purpose of the parted command in Linux?",
+    "options": {
+      "A": "Display partition information",
+      "B": "Disk Partitioning",
+      "C": "File partitioning",
+      "D": "Display disk usage"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 118,
+    "question": "The mount command with the -o remount option does what?",
+    "options": {
+      "A": "Remounts a read-only filesystem",
+      "B": "Mounts a new filesystem",
+      "C": "Unmounts a filesystem",
+      "D": "Mounts a filesystem with new options"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 119,
+    "question": "What does the Linux command strace do?",
+    "options": {
+      "A": "Display system trace information",
+      "B": "Monitor system calls",
+      "C": "Display system configuration",
+      "D": "Monitor system resource usage"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 120,
+    "question": "What is the default shell in most Linux distributions?",
+    "options": {
+      "A": "Bash",
+      "B": "Sh",
+      "C": "Zsh",
+      "D": "Ksh"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 121,
+    "question": "Which command is used to make a shell script executable?",
+    "options": {
+      "A": "chmod +x",
+      "B": "execute",
+      "C": "makeexec",
+      "D": "permit"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 122,
+    "question": "What is the purpose of the echo command in a shell script?",
+    "options": {
+      "A": "Print text to the screen",
+      "B": "Execute a program",
+      "C": "Create a directory",
+      "D": "Remove a file"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 123,
+    "question": "Which wildcard character represents any sequence of characters in a filename?",
+    "options": {
+      "A": "*",
+      "B": "?",
+      "C": "!",
+      "D": "%"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 124,
+    "question": "In Bash, what is the syntax for a basic if statement?",
+    "options": {
+      "A": "if [ condition ]; then",
+      "B": "if ( condition )",
+      "C": "if -e condition",
+      "D": "if condition:"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 125,
+    "question": "How do you check if two values are equal in a Bash if statement?",
+    "options": {
+      "A": "if [ $a = $b ]",
+      "B": "if $a == $b",
+      "C": "if $a equals $b",
+      "D": "if $a -eq $b"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 126,
+    "question": "In a Bash case statement, what is the purpose of the esac keyword?",
+    "options": {
+      "A": "End the case block",
+      "B": "Execute the default case",
+      "C": "Indicate a case match",
+      "D": "Separate case conditions"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 127,
+    "question": "How do you use a wildcard (*) in a Bash case statement?",
+    "options": {
+      "A": "case $var in * )",
+      "B": "case * in $var",
+      "C": "case $var * )",
+      "D": "case * $var in )"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 128,
+    "question": "In Bash, what is the syntax for a basic for loop?",
+    "options": {
+      "A": "for i in [1..5]; do",
+      "B": "for (i = 1; i <= 5; i++)",
+      "C": "for i = 1 to 5",
+      "D": "for i = 1; i <= 5; i++"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 129,
+    "question": "How do you increment a variable in a Bash do-while loop?",
+    "options": {
+      "A": "((i++))",
+      "B": "i += 1",
+      "C": "i=i+1",
+      "D": "i++"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 130,
+    "question": "In Apache, what is the default configuration file named?",
+    "options": {
+      "A": "httpd.conf",
+      "B": "apache.cfg",
+      "C": "default.conf",
+      "D": "apache.conf"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 131,
+    "question": "In Nginx, what is the primary configuration file called?",
+    "options": {
+      "A": "nginx.conf",
+      "B": "site.conf",
+      "C": "default.conf",
+      "D": "server.cfg"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 132,
+    "question": "How do you test the Nginx configuration for syntax errors?",
+    "options": {
+      "A": "nginx -t",
+      "B": "test-nginx",
+      "C": "nginx-test",
+      "D": "nginx --check"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 133,
+    "question": "In PostgreSQL, how do you list all databases?",
+    "options": {
+      "A": "\\l",
+      "B": "SHOW DATABASES;",
+      "C": "LIST ALL;",
+      "D": "SELECT * FROM pg_databases;"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 134,
+    "question": "Which shell is commonly used for scripting in Linux?",
+    "options": {
+      "A": "Bash",
+      "B": "Zsh",
+      "C": "Ksh",
+      "D": "Fish"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 135,
+    "question": "What is the purpose of the #!/bin/bash shebang in a shell script?",
+    "options": {
+      "A": "Define the shell used to execute the script",
+      "B": "Specify the script's encoding",
+      "C": "Identify the script's version",
+      "D": "Enable debugging mode in the script"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 136,
+    "question": "How do you comment a single line in a Bash script?",
+    "options": {
+      "A": "# Comment text",
+      "B": "/* Comment text */",
+      "C": "-- Comment text",
+      "D": "// Comment text"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 137,
+    "question": "In Bash scripting, what does the chmod +x command do?",
+    "options": {
+      "A": "Add execute permission to a file",
+      "B": "Change file ownership",
+      "C": "Create a new file",
+      "D": "Remove execute permission from a file"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 138,
+    "question": "How do you install Ansible on a Linux system?",
+    "options": {
+      "A": "yum install ansible",
+      "B": "apt-get ansible",
+      "C": "ansible install",
+      "D": "install ansible"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 139,
+    "question": "In a shell script, what does the $# variable represent?",
+    "options": {
+      "A": "Total number of arguments",
+      "B": "Script name",
+      "C": "Current process ID",
+      "D": "User home directory"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 140,
+    "question": "Which command is used to find files in a directory hierarchy based on various criteria?",
+    "options": {
+      "A": "find",
+      "B": "locate",
+      "C": "search",
+      "D": "grep"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 141,
+    "question": "What is the purpose of the test command in if statements?",
+    "options": {
+      "A": "Check conditions",
+      "B": "Print output of a command",
+      "C": "Execute a test script",
+      "D": "Set environment variables"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 142,
+    "question": "How do you check if a file exists in a Bash script?",
+    "options": {
+      "A": "if [ -e $file ]",
+      "B": "if [ file_exists{$file}]",
+      "C": "if file_exists $file",
+      "D": "if [ -f $file ]"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 143,
+    "question": "What is the purpose of the *) in a Bash case statement?",
+    "options": {
+      "A": "Match any condition",
+      "B": "Execute default case",
+      "C": "Indicate an error",
+      "D": "Match literal asterisk (*)"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 144,
+    "question": "How do you use a pattern match in a Bash case statement?",
+    "options": {
+      "A": "case $var in pat*)",
+      "B": "case pat* in $var)",
+      "C": "case $var = pat*)",
+      "D": "case $var = pat*)"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 145,
+    "question": "What is the purpose of the seq command in a for loop?",
+    "options": {
+      "A": "Create a sequence of numbers",
+      "B": "Display the current sequence",
+      "C": "Set the sequence length",
+      "D": "Generate a random sequence"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 146,
+    "question": "In Bash, what does the break statement do in a for loop?",
+    "options": {
+      "A": "Exit the loop prematurely",
+      "B": "Skip the current iteration",
+      "C": "Resume the next iteration",
+      "D": "End the loop entirely"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 147,
+    "question": "How do you create an infinite loop in Bash using a do-while loop?",
+    "options": {
+      "A": "while true; do",
+      "B": "do-while :",
+      "C": "while [1 ]; do",
+      "D": "do while [true]"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 148,
+    "question": "Which directive in Apache is used to specify the document root for a website?",
+    "options": {
+      "A": "DocumentRoot",
+      "B": "WebsiteRoot",
+      "C": "RootDocument",
+      "D": "SiteDirectory"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 149,
+    "question": "How do you enable a virtual host in Apache?",
+    "options": {
+      "A": "a2ensite command",
+      "B": "enable-vhost command",
+      "C": "apache2ctl enable",
+      "D": "activate-virtualhost command"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 150,
+    "question": "Which directive in Nginx is used to define a server block?",
+    "options": {
+      "A": "server",
+      "B": "server-block",
+      "C": "block-server",
+      "D": "block"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 151,
+    "question": "How do you set up SSL/TLS for a website in Nginx?",
+    "options": {
+      "A": "ssl_certificate and ssl_key directives",
+      "B": "enable-ssl directive",
+      "C": "ssl_setup command",
+      "D": "nginx --ssl"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 152,
+    "question": "What is the purpose of the ProxyPass directive in Apache?",
+    "options": {
+      "A": "Configure reverse proxy",
+      "B": "Set up load balancing",
+      "C": "Redirect URLs",
+      "D": "Define a virtual host"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 153,
+    "question": "What is the purpose of the KeepAlive directive in Apache?",
+    "options": {
+      "A": "Enable persistent connections",
+      "B": "Set the server's idle timeout",
+      "C": "Control the maximum number of connections",
+      "D": "Enable session persistence"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 154,
+    "question": "How do you configure a password-protected directory in Apache?",
+    "options": {
+      "A": "htpasswd and AuthUserFile directives",
+      "B": "password-protect directive",
+      "C": "auth-directory directive",
+      "D": "apache-protect directive"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 155,
+    "question": "What is the purpose of the gzip directive in Nginx?",
+    "options": {
+      "A": "Enable gzip compression",
+      "B": "Set the server's Gzip level",
+      "C": "Specify the gzip file types",
+      "D": "Define gzip cache size"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 156,
+    "question": "How do you grant all privileges to a user in MySQL?",
+    "options": {
+      "A": "GRANT ALL PRIVILEGES ON *.* TO 'user'@'localhost';",
+      "B": "GRANT ALL TO 'user'@'localhost';",
+      "C": "GRANT USER ALL;",
+      "D": "GRANT PRIVILEGES ON * TO 'user'@'localhost';"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 157,
+    "question": "What command is used to create a table in PostgreSQL?",
+    "options": {
+      "A": "CREATE TABLE table_name;",
+      "B": "MAKE TABLE table_name;",
+      "C": "TABLE CREATE table_name;",
+      "D": "CREATE table_name;"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 158,
+    "question": "How do you create a backup of a MySQL database?",
+    "options": {
+      "A": "mysqldump dbname > backup.sql",
+      "B": "backup dbname > backup.sql",
+      "C": "CREATE BACKUP dbname TO 'backup.sql';",
+      "D": "BACKUP DATABASE dbname TO 'backup.sql';"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 159,
+    "question": "How do you import data into a MySQL table from a CSV file?",
+    "options": {
+      "A": "LOAD DATA LOCAL INFILE 'file.csv' INTO TABLE table_name;",
+      "B": "IMPORT DATA file.csv INTO TABLE table_name;",
+      "C": "CSV IMPORT file.csv TO TABLE table_name;",
+      "D": "INSERT INTO table_name FROM 'file.csv';"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 160,
+    "question": "What is the purpose of the systemctl command in Linux?",
+    "options": {
+      "A": "Manage system services",
+      "B": "Configure system settings",
+      "C": "Execute system scripts",
+      "D": "Monitor system performance"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 161,
+    "question": "What command is used to install a package in a Debian-based Linux system?",
+    "options": {
+      "A": "apt-get install package-name",
+      "B": "yum install package-name",
+      "C": "dnf install package-name",
+      "D": "install package-name"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 162,
+    "question": "What is the purpose of the netstat command in Linux?",
+    "options": {
+      "A": "Display network statistics",
+      "B": "Configure network interfaces",
+      "C": "Start network services",
+      "D": "Test network connectivity"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 163,
+    "question": "What command is used Capsules to display the environment variables in Linux?",
+    "options": {
+      "A": "env",
+      "B": "showenv",
+      "C": "printenv",
+      "D": "listenv"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 164,
+    "question": "What is the purpose of the if statement in a shell script?",
+    "options": {
+      "A": "Execute a command only if a condition is true",
+      "B": "Specify a file inclusion condition",
+      "C": "Define a loop based on a condition",
+      "D": "Check the script's integrity"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 165,
+    "question": "How do you read input from the user in a Bash script?",
+    "options": {
+      "A": "read input",
+      "B": "userinput = read",
+      "C": "get userinput",
+      "D": "input = user"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 166,
+    "question": "What is the purpose of the sed command in Bash scripting?",
+    "options": {
+      "A": "Stream editor for filtering and transforming text",
+      "B": "Search for files and directories",
+      "C": "Replace text in files",
+      "D": "Display system log messages"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 167,
+    "question": "What does the trap command do in Bash scripting?",
+    "options": {
+      "A": "Handle signals and shell errors",
+      "B": "Create a trapdoor for secure access",
+      "C": "Execute a command periodically",
+      "D": "Monitor script execution time"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 168,
+    "question": "How do you check if a file exists in a Bash script?",
+    "options": {
+      "A": "if [ -e file.txt ]; then",
+      "B": "if file.txt exists; then",
+      "C": "check file.txt",
+      "D": "if file.txt; then"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 169,
+    "question": "What is the purpose of the Ansible ad-hoc command?",
+    "options": {
+      "A": "Execute a single task on multiple hosts",
+      "B": "Define a custom Ansible module",
+      "C": "Schedule recurring tasks",
+      "D": "Run Ansible playbooks sequentially"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 170,
+    "question": "How do you pass variables to an Ansible playbook?",
+    "options": {
+      "A": "vars: { variable1: value1, variable2: value2 }",
+      "B": "variables = { variable1: value1, variable2: value2 }",
+      "C": "pass variable1 = value1 variable2 = value2",
+      "D": "variables: [ variable1, variable2]"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 171,
+    "question": "How do you run an Ansible playbook on a specific host?",
+    "options": {
+      "A": "ansible-playbook -i host playbook.yml",
+      "B": "ansible-run playbook.yml -host host",
+      "C": "run-playbook -i host playbook.yml",
+      "D": "playbook.yml -i host ansible-run"
+    },
+    "correctAnswer": 0,
+ "subject": "Linux"
+  },
+  {
+    "id": 172,
+    "question": "How do you comment out multiple lines in a shell script?",
+    "options": {
+      "A": "/* comment */",
+      "B": "# comment",
+      "C": "// comment",
+      "D": "-- comment"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 173,
+    "question": "Which command is used to display the last 10 lines of a file?",
+    "options": {
+      "A": "head",
+      "B": "tail",
+      "C": "display",
+      "D": "show"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 174,
+    "question": "In a shell script, how do you read input from the user?",
+    "options": {
+      "A": "input",
+      "B": "read",
+      "C": "get",
+      "D": "scan"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 175,
+    "question": "What is the purpose of the break statement in a shell script loop?",
+    "options": {
+      "A": "Exit the script",
+      "B": "Exit the loop",
+      "C": "Continue to the next iteration",
+      "D": "Skip the current iteration"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 176,
+    "question": "Which command is used to delete a file in a shell script?",
+    "options": {
+      "A": "delete",
+      "B": "rm",
+      "C": "remove",
+      "D": "del"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 177,
+    "question": "How do you iterate over the elements of an array in a Bash for loop?",
+    "options": {
+      "A": "for element in $array",
+      "B": "for element in ${array[@]}",
+      "C": "for element in $array[@]",
+      "D": "for element = $array"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 178,
+    "question": "In Bash, what is the syntax for a basic do-while loop?",
+    "options": {
+      "A": "do while [ condition ]",
+      "B": "while [ condition ]; do",
+      "C": "while [ condition ] do",
+      "D": "do while [ condition ]"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 179,
+    "question": "How do you restart the Apache web server after making configuration changes?",
+    "options": {
+      "A": "service apache restart",
+      "B": "systemctl restart apache2",
+      "C": "restart apache",
+      "D": "apache restart"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 180,
+    "question": "What is the default port for MySQL connections?",
+    "options": {
+      "A": "1433",
+      "B": "3306",
+      "C": "5432",
+      "D": "1521"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 181,
+    "question": "How do you restart the Apache web server from the Linux command line?",
+    "options": {
+      "A": "service apache2 restart",
+      "B": "systemctl restart apache2",
+      "C": "restart apache2",
+      "D": "apache2ctl restart"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 182,
+    "question": "In Nginx, what command is used to check the syntax of the configuration file?",
+    "options": {
+      "A": "nginx-check",
+      "B": "nginx -t",
+      "C": "nginx-test",
+      "D": "check-nginx"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 183,
+    "question": "What is the purpose of a shebang (#!/bin/bash) in a Bash script?",
+    "options": {
+      "A": "Comment indicating the author of the script",
+      "B": "Specifies the shell interpreter for the script",
+      "C": "Marks the end of the script",
+      "D": "Defines a variable in the script"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 184,
+    "question": "What does the echo command do in Bash scripting?",
+    "options": {
+      "A": "Display the script's filename",
+      "B": "Print text to the standard output",
+      "C": "Execute a command within the script",
+      "D": "Generate a random number"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 185,
+    "question": "What is Ansible primarily used for?",
+    "options": {
+      "A": "Container orchestration",
+      "B": "Configuration management",
+      "C": "Continuous integration",
+      "D": "Network routing"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 186,
+    "question": "What is an Ansible playbook?",
+    "options": {
+      "A": "A collection of Ansible roles",
+      "B": "A script for executing tasks on remote hosts",
+      "C": "Ansible's configuration file",
+      "D": "A module for managing Docker containers"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 187,
+    "question": "What does the if [ -f filename ] condition check in a shell script?",
+    "options": {
+      "A": "Checks if the file exists",
+      "B": "Checks if the file is a regular file",
+      "C": "Checks if the file is executable",
+      "D": "Checks if the file is a directory"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 188,
+    "question": "How do you redirect both standard output and standard error to a file in a shell script?",
+    "options": {
+      "A": "> file 2>1",
+      "B": "2>&1 > file",
+      "C": "& file",
+      "D": "> file 2>&1"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 189,
+    "question": "What is the purpose of the case statement in a shell script?",
+    "options": {
+      "A": "Looping",
+      "B": "Decision making",
+      "C": "Function definition",
+      "D": "File copying"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  },
+  {
+    "id": 190,
+    "question": "What does the shift command do in a shell script?",
+    "options": {
+      "A": "Shifts the script's focus",
+      "B": "Shifts the command line arguments",
+      "C": "Shifts the working directory",
+      "D": "Shifts the cursor position"
+    },
+    "correctAnswer": 1,
+ "subject": "Linux"
+  }]
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplay = document.getElementById("score-display");
+        const progressDisplay = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+        const errorMessage = document.getElementById("error-message");
+
+        function loadQuestion() {
+    const questionObj = allQuestions[currentQuestionIndex];
+    questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+    progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+    questionTextEl.textContent = questionObj.question;
+    scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+    optionsContainer.innerHTML = "";
+    errorMessage.style.display = "none";
+    nextBtn.style.display = "none";
+    restartBtn.style.display = "none";
+
+    // Handle both array-based options and object-based options (with A, B, C, D keys)
+    const options = Array.isArray(questionObj.options) 
+        ? questionObj.options 
+        : [questionObj.options.A, questionObj.options.B, questionObj.options.C, questionObj.options.D];
+
+    options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.addEventListener("click", () => selectAnswer(button, index));
+        optionsContainer.appendChild(button);
+    });
+}
+
+function selectAnswer(button, index) {
+    const buttons = optionsContainer.querySelectorAll("button");
+    buttons.forEach(btn => btn.disabled = true);
+
+    // Make sure correctAnswer is a number
+    const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
+    if (index === correctIndex) {
+        button.classList.add("correct");
+        score++;
+    } else {
+        button.classList.add("wrong");
+        buttons[correctIndex].classList.add("correct");
+    }
+
+    scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+    if (currentQuestionIndex < allQuestions.length - 1) {
+        nextBtn.style.display = "inline-block";
+    } else {
+        restartBtn.style.display = "inline-block";
+    }
+}
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+</body>
+</html>

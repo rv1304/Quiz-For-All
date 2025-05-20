@@ -1,5 +1,2 @@
 .vercel
 node_modules/
-*
-!subjects/
-!subjects/linux/
