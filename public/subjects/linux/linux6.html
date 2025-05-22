@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Linux Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+    
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+    
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+    
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+        }
+    
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+    
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+    
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+    
+        #next-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        #next-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e8;
+        }
+    
+        #error-message {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+    
+            h1 {
+                font-size: 1.8em;
+            }
+    
+            #question-text {
+                font-size: 1.1em;
+            }
+    
+            #next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Linux Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number"></p>
+        <p id="progress-display"></p>
+        <p id="score-display">Score: 0 / 0</p>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="error-message" style="display: none;"></p>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <script>
+        const allQuestions =[
+  {
+    "id": 1,
+    "question": "You run the `ls -l` command and see the following output: `-rw-r--r-- 1 user user 1024 Oct 15 12:34 file.txt`. What does \"user user\" represent?",
+    "options": [
+      "The group and owner associated with the file respectively",
+      "The owner and group associated with the file respectively",
+      "The file's creation date and time",
+      "The file's permission mode"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 2,
+    "question": "You run the `mv file.txt newfile.txt` command. What is the result?",
+    "options": [
+      "Moves \"file.txt\" to a new directory called \"newfile.txt\"",
+      "Renames \"file.txt\" to \"newfile.txt\"",
+      "Copies \"file.txt\" to \"newfile.txt\"",
+      "Deletes \"file.txt\" and creates \"newfile.txt\""
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 3,
+    "question": "You run the `ls -aR /` command. What will be the output?",
+    "options": [
+      "List all files and directories (hidden as well) in the root directory recursively",
+      "List all hidden files and directories only in the root directory",
+      "List the contents of the current directory",
+      "List files and directories in reverse order in the root directory"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 4,
+    "question": "You execute the `cp -R directory/ newdir/` command. What does the `-R` option do?",
+    "options": [
+      "Copy files and directories recursively",
+      "Remove files and directories forcefully",
+      "Rename directories",
+      "Copy directories and their contents as hard links"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 5,
+    "question": "What is the output of the `du -sh /home/user` command?",
+    "options": [
+      "Displays the size of the `/home/user` directory in bytes",
+      "Lists all files and directories within `/home/user`",
+      "Shows a total summary of disk usage in the `/home/user` directory",
+      "Calculates the checksum of files in `/home/user`"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 6,
+    "question": "You run the `cd ../../` command. What is the result?",
+    "options": [
+      "Moves to the user's home directory",
+      "Navigates two levels up in the directory structure",
+      "Lists hidden files in the current directory",
+      "Changes to the root directory"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 7,
+    "question": "Given the directory structure with /home/john as your working directory, to change the current directory to \"Downloads\", what command should you use?",
+    "options": [
+      "cd /Downloads",
+      "cd ~/Downloads",
+      "cd ..Downloads",
+      "change /Downloads"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 8,
+    "question": "Given the directory structure with /home/john as your working directory, which command is used to create a new directory called \"Photos\" under the \"Documents\" directory?",
+    "options": [
+      "mkdir Documents/Photos",
+      "mkdir /home/john/Pictures/Photos",
+      "mkdir ./Photos",
+      "mkdir ../Documents/Photos"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 9,
+    "question": "Given the directory structure with /home/john as your working directory, how do you remove an empty directory \"Temporary\" under the \"Desktop\" directory?",
+    "options": [
+      "rmdir Temporary",
+      "rm -rf Desktop/Temporary",
+      "rmdir -p Desktop/Temporary",
+      "rmdir Desktop/Temporary"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 10,
+    "question": "Given the directory structure with /home/john as your working directory, to create an empty file called \"report.txt\" in the \"Documents/Work/Reports\" directory, which command would you use?",
+    "options": [
+      "touch Documents/Work/Reports/report.txt",
+      "touch /home/Documents/Work/Reports/report.txt",
+      "create Documents/Work/Reports/report.txt",
+      "touch /Reports/report.txt"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 11,
+    "question": "What command allows you to rename a file or directory?",
+    "options": [
+      "rn",
+      "rename",
+      "mv",
+      "change"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 12,
+    "question": "Given the directory structure with /home/john as your working directory, to remove a file named \"oldfile.txt\" from the \"Desktop\" directory, which command would you use?",
+    "options": [
+      "delete Desktop/oldfile.txt",
+      "rm /home/Desktop/oldfile.txt",
+      "rm Desktop/oldfile.txt",
+      "remove Desktop/oldfile.txt"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 13,
+    "question": "To find files and directories in the system, you can use the \"locate\" command. What does it search for?",
+    "options": [
+      "Currently running processes",
+      "Files and directories based on their names",
+      "Active network connections",
+      "System hardware information"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 14,
+    "question": "Given the directory structure with /home/john as your working directory, what command is used to forcefully remove a Pictures Folder?",
+    "options": [
+      "delete -r Pictures",
+      "rmdir -r Pictures",
+      "rm -r Pictures",
+      "Both B and C"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 15,
+    "question": "How can you change the permissions of a file to make it readable, writable, and executable for the owner, but only readable for others?",
+    "options": [
+      "chmod 777 file.txt",
+      "chmod 644 file.txt",
+      "chmod 755 file.txt",
+      "chmod 666 file.txt"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 16,
+    "question": "Given the directory structure with /home/john as your working directory, how do you find the absolute path of a file named \"important.txt\" located within the \"Projects\" directory under \"Documents/Work\"?",
+    "options": [
+      "find /home/john/Documents/Work -name important.txt",
+      "locate Documents/Work/Projects/important.txt",
+      "search important.txt in Documents/Work",
+      "locate -a important.txt"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 17,
+    "question": "What command is used to change the access mode of a file in symbolic notation, granting read and write permissions to the owner, read-only permissions to the group, and no permissions to others?",
+    "options": [
+      "chmod 624 file.txt",
+      "chmod u+rw, g+r, o-r file.txt",
+      "chmod 124 file.txt",
+      "chmod 746 file.txt"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 18,
+    "question": "To recursively copy a directory and its contents, preserving ownership and permissions, which command should you use?",
+    "options": [
+      "cp -pR",
+      "cp -a",
+      "cp -p",
+      "cp -rO"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 19,
+    "question": "Given the directory structure with /home/john as your working directory, what command would you use to remove a directory \"Public\" and its contents?",
+    "options": [
+      "rmdir Public",
+      "rm -rf Public",
+      "delete Public",
+      "remove -d Public"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 20,
+    "question": "Given the directory structure with /home/john as your working directory, to copy a directory and its contents from \"Documents/Work\" to \"Documents/Archives\", which command should you use?",
+    "options": [
+      "cp Documents/Work Documents/Archives",
+      "cp -r Documents/Work Documents/Archives",
+      "mv Documents/Work Documents/Archives",
+      "copy Documents/Work Documents/Archives"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 21,
+    "question": "What is the purpose of the `-l` option in the `df -l` command?",
+    "options": [
+      "Display file sizes",
+      "Show a list of all available files",
+      "List sizes in human-readable format",
+      "Display the local file system information"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 22,
+    "question": "You execute the `mkdir -m 777 mydir` command. What is the significance of the `-m` option?",
+    "options": [
+      "Create a directory named `mydir` and set its permissions to 777",
+      "Create multiple directories named `mydir`",
+      "List the contents of the `mydir` directory",
+      "Move files to the `mydir` directory"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 23,
+    "question": "You run the `ls -l / | head -n 5` command. What is the expected output?",
+    "options": [
+      "The first 5 files and directories in the root directory with detailed information",
+      "A list of hidden files and directories in the root directory",
+      "The first 5 lines of the file named `/`",
+      "An error, as you cannot use `head` with `ls`"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 24,
+    "question": "You use the `cp -a dir1/ dir2/` command to copy a directory. What is the result?",
+    "options": [
+      "A copy of `dir1/` is created within `dir2/`",
+      "An error is generated, as `-a` is an invalid option for `cp`",
+      "`dir1/` is moved to `dir2/`",
+      "An error is generated, as you cannot copy directories with `cp`"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 25,
+    "question": "You execute the `mv file1.txt dir/` command. What is the result if `dir/` does not exist?",
+    "options": [
+      "`file1.txt` is moved to a new directory named `dir`",
+      "An error is generated; `dir/` does not exist",
+      "`dir/` is created, and `file1.txt` is moved into it",
+      "`file1.txt` is deleted"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 26,
+    "question": "You run the `ls -d */` command. What will be the output?",
+    "options": [
+      "Lists all files and directories in the current directory",
+      "Lists only hidden directories",
+      "Lists only directories in the current directory",
+      "An error, as you cannot use `-d` with `ls`"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 27,
+    "question": "What is the purpose of the `-c` option in the `chmod` command?",
+    "options": [
+      "Change the owner of a file or directory",
+      "Display message for every file and directory whose permission is changed",
+      "Copy files and directories",
+      "Show the file's SELinux context"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 28,
+    "question": "You execute the `du -h` command. What does the `-h` flag indicate?",
+    "options": [
+      "Display hidden files and directories",
+      "Show human-readable sizes",
+      "Display hard links",
+      "List the disk usage of home directories"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 29,
+    "question": "What is the primary purpose of the `mkdir -m` option?",
+    "options": [
+      "Create a new directory with the specified permissions",
+      "Rename a directory",
+      "List the contents of a directory",
+      "Move a directory to another location"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 30,
+    "question": "You run the `rm -i file.txt` command. What is the purpose of the `-i` option?",
+    "options": [
+      "Remove the file without any confirmation",
+      "Rename the file",
+      "Move the file to the Trash for later recovery",
+      "Prompt for confirmation before deletion"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 31,
+    "question": "What does the `cd -` command do in Linux?",
+    "options": [
+      "Navigates to the previous directory",
+      "Changes to the root directory",
+      "Lists hidden files",
+      "Moves to the user's home directory"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 32,
+    "question": "You use the `cp -u file1.txt file2.txt` command to copy a file. What is the result?",
+    "options": [
+      "`file1.txt` is copied to `file2.txt` if `file2.txt` does not exist or is older",
+      "An error is generated; the `-u` option is invalid for `cp`",
+      "`file1.txt` is copied to `file2.txt` regardless of the file's age",
+      "`file1.txt` is moved to `file2.txt`"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 33,
+    "question": "You execute the `ls -S` command. What does the `-S` flag do in this context?",
+    "options": [
+      "Lists files and directories in order of file size, largest first",
+      "Shows hidden files and directories",
+      "Sorts files and directories by file type",
+      "An error, as `-S` is an invalid option for `ls`"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 34,
+    "question": "You run the `df -i` command. What does the `-i` flag indicate?",
+    "options": [
+      "Displays information about inodes",
+      "Shows inode numbers for files",
+      "Lists the largest files on the filesystem",
+      "An error, as `-i` is an invalid option for `df`"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 35,
+    "question": "You execute the `rm -v file.txt` command. What is the purpose of the `-v` option?",
+    "options": [
+      "Removes the file quietly without any confirmation",
+      "Renames the file",
+      "Moves the file to the Trash for later recovery",
+      "Displays the removal process with a verbose message"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 36,
+    "question": "Which partitioning scheme allows you to create more than four primary partitions by using an extended partition?",
+    "options": [
+      "GPT (GUID Partition Table)",
+      "MBR (Master Boot Record)",
+      "LVM (Logical Volume Manager)",
+      "EFI (Extensible Firmware Interface)"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 37,
+    "question": "What is the purpose of the \"fdisk\" command in Linux?",
+    "options": [
+      "Format a disk",
+      "Create a new file system",
+      "Manage disk partitions",
+      "Encrypt a partition"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 38,
+    "question": "Which file system is commonly used for solid-state drives (SSDs) due to its focus on minimizing write operations to extend the lifespan of the drive?",
+    "options": [
+      "Ext4",
+      "NTFS",
+      "Btrfs",
+      "F2FS"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 39,
+    "question": "Which file system feature is responsible for preventing data corruption in the event of a power outage or system crash?",
+    "options": [
+      "Journaling",
+      "Encryption",
+      "Compression",
+      "Deduplication"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 40,
+    "question": "In Linux, what is the purpose of the \"mount\" command?",
+    "options": [
+      "Create a new partition",
+      "Display the list of mounted file systems",
+      "Attach a file system to the directory tree",
+      "Format a file system"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 41,
+    "question": "When unmounting a file system in Linux, which command should be used to ensure all changes are saved before unmounting?",
+    "options": [
+      "umount",
+      "sync",
+      "eject",
+      "detach"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 42,
+    "question": "In Linux, what is the purpose of the \"fstab\" file?",
+    "options": [
+      "Store encrypted passwords",
+      "Define file system mount points and options",
+      "Manage system logs",
+      "Configure the kernel"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 43,
+    "question": "What command is used to identify the disk space usage of files and directories in Linux?",
+    "options": [
+      "du",
+      "df",
+      "ls",
+      "spaceusage"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 44,
+    "question": "Which utility in Linux is used to periodically clean up and free disk space by removing unnecessary files?",
+    "options": [
+      "defrag",
+      "fsck",
+      "dd",
+      "logrotate"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 45,
+    "question": "In Linux, what is the purpose of the \"badblocks\" command?",
+    "options": [
+      "Create a corrupted file system",
+      "Identify bad sectors on a disk",
+      "Check the integrity of system files",
+      "Create a block device"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 46,
+    "question": "In Linux, what file type is typically represented by \"c\" in the file permissions and is used for character devices?",
+    "options": [
+      "Regular file",
+      "Directory",
+      "Socket",
+      "Character device file"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 47,
+    "question": "Which file type in Linux is used for block devices and is represented by \"b\" in the file permissions?",
+    "options": [
+      "Symbolic link",
+      "Named pipe",
+      "Block device file",
+      "Special file"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 48,
+    "question": "Which type of file is used to store the kernel's core dump for debugging purposes?",
+    "options": [
+      "Regular file",
+      "Core dump file",
+      "Named pipe",
+      "Block device file"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 49,
+    "question": "What is the file type \"s\" in Linux used for, and which special file does it represent?",
+    "options": [
+      "Shared memory file",
+      "Named pipe",
+      "Socket",
+      "Symbolic link"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 50,
+    "question": "In the Linux file system hierarchy, what is the purpose of the \"/usr\" directory?",
+    "options": [
+      "User home directories",
+      "System configuration files",
+      "User command binaries and data",
+      "Temporary files"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 51,
+    "question": "In the Linux file system hierarchy, where are system log files typically located?",
+    "options": [
+      "/var/log",
+      "/etc",
+      "/opt",
+      "/usr/bin"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 52,
+    "question": "What is the purpose of the \"/boot\" directory in the Linux file system hierarchy?",
+    "options": [
+      "User's home directory",
+      "System boot files and kernels",
+      "System configuration files",
+      "Temporary files"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 53,
+    "question": "In Linux, which directory contains user-specific configuration files and settings?",
+    "options": [
+      "/opt",
+      "/var",
+      "/home",
+      "/etc"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 54,
+    "question": "What does the \"/dev\" directory in the Linux file system hierarchy contain?",
+    "options": [
+      "User home directories",
+      "Device files",
+      "System binaries",
+      "Configuration files"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 55,
+    "question": "In Linux, what is the purpose of the \"/proc\" directory?",
+    "options": [
+      "Temporary storage",
+      "System configuration",
+      "Process information and control",
+      "User-specific data"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 56,
+    "question": "Which command in Linux is used to display the first and last few lines of a text file?",
+    "options": [
+      "head",
+      "tail",
+      "cat",
+      "more"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 57,
+    "question": "What command allows you to display the contents of a compressed file in Linux without actually decompressing it?",
+    "options": [
+      "zip",
+      "zcat",
+      "gunzip",
+      "tar"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 58,
+    "question": "In Linux, which command is used to display binary files in hexadecimal format?",
+    "options": [
+      "hexdump",
+      "od",
+      "cat",
+      "hexview"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 59,
+    "question": "What is the purpose of the \"pr\" command in Linux?",
+    "options": [
+      "Print the contents of a file",
+      "Display the process list",
+      "Print line numbers in a file",
+      "Display the list of printers"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 60,
+    "question": "What is the primary function of swap space in Linux?",
+    "options": [
+      "Store user data files",
+      "Enhance system security",
+      "Extend the size of the root partition",
+      "Provide virtual memory for the system"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 61,
+    "question": "Total primary partitions that can exist on one drive is?",
+    "options": [
+      "1",
+      "2",
+      "16",
+      "4"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 62,
+    "question": "Which command is used to create a new swap partition in Linux?",
+    "options": [
+      "mkswap",
+      "create_swap",
+      "swapadd",
+      "newpartition"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 63,
+    "question": "What is the recommended size for a swap partition in Linux, relative to the system's RAM?",
+    "options": [
+      "Twice the size of RAM",
+      "Equal to the size of RAM",
+      "Half the size of RAM",
+      "Four times the size of RAM"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 64,
+    "question": "In Linux, which command is used to enable a swap partition?",
+    "options": [
+      "enable_swap",
+      "mount_swap",
+      "swapon",
+      "activate_swap"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 65,
+    "question": "What happens when the available RAM in a Linux system is fully utilized and the swap space is exhausted?",
+    "options": [
+      "The system crashes",
+      "New data is stored in a temporary cache",
+      "Files are automatically deleted",
+      "The system reboots"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 66,
+    "question": "Given the current working directory is \"/home/user2/documents\", to create the file \"report.txt\", which command should be used?",
+    "options": [
+      "touch /home/user2/documents/report.txt",
+      "rm report.txt",
+      "rm /documents/report.txt",
+      "delete report.txt"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 67,
+    "question": "Assuming the current directory is \"/home/user2/documents\", to create a directory named \"backup\" within the current location, which command should be used?",
+    "options": [
+      "mkdir /backup",
+      "mkdir backup",
+      "mkdir /var/log/backup",
+      "mk backu"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 68,
+    "question": "Given the current working directory is \"/home/user1/pictures\", to create a directory named \"vacation\" within this location, which command should be used?",
+    "options": [
+      "mkdir vacation",
+      "mkdir /vacation",
+      "mkdir /home/user1",
+      "mk vacation"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 69,
+    "question": "Assuming the current directory is \"/home/user2/music\", to copy the file \"song3.mp3\" to the \"user1/music\" directory, which command should be used?",
+    "options": [
+      "cp song3.mp3 /home/user1/music",
+      "cp /home/user2/music /home/user1/music",
+      "cp /home/user1/music /home/user2/music",
+      "copy song3.mp3"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 70,
+    "question": "Given the directory structure, assuming the current working directory is \"/home/user1\", to delete the file \"file2.txt\", which command should be used?",
+    "options": [
+      "rm /home/user1/documents/file2.txt",
+      "rm file2.txt",
+      "rm /documents/file2.txt",
+      "delete file2.txt"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 71,
+    "question": "Given the directory structure, assuming the current working directory is \"/home/user2/music\", to copy the file \"song4.mp3\" to the \"user1/music\" directory, which command should be used?",
+    "options": [
+      "cp song4.mp3 /home/user1/music",
+      "cp /home/user2/song4.mp3 /home/user1/music",
+      "cp /home/user1/music/song4.mp3 /home/user2/music",
+      "copy song4.mp3"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 72,
+    "question": "Assuming the current working directory is \"/home/user1/documents\", to move the file \"file1.txt\" to the \"pictures\" directory, which command should be used?",
+    "options": [
+      "mv /home/user1/documents /home/user1/pictures",
+      "mv file1.txt /home/user1/pictures",
+      "mv file1.txt /documents",
+      "mv file1.txt /pictures"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 73,
+    "question": "Assuming the current working directory is \"/home/user1/documents\", to create a subfolder named \"projects\" within this location, which command should be used?",
+    "options": [
+      "mkdir projects",
+      "mkdir /projects",
+      "mkdir /home/user1/documents",
+      "mk projects"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 74,
+    "question": "Given the directory structure, assuming the current directory is \"/home/user2/documents\", to move the file \"report.pdf\" to the user1 \"documents\" directory, which command should be used?",
+    "options": [
+      "mv report.pdf /home/user1/documents",
+      "mv /home/user2/report.pdf /home/user2/documents",
+      "mv /home/user2/documents/report.pdf",
+      "mv report.pdf documents"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 75,
+    "question": "Assuming the current working directory is \"/home/user1/pictures\", to delete the file \"subimage2.png\", which command should be used?",
+    "options": [
+      "rm /home/user1/pictures/subfolder2/subimage2.png",
+      "rm subimage2.png",
+      "rm pictures/subimage2.png",
+      "delete subimage2.png"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 76,
+    "question": "Given the directory structure, assuming the current directory is \"/home/user2/documents\", to copy the file \"notes.txt\" to the \"user1/documents\" directory, which command should be used?",
+    "options": [
+      "cp /home/user1/documents",
+      "cp /home/user2/documents/notes.txt /home/user1/documents",
+      "cp /home/user1/documents/notes.txt /home/user2/documents",
+      "copy notes.txt"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 77,
+    "question": "Assuming the current directory is \"/home/user1/music\", to move the file \"subtrack1.mp3\" to the \"user2/music\" directory, which command should be used?",
+    "options": [
+      "mv subtrack1.mp3 /home/user2/music",
+      "mv /home/user1/music/subfolder3/subtrack1.mp3 /home/user2/music",
+      "mv subtrack1.mp3 /music/user2",
+      "mv /home/user2/music/subtrack1.mp3"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 78,
+    "question": "To change the current directory to \"user1/music\", which command should be used?",
+    "options": [
+      "cd /user1/music",
+      "cd /home/user1/music",
+      "change /music/user1",
+      "changedir /user1/music"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 79,
+    "question": "What command is used to list files in the \"documents\" directory of \"user1\"?",
+    "options": [
+      "ls /documents/user1",
+      "list /home/user1/documents",
+      "ls /home/user1/documents",
+      "list /user1/documents"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 80,
+    "question": "Which command is used to move \"file1.txt\" from \"user1/documents\" to \"user1/pictures\"?",
+    "options": [
+      "mv /home/user1/documents/file1.txt /home/user1/pictures",
+      "move file1.txt /user1/pictures",
+      "mv /user1/documents/file1.txt /user1/pictures",
+      "move /user1/pictures/file1.txt"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 81,
+    "question": "What command will remove the \"subimage2.png\" file from \"user1/pictures/subfolder2\"?",
+    "options": [
+      "rm /user1/pictures/subfolder2/subimage2.png",
+      "delete subimage2.png",
+      "rm /home/user1/pictures/subfolder2/subimage2.png",
+      "remove subimage2.png"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 82,
+    "question": "To create a directory named \"backups\" inside the \"user2\" directory, which command should be used?",
+    "options": [
+      "make backups /home/user2",
+      "mkdir /user2/backups",
+      "mkdir /home/user2/backups",
+      "create backups /user2"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 83,
+    "question": "To list the contents of the \"music\" directory for \"user1\", which command should be used?",
+    "options": [
+      "ls /home/user1/music",
+      "ls /user1/music",
+      "list /music/user1",
+      "dir /home/user1/music"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 84,
+    "question": "What command is used to move the entire \"pictures\" directory from \"user1\" to \"user2\"?",
+    "options": [
+      "mv /home/user1/pictures /user2",
+      "mv /home/user2",
+      "mv /home/user1/pictures /home/user2",
+      "mv /user1/pictures /user2"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 85,
+    "question": "To change the current directory to the root directory, what command should be used?",
+    "options": [
+      "cd /",
+      "change /root",
+      "change root",
+      "dir /"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 86,
+    "question": "What command is used to create an empty file named \"newfile.txt\" in the \"user2/documents\" directory?",
+    "options": [
+      "touch /user2/documents/newfile.txt",
+      "create newfile.txt",
+      "touch newfile.txt /user2/documents",
+      "touch /home/user2/documents/newfile.txt"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 87,
+    "question": "If you want to delete the \"subtrack1.mp3\" file from the \"subfolder3\" which command should be used?",
+    "options": [
+      "delete /home/user1/music/subfolder3/subtrack1.mp3",
+      "rm /home/user1/music/subfolder3/subtrack1.mp3",
+      "remove subtrack1.mp3",
+      "rm /home/user1/music/subtrack1.mp3"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 88,
+    "question": "What command should be used to navigate from the \"user1/music\" directory to the parent directory?",
+    "options": [
+      "cd ..",
+      "cd parent",
+      "cd -",
+      "dir .."
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 89,
+    "question": "Which command is used to delete the entire \"pictures\" directory within \"user1\"?",
+    "options": [
+      "rmdir /home/user1",
+      "rm -rf /home/user1/pictures",
+      "remove /home/user1/pictures",
+      "delete /pictures/user1"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 90,
+    "question": "To create a new directory named \"videos\" within the \"user1\" directory, what command should be used?",
+    "options": [
+      "mkdir /user1/videos",
+      "mkdir /videos",
+      "make directory videos /user1",
+      "mkdir /home/user1/videos"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 91,
+    "question": "What command would you use to move the file \"file2.txt\" from \"documents\" to the \"music\" directory within \"user1\"?",
+    "options": [
+      "mv /home/user1/documents/file2.txt /home/user1/music",
+      "mv file2.txt /home/music",
+      "move /user1/documents/file2.txt /user1/music",
+      "mv /documents/user1/file2.txt /user1"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 92,
+    "question": "If you want to navigate to the \"user2/documents\" directory from the current location, which command should be used?",
+    "options": [
+      "cd /home/user2/documents",
+      "cd /documents",
+      "change /user2/documents",
+      "dir /user2/documents"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 93,
+    "question": "What does the command `ls /home/user1/documents` do in Linux?",
+    "options": [
+      "Moves files to the \"documents\" directory",
+      "Lists the contents of the \"documents\" directory in \"/home/user1\"",
+      "Removes the \"documents\" directory",
+      "Creates a new directory named \"documents\""
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 94,
+    "question": "In Linux, what does the command `ls -l` do?",
+    "options": [
+      "Lists files in the long format",
+      "Lists only the directories in a location",
+      "Lists files without showing their permissions",
+      "Displays hidden files"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 95,
+    "question": "What happens when executing `ls -a /home/user2` in Linux?",
+    "options": [
+      "Lists all files and directories in \"/home/user2\"",
+      "Lists only the directories in \"/home/user2\"",
+      "Lists files in alphabetical order in \"/home/user2\"",
+      "Lists all files and directories except hidden ones in \"/home/user2\""
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 96,
+    "question": "Which of the following is a package management system commonly used in Debian-based Linux distributions like Ubuntu?",
+    "options": [
+      "YUM",
+      "APT",
+      "RPM",
+      "Pacman"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 97,
+    "question": "What is the primary responsibility of the kernel in a Linux system?",
+    "options": [
+      "Managing graphical user interfaces",
+      "Managing user applications",
+      "Managing hardware resources and system services",
+      "Managing system files and directories"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 98,
+    "question": "Which part of the Linux kernel is responsible for process management, memory management, and hardware device handling?",
+    "options": [
+      "System Library",
+      "System Call Interface",
+      "System Scheduler",
+      "Kernel Space"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 99,
+    "question": "Which part of the Linux kernel is responsible for managing system calls and providing a bridge between user-space and kernel-space?",
+    "options": [
+      "System Library",
+      "System Call Interface",
+      "System Scheduler",
+      "Kernel Space"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 100,
+    "question": "Which of the following is true about the Linux kernel's monolithic architecture?",
+    "options": [
+      "It runs only on single-core processors",
+      "It has all core operating system functions in a single address space",
+      "It requires frequent reboots to function properly",
+      "It relies on microkernels for its functionality"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 101,
+    "question": "In terms of file path structure, Linux uses:",
+    "options": [
+      "Backslashes",
+      "Drive letters (C:, D:)",
+      "Forward slashes (/)",
+      "Colons (:)"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 102,
+    "question": "Which of the following is a characteristic of Windows architecture?",
+    "options": [
+      "Monolithic kernel",
+      "Open-source nature",
+      "POSIX compliance",
+      "Command-line interface"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 103,
+    "question": "In Linux, software installation is typically handled by package managers. What is the common method of software installation in Windows?",
+    "options": [
+      "TAR files",
+      "APT",
+      "RPM",
+      "EXE or MSI installers"
+    ],
+    "correctAnswer": 4,
+    "subject": "Linux"
+  },
+  {
+    "id": 104,
+    "question": "Which of the following is a significant difference between Windows and Linux user accounts?",
+    "options": [
+      "Linux uses usernames, while Windows uses email addresses",
+      "Windows user accounts are case-sensitive, while Linux accounts are not",
+      "Linux has root privileges, while Windows has administrator privileges",
+      "Windows user accounts have more restricted permissions by default"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 105,
+    "question": "Which command line interface is commonly used in Linux, while a graphical user interface is more prevalent in Windows?",
+    "options": [
+      "Bash",
+      "PowerShell",
+      "Command Prompt",
+      "Terminal"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  }
+]
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplay = document.getElementById("score-display");
+        const progressDisplay = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+        const errorMessage = document.getElementById("error-message");
+
+        function loadQuestion() {
+    const questionObj = allQuestions[currentQuestionIndex];
+    questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+    progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+    questionTextEl.textContent = questionObj.question;
+    scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+    optionsContainer.innerHTML = "";
+    errorMessage.style.display = "none";
+    nextBtn.style.display = "none";
+    restartBtn.style.display = "none";
+
+    // Handle both array-based options and object-based options (with A, B, C, D keys)
+    const options = Array.isArray(questionObj.options) 
+        ? questionObj.options 
+        : [questionObj.options.A, questionObj.options.B, questionObj.options.C, questionObj.options.D];
+
+    options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.addEventListener("click", () => selectAnswer(button, index));
+        optionsContainer.appendChild(button);
+    });
+}
+
+function selectAnswer(button, index) {
+    const buttons = optionsContainer.querySelectorAll("button");
+    buttons.forEach(btn => btn.disabled = true);
+
+    // Make sure correctAnswer is a number
+    const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
+    if (index === correctIndex) {
+        button.classList.add("correct");
+        score++;
+    } else {
+        button.classList.add("wrong");
+        buttons[correctIndex].classList.add("correct");
+    }
+
+    scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+    if (currentQuestionIndex < allQuestions.length - 1) {
+        nextBtn.style.display = "inline-block";
+    } else {
+        restartBtn.style.display = "inline-block";
+    }
+}
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+</body>
+</html>

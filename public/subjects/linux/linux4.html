@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Linux Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+    
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+    
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+    
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+    
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+        }
+    
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+    
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+    
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+    
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+    
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+    
+        #next-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        #next-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e8;
+        }
+    
+        #error-message {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+    
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+    
+            h1 {
+                font-size: 1.8em;
+            }
+    
+            #question-text {
+                font-size: 1.1em;
+            }
+    
+            #next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Linux Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number"></p>
+        <p id="progress-display"></p>
+        <p id="score-display">Score: 0 / 0</p>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="error-message" style="display: none;"></p>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <script>
+        const allQuestions =[
+  {
+    "id": 1,
+    "question": "What is the primary purpose of the `ls` command in Linux?",
+    "options": [
+      "List system hardware information",
+      "Display the contents of a directory",
+      "Create a new directory",
+      "List running processes"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 2,
+    "question": "Which option is used to display hidden files when running `ls`?",
+    "options": [
+      "-H",
+      "-S",
+      "-A",
+      "-R"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 3,
+    "question": "What does the `-l` option do in the `ls` command?",
+    "options": [
+      "List files in a long format",
+      "Display files in a single column",
+      "Sort files by size",
+      "List only directories"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 4,
+    "question": "Which command lists files and directories in reverse order?",
+    "options": [
+      "ls -r",
+      "ls -R",
+      "ls -t",
+      "ls -S"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 5,
+    "question": "Which `ls` option displays file sizes in human-readable format (e.g., KB, MB)?",
+    "options": [
+      "-k",
+      "-h",
+      "-s",
+      "-R"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 6,
+    "question": "How can you list files and directories in a specified directory other than the current one using `ls`?",
+    "options": [
+      "Use the `-p` option",
+      "Provide the directory path as an argument",
+      "Use the `-d` option",
+      "You cannot specify a directory with `ls`"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 7,
+    "question": "Which `ls` option sorts files and directories by modification time, with the most recently modified ones at the top?",
+    "options": [
+      "-a",
+      "-t",
+      "-r",
+      "-i"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 8,
+    "question": "Which `ls` option displays files and directories in a tree-like format?",
+    "options": [
+      "-t",
+      "-R",
+      "-G",
+      "-i"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 9,
+    "question": "What is the purpose of the `ls -i` command?",
+    "options": [
+      "Display file sizes",
+      "List files with inode numbers",
+      "Sort files in reverse order",
+      "Display hidden files"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 10,
+    "question": "Which `ls` option displays file and directory permissions along with the listing?",
+    "options": [
+      "-P",
+      "-F",
+      "-G",
+      "-l"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 11,
+    "question": "What is the root directory in the Linux file system?",
+    "options": [
+      "/home",
+      "/var",
+      "/",
+      "root"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 12,
+    "question": "Which file is used to store user account information in Linux?",
+    "options": [
+      "/opt/password",
+      "/var/users",
+      "/bin/groups",
+      "/etc/passwd"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 13,
+    "question": "In Linux, what is the purpose of the `/bin` directory?",
+    "options": [
+      "Storing binary executables and essential system programs",
+      "Storing temporary files",
+      "User home directories",
+      "System configuration files"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 14,
+    "question": "Which directory contains configuration files for system-wide settings in Linux?",
+    "options": [
+      "/lib",
+      "/etc",
+      "/opt",
+      "/var"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 15,
+    "question": "In Linux, what is the purpose of the `/usr` directory?",
+    "options": [
+      "Storing user home directories",
+      "User Utilities and Application",
+      "Temporary storage",
+      "User-specific configuration files"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 16,
+    "question": "What does the `/dev` directory contain in Linux?",
+    "options": [
+      "Device files representing hardware devices",
+      "User home directories",
+      "System log files",
+      "System executables"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 17,
+    "question": "Which directory in Linux stores log files generated by system processes?",
+    "options": [
+      "/log",
+      "/var/log",
+      "/tmp",
+      "/syslogs"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 18,
+    "question": "What is the purpose of the `/tmp` directory in Linux?",
+    "options": [
+      "Storing temporary files and directories",
+      "System configuration files",
+      "User-specific settings",
+      "User home directories"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 19,
+    "question": "In Linux, what is the purpose of the `/mnt` directory?",
+    "options": [
+      "Storing user home directories",
+      "Mounting temporary filesystems",
+      "Managing user groups",
+      "System backups"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 20,
+    "question": "Which directory in Linux stores software packages and libraries for optional software?",
+    "options": [
+      "/bin",
+      "/sbin",
+      "/opt",
+      "/lib"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 21,
+    "question": "What does the `cd` command stand for in Linux?",
+    "options": [
+      "Change Directory",
+      "Create Directory",
+      "Current Date",
+      "Copy Directory"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 22,
+    "question": "Which command allows you to change the working directory to your home directory in Linux?",
+    "options": [
+      "cd /",
+      "cd ~",
+      "cd ..",
+      "cd ."
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 23,
+    "question": "What happens if you run the `cd` command without specifying a directory in Linux?",
+    "options": [
+      "It takes you to the root directory.",
+      "It lists the contents of the current directory.",
+      "It prints the current working directory.",
+      "It displays an error message."
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 24,
+    "question": "Which of the following commands can be used to go up one level in the directory hierarchy in Linux?",
+    "options": [
+      "cd /",
+      "cd ..",
+      "cd ~",
+      "cd"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 25,
+    "question": "How can you change the working directory to a directory named 'documents' located in the current directory in Linux?",
+    "options": [
+      "cd /documents",
+      "cd ./documents",
+      "cd ../documents",
+      "cd doc"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 26,
+    "question": "What is the primary function of the Linux kernel in an operating system?",
+    "options": [
+      "Managing user applications",
+      "Handling input/output devices",
+      "Running graphical user interfaces",
+      "Providing web browsing capabilities"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 27,
+    "question": "Which component of the Linux kernel is responsible for process scheduling and memory management?",
+    "options": [
+      "Kernel modules",
+      "System libraries",
+      "Kernel scheduler",
+      "Process scheduler"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 28,
+    "question": "The Linux kernel can be classified as a ________ operating system kernel, which means it allows multiple processes to run simultaneously.",
+    "options": [
+      "Monolithic",
+      "Microkernel",
+      "Hybrid",
+      "Nano"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 29,
+    "question": "Which part of the Linux kernel is responsible for handling device drivers and hardware interaction?",
+    "options": [
+      "System libraries",
+      "Userspace applications",
+      "Kernel space",
+      "Kernel modules"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 30,
+    "question": "What is the role of the init process in the Linux kernel architecture?",
+    "options": [
+      "Initializing system hardware",
+      "Managing memory allocation",
+      "Bootstrapping the system and starting user-level processes",
+      "Managing user accounts"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 31,
+    "question": "What is the first program that runs during the boot process of a Linux system?",
+    "options": [
+      "init",
+      "BIOS",
+      "Grub",
+      "Kernel"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 32,
+    "question": "In the Linux boot process, which component is responsible for loading the kernel into memory from the disk?",
+    "options": [
+      "User",
+      "BIOS",
+      "Int",
+      "Bootloader"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 33,
+    "question": "In the Linux boot process, what is the last step after all necessary components have been loaded and services started?",
+    "options": [
+      "Loading the graphical user interface (GUI)",
+      "Displaying the login prompt",
+      "Running the first user-level application",
+      "Shutting down the system"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 34,
+    "question": "In the context of Linux booting, what does 'GRUB' stand for?",
+    "options": [
+      "Grand Unified Bootloader",
+      "General Resource Utilization Bootloader",
+      "Global Runtime Universal Bootloader",
+      "Graphical User Bootloader"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 35,
+    "question": "During the Linux boot process, which component is responsible for loading the Linux kernel into memory?",
+    "options": [
+      "BIOS",
+      "GRUB",
+      "Int",
+      "systemd"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 36,
+    "question": "Which Linux command is used to create a new directory?",
+    "options": [
+      "`dir`",
+      "`make`",
+      "`create`",
+      "`mkdir`"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 37,
+    "question": "What is the purpose of the `-p` option in the `mkdir` command?",
+    "options": [
+      "Print the directory's contents",
+      "Remove the directory and its contents",
+      "Create parent directories if they don't exist",
+      "Provide permission for the directory"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 38,
+    "question": "Which command is used to remove an empty directory in Linux?",
+    "options": [
+      "`delete`",
+      "`rmdir`",
+      "`remove`",
+      "`rm`"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 39,
+    "question": "What happens if you attempt to use `rmdir` to delete a directory that contains files or subdirectories?",
+    "options": [
+      "The directory is deleted along with its contents.",
+      "The command generates an error and does not delete the directory.",
+      "Only empty subdirectories are removed.",
+      "The directory is moved to the Trash for later recovery."
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 40,
+    "question": "Which of the following commands can be used to remove a directory and its contents, including subdirectories?",
+    "options": [
+      "`rmdir -f`",
+      "`rmdir -R`",
+      "`rm -r`",
+      "`delete -d`"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 41,
+    "question": "What is the command which changes the working directory from home(~) to root(/)?",
+    "options": [
+      "cd ../..",
+      "cd /",
+      "Both A and B",
+      "None of these"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 42,
+    "question": "What is the command which changes the working directory from root(/) to home(~)?",
+    "options": [
+      "cd ../..",
+      "cd",
+      "Both A and B",
+      "None of these"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 43,
+    "question": "You are in a directory containing the following files: `file1.txt`, `file2.txt`, and `file3.txt`. What is the output of the `ls` command?",
+    "options": [
+      "file1.txt file2.txt file3.txt",
+      "file1.txt",
+      "file2.txt",
+      "file3.txt"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 44,
+    "question": "You have a text file named `document.txt`. What is the output of the `cat document.txt` command?",
+    "options": [
+      "The content of `document.txt`",
+      "Nothing; it opens the text editor",
+      "\"document.txt\" displayed on the screen",
+      "An error message"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 45,
+    "question": "If you run `chmod 755 file.txt`, what is the permission set for `file.txt`?",
+    "options": [
+      "-rwxr-xr-x",
+      "-rw-r--r--",
+      "-rwx------",
+      "-rw-------"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 46,
+    "question": "You copy a file named `file.txt` to a directory called `backup/`. What is the command to do this?",
+    "options": [
+      "cp file.txt backup/",
+      "mv file.txt backup/",
+      "cp backup/ file.txt",
+      "mv backup/ file.txt"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 47,
+    "question": "What does the `rm -r directory/` command do?",
+    "options": [
+      "Removes the directory and its contents",
+      "Removes only the directory if it's empty",
+      "Renames the directory",
+      "Recursively copies the directory"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 48,
+    "question": "You move a file named `file.txt` to a different directory using the `mv` command. What happens to the original file?",
+    "options": [
+      "It is copied to the new directory.",
+      "It is deleted from the original directory.",
+      "It is renamed in the original directory.",
+      "It remains in the original directory."
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 49,
+    "question": "What does the `touch newfile.txt` command do?",
+    "options": [
+      "Creates a new empty file named `newfile.txt`",
+      "Updates the timestamp of an existing file `newfile.txt`",
+      "Lists the contents of `newfile.txt`",
+      "Either A or B"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 50,
+    "question": "You run the `du -sh directory/` command. What does the `-s` flag do in this context?",
+    "options": [
+      "Display sizes in bytes",
+      "Display sizes in a human-readable format",
+      "Calculate the size of subdirectories",
+      "Summarize the size of the specified directory"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 51,
+    "question": "You run the `df -h` command. What does the `-h` flag do in this context?",
+    "options": [
+      "Display information about hard drives",
+      "Display information about files",
+      "Display sizes in a human-readable format",
+      "Show hidden files"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 52,
+    "question": "You execute the `free -m` command. What does the `-m` flag indicate?",
+    "options": [
+      "Display memory usage in megabytes",
+      "Display available memory in megabits",
+      "Display memory usage in kilobytes",
+      "Display memory information for the machine"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 53,
+    "question": "What does the `cd .` command do?",
+    "options": [
+      "Changes to the user's home directory",
+      "Navigates to the root directory",
+      "Do Nothing",
+      "Lists files and directories in the current directory"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 54,
+    "question": "You execute the `mkdir mydir` command. What is the result?",
+    "options": [
+      "Creates a new directory named 'mydir'",
+      "Deletes the 'mydir' directory",
+      "Renames an existing directory to 'mydir'",
+      "Lists the contents of 'mydir'"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 55,
+    "question": "What happens when you run the `rmdir directory/` command?",
+    "options": [
+      "Removes the directory and its contents",
+      "Removes only the directory if it's empty",
+      "Renames the directory",
+      "Recursively copies the directory"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 56,
+    "question": "What is the purpose of the `cp -i` command when copying files?",
+    "options": [
+      "Copy files interactively, prompting before overwriting",
+      "Copy files as symbolic links",
+      "Copy files in reverse order",
+      "Copy files while ignoring any errors"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 57,
+    "question": "You execute the `rm -rf directory/` command. What does the `-r` and `-f` combination do?",
+    "options": [
+      "Remove the directory forcefully without asking for confirmation",
+      "Remove the directory and asks for confirmation",
+      "Recursively copy the directory",
+      "Rename the directory"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 58,
+    "question": "What does the `cd ~` command do in Linux?",
+    "options": [
+      "Changes to the root directory",
+      "Navigates to the previous directory",
+      "Changes to the home directory of the current user",
+      "Lists hidden files"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 59,
+    "question": "You run the `mkdir dir1/dir2/dir3` command. What happens?",
+    "options": [
+      "Create parent directories if they don't exist",
+      "Remove the directory and its contents",
+      "Create dir3 if path exists else shows Error",
+      "Provide permissions for the directory"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 60,
+    "question": "You use the `rm` command to delete a file named `important.txt`. What is the outcome of the command?",
+    "options": [
+      "Deletes the file without any confirmation",
+      "Renames the file",
+      "Moves the file to the Trash for later recovery",
+      "Prompts for confirmation before deletion"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 61,
+    "question": "Who is the original creator of the Linux kernel?",
+    "options": [
+      "Linus Torvalds",
+      "Richard Stallman",
+      "Steve Jobs",
+      "Bill Gates"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 62,
+    "question": "In what year was the first version of the Linux kernel released?",
+    "options": [
+      "1991",
+      "1984",
+      "2000",
+      "1979"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 63,
+    "question": "Which of the following is not a popular Linux distribution?",
+    "options": [
+      "ubuntu",
+      "fedora",
+      "microsoft linux",
+      "centOS"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 64,
+    "question": "Which Linux distribution is known for its use in server environments and is derived from the sources of Red Hat Enterprise Linux?",
+    "options": [
+      "ubuntu",
+      "debian",
+      "centOS",
+      "Arch Linux"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 65,
+    "question": "The Linux distribution known for its rolling release model and user-centric design is:",
+    "options": [
+      "fedora",
+      "debian",
+      "arch linux",
+      "slackware"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 66,
+    "question": "What is the primary function of the GRUB bootloader in Linux?",
+    "options": [
+      "Manage user accounts",
+      "Load and control the Linux kernel",
+      "Provide a graphical user interface",
+      "Run Linux shell commands"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 67,
+    "question": "Which component of the Linux system manages hardware resources and provides an interface for software to interact with the hardware?",
+    "options": [
+      "Shell",
+      "Kernel",
+      "Desktop Environment",
+      "Window Manager"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 68,
+    "question": "What is the purpose of the 'init' process in a Linux system?",
+    "options": [
+      "Manage user accounts",
+      "Launch the Linux kernel",
+      "Handle system initialization and manage processes",
+      "Manage disk storage"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 69,
+    "question": "Which Linux command is used to list the contents of a directory?",
+    "options": [
+      "ls",
+      "cd",
+      "mkdir",
+      "rm"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 70,
+    "question": "Which of the following is a package management system commonly used in Debian-based Linux distributions like Ubuntu?",
+    "options": [
+      "YUM",
+      "APT",
+      "RPM",
+      "Pacman"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 71,
+    "question": "What is the primary responsibility of the kernel in a Linux system?",
+    "options": [
+      "Managing graphical user interfaces",
+      "Managing user applications",
+      "Managing hardware resources and system services",
+      "Managing system files and directories"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 72,
+    "question": "Which part of the Linux kernel is responsible for process management, memory management, and hardware device handling?",
+    "options": [
+      "System Library",
+      "System Call Interface",
+      "System Scheduler",
+      "Kernel Space"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 73,
+    "question": "Which part of the Linux kernel is responsible for managing system calls and providing a bridge between user-space and kernel-space?",
+    "options": [
+      "System Library",
+      "System Call Interface",
+      "System Scheduler",
+      "Kernel Space"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 74,
+    "question": "Which of the following is true about the Linux kernel's monolithic architecture?",
+    "options": [
+      "It runs only on single-core processors.",
+      "It has all core operating system functions in a single address space.",
+      "It requires frequent reboots to function properly.",
+      "It relies on microkernels for its functionality."
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 75,
+    "question": "In terms of file path structure, Linux uses:",
+    "options": [
+      "Backslashes",
+      "Drive letters (C:, D:)",
+      "Forward slashes (/)",
+      "Colons (:)"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 76,
+    "question": "Which of the following is a characteristic of Windows architecture?",
+    "options": [
+      "Monolithic kernel",
+      "Open-source nature",
+      "POSIX compliance",
+      "Command-line interface"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 77,
+    "question": "In Linux, software installation is typically handled by package managers. What is the common method of software installation in Windows?",
+    "options": [
+      "TAR files",
+      "APT",
+      "RPM",
+      "EXE or MSI installers"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 78,
+    "question": "Which of the following is a significant difference between Windows and Linux user accounts?",
+    "options": [
+      "Linux uses usernames, while Windows uses email addresses.",
+      "Windows user accounts are case-sensitive, while Linux accounts are not.",
+      "Linux has root privileges, while Windows has administrator privileges.",
+      "Windows user accounts have more restricted permissions by default."
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 79,
+    "question": "Which command line interface is commonly used in Linux, while a graphical user interface is more prevalent in Windows?",
+    "options": [
+      "Bash",
+      "PowerShell",
+      "Command Prompt",
+      "Terminal"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 80,
+    "question": "Which of the following is an open-source licensing model commonly associated with Linux but not with Windows?",
+    "options": [
+      "GPL (GNU General Public License)",
+      "EULA (End-User License Agreement)",
+      "Proprietary Licensing",
+      "Closed Source Licensing"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 81,
+    "question": "Which installation method allows you to run Linux alongside an existing operating system, such as Windows, without affecting the current system setup?",
+    "options": [
+      "Dual-boot installation",
+      "Live CD installation",
+      "Network installation",
+      "Virtual machine installation"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 82,
+    "question": "What is the primary advantage of a network installation of Linux?",
+    "options": [
+      "It doesn't require an internet connection.",
+      "It is the fastest installation method.",
+      "It allows for centralized software management and updates.",
+      "It doesn't require any installation media."
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 83,
+    "question": "Which type of Linux installation typically involves using a pre-configured image or snapshot to create a virtual machine?",
+    "options": [
+      "Bare-metal installation",
+      "Container installation",
+      "Cloud instance installation",
+      "Disk partition installation"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 84,
+    "question": "What is the purpose of a Live CD/DVD installation of Linux?",
+    "options": [
+      "To install Linux on a server",
+      "To run Linux without installing it on the hard drive",
+      "To upgrade an existing Linux installation",
+      "To perform a dual-boot installation"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 85,
+    "question": "Which Linux installation method is commonly used in data centers for server deployments?",
+    "options": [
+      "Network installation",
+      "Live CD installation",
+      "Dual-boot installation",
+      "USB drive installation"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 86,
+    "question": "What is the first stage of the Linux booting process, responsible for initializing hardware components and loading the bootloader?",
+    "options": [
+      "BIOS/UEFI",
+      "GRUB",
+      "Kernel",
+      "Init"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 87,
+    "question": "The bootloader in Linux is responsible for:",
+    "options": [
+      "Managing user accounts",
+      "Loading the Linux kernel and initial RAM disk",
+      "Running the init process",
+      "Displaying the graphical user interface"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 88,
+    "question": "Which component of the Linux boot process is responsible for mounting the root filesystem and switching from an initial RAM disk to the real root filesystem?",
+    "options": [
+      "BIOS/UEFI",
+      "GRUB",
+      "Init",
+      "Initrd or Initramfs"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 89,
+    "question": "In the booting process, the Linux kernel is responsible for:",
+    "options": [
+      "Loading the bootloader",
+      "Initializing hardware components",
+      "Managing user accounts",
+      "Running user applications"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 90,
+    "question": "What is the last stage of the Linux boot process, responsible for bringing up system services and user interfaces?",
+    "options": [
+      "BIOS/UEFI",
+      "GRUB",
+      "Kernel",
+      "Init or systemd"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 91,
+    "question": "Which Linux command is used to list the files and directories in a directory?",
+    "options": [
+      "pwd",
+      "ls",
+      "cd",
+      "touch"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 92,
+    "question": "What does the cd command stand for in Linux?",
+    "options": [
+      "Change Directory",
+      "Create Directory",
+      "Current Directory",
+      "Copy Directory"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 93,
+    "question": "To go back to the previous directory, you can use the command:",
+    "options": [
+      "cd ..",
+      "cd -",
+      "cd .",
+      "cd /"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 94,
+    "question": "What command is used to display the current working directory?",
+    "options": [
+      "ls",
+      "cd",
+      "pwd",
+      "dir"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 95,
+    "question": "Which command is used to create an empty text file in Linux?",
+    "options": [
+      "touch",
+      "create",
+      "newfile",
+      "mkfile"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 96,
+    "question": "To create a directory named 'my_documents' and all parent directories if they don't exist, you can use the command:",
+    "options": [
+      "mkdir -p my_documents",
+      "mkdir my_documents",
+      "create my_documents",
+      "touch my_documents"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 97,
+    "question": "What command is used to remove a file in Linux?",
+    "options": [
+      "rm",
+      "delete",
+      "erase",
+      "del"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 98,
+    "question": "To create a symbolic link to a file or directory in Linux, which command should you use?",
+    "options": [
+      "slink",
+      "symlink",
+      "ln -s",
+      "link"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 99,
+    "question": "In Linux, to copy a file from one directory to another, you can use the command:",
+    "options": [
+      "cp",
+      "mv",
+      "copy",
+      "paste"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 100,
+    "question": "Which command is used to change the permissions of a file or directory in Linux?",
+    "options": [
+      "chmod",
+      "chperm",
+      "changeperm",
+      "permmode"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 101,
+    "question": "Which of the following is a component of the Linux operating system?",
+    "options": [
+      "Registry",
+      "Kernel",
+      "Control Panel",
+      "DirectX"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 102,
+    "question": "Which feature of Linux allows multiple users to run programs simultaneously on a single system?",
+    "options": [
+      "Multitasking",
+      "Multiprocessing",
+      "Multiuser",
+      "Multithreading"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 103,
+    "question": "What is the primary role of the kernel in an operating system like Linux?",
+    "options": [
+      "Manage software installations",
+      "Interact with hardware and manage system resources",
+      "Control user interfaces",
+      "Handle internet connectivity"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 104,
+    "question": "What is a significant architectural difference between Windows and Linux?",
+    "options": [
+      "Linux uses a monolithic kernel, while Windows uses a microkernel",
+      "Windows has no GUI, while Linux primarily operates through a GUI",
+      "Windows and Linux both use the same file structure",
+      "Linux allows for proprietary software, while Windows is entirely open-source"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 105,
+    "question": "During the Linux installation process, which component allows users to select specific software packages to install?",
+    "options": [
+      "BIOS settings",
+      "Bootloader configuration",
+      "Package manager",
+      "Kernel customization"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 106,
+    "question": "In the Linux structure, what does the /bin directory contain?",
+    "options": [
+      "Boot files",
+      "Binary executable files",
+      "Backup files",
+      "Device files"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 107,
+    "question": "What is the primary function of the Linux kernel?",
+    "options": [
+      "Manage peripheral devices",
+      "Run applications",
+      "Act as an intermediary between software and hardware",
+      "Manage network connections"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 108,
+    "question": "Which command is used to change the current directory in Linux?",
+    "options": [
+      "mv",
+      "cd",
+      "ls",
+      "pwd"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 109,
+    "question": "What does the command 'ls -l' display in a Linux terminal?",
+    "options": [
+      "List files and directories in long format",
+      "Show only hidden files",
+      "Display file contents",
+      "List files in a single column"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 110,
+    "question": "In Linux, what does 'pwd' stand for?",
+    "options": [
+      "Print who's directory",
+      "Print working directory",
+      "Pathway directory",
+      "Print where's directory"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 111,
+    "question": "Which command is used to create a new directory in Linux?",
+    "options": [
+      "touch",
+      "md",
+      "cp",
+      "mkdir"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 112,
+    "question": "What command is used to copy files or directories in Linux?",
+    "options": [
+      "cp",
+      "mv",
+      "cat",
+      "rn"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 113,
+    "question": "Which command is used to create an empty file in Linux?",
+    "options": [
+      "create",
+      "touch",
+      "newfile",
+      "make"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 114,
+    "question": "What is the key difference between absolute and relative paths in Linux?",
+    "options": [
+      "Absolute paths are shorter than relative paths",
+      "Absolute paths start from the root directory, while relative paths start from the current directory",
+      "Relative paths can be accessed by any user, while absolute paths are user-specific",
+      "Absolute paths use symbolic links, while relative paths use hard links"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 115,
+    "question": "What is the purpose of the 'mount' command in Linux?",
+    "options": [
+      "Create a new directory",
+      "Copy files to another location",
+      "Attach a file system to the directory tree",
+      "Delete a file or directory"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 116,
+    "question": "Which command is used to display the amount of disk space used and available on the file system in Linux?",
+    "options": [
+      "ds",
+      "diskusage",
+      "df",
+      "du"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 117,
+    "question": "What does the 'umount' command do in Linux?",
+    "options": [
+      "Mount a file system",
+      "Update file permissions",
+      "Unmount a file system",
+      "Rename a file"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 118,
+    "question": "What is the purpose of the 'du' command in Linux?",
+    "options": [
+      "Display current directory",
+      "Print file content",
+      "Estimate file space usage",
+      "Calculate directory size in bytes"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 119,
+    "question": "Which command in Linux is used to move files or directories from one place to another?",
+    "options": [
+      "move",
+      "cp",
+      "mv",
+      "rn"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 120,
+    "question": "What is the main function of 'touch' command in Linux?",
+    "options": [
+      "Change file permissions",
+      "Create new files",
+      "Rename directories",
+      "Display file contents"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 121,
+    "question": "What is the purpose of the 'cp' command in Linux?",
+    "options": [
+      "Create a new directory",
+      "Move files and directories",
+      "Copy files and directories",
+      "Display system information"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 122,
+    "question": "Which command is used to list all files in a directory, including hidden files, in Linux?",
+    "options": [
+      "ls -a",
+      "ls -h",
+      "ls -f",
+      "ls -r"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 123,
+    "question": "In Linux, what does the 'df' command display?",
+    "options": [
+      "Free disk space and total disk space",
+      "Directory names",
+      "File permissions",
+      "Number of directories"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 124,
+    "question": "What command is used to view the content of a file in Linux?",
+    "options": [
+      "open",
+      "view",
+      "cat",
+      "read"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 125,
+    "question": "What is the primary function of the 'mkdir' command in Linux?",
+    "options": [
+      "Remove files",
+      "Make a new directory",
+      "Display the content of a directory",
+      "Rename a directory"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 126,
+    "question": "Which command is used to find the current disk space usage of files and directories in Linux?",
+    "options": [
+      "size",
+      "diskusage",
+      "df",
+      "du"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 127,
+    "question": "What does the 'umount' command do in Linux?",
+    "options": [
+      "Mount a file system",
+      "Update file permissions",
+      "Unmount a file system",
+      "Rename a file"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 128,
+    "question": "What does the 'ln' command do in Linux?",
+    "options": [
+      "List directory contents",
+      "Create a symbolic or hard link to a file",
+      "List the user's login history",
+      "Create a new directory"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 129,
+    "question": "Which command in Linux is used to display the total number of inodes and disk space usage for a file system?",
+    "options": [
+      "inodes",
+      "spaceinfo",
+      "stat",
+      "df -i"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 130,
+    "question": "What is the purpose of the 'sync' command in Linux?",
+    "options": [
+      "Synchronize file contents with the latest updates",
+      "Display system time",
+      "Synchronize network connections",
+      "Synchronize directory structures"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 131,
+    "question": "What Linux command is used to display the file type of each specified file?",
+    "options": [
+      "file",
+      "type",
+      "filetype",
+      "fype"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 132,
+    "question": "What is the primary purpose of the 'find' command in Linux?",
+    "options": [
+      "Search and locate files in a directory hierarchy",
+      "Display file metadata",
+      "Create new directories",
+      "Change file permissions"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 133,
+    "question": "What is the purpose of the 'locate' command in Linux?",
+    "options": [
+      "Create a new file",
+      "Search and locate files in a directory",
+      "Update file metadata",
+      "Index and search file paths quickly"
+    ],
+    "correctAnswer": 3,
+    "subject": "Linux"
+  },
+  {
+    "id": 134,
+    "question": "What command in Linux is used to change a user's password?",
+    "options": [
+      "passwd",
+      "password",
+      "pswd",
+      "userpasswd"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 135,
+    "question": "Which command is used to copy files and directories in Linux?",
+    "options": [
+      "copy",
+      "cp",
+      "mv",
+      "cpy"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 136,
+    "question": "What command is used to remove files or directories in Linux?",
+    "options": [
+      "delete",
+      "rm",
+      "remove",
+      "del"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 137,
+    "question": "Which command is used to move or rename files and directories in Linux?",
+    "options": [
+      "rename",
+      "rn",
+      "mv",
+      "move"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 138,
+    "question": "What is the function of the 'mkdir' command in Linux?",
+    "options": [
+      "Remove a directory",
+      "Create a new directory",
+      "Display directory contents",
+      "Rename a directory"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 139,
+    "question": "What does the 'rmdir' command do in Linux?",
+    "options": [
+      "Rename a directory",
+      "List directory contents",
+      "Remove a directory",
+      "Display directory information"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 140,
+    "question": "What is the main function of 'touch' command in Linux?",
+    "options": [
+      "Change file permissions",
+      "Create new files",
+      "Rename directories",
+      "Display file contents"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  }
+]
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplay = document.getElementById("score-display");
+        const progressDisplay = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+        const errorMessage = document.getElementById("error-message");
+
+        function loadQuestion() {
+    const questionObj = allQuestions[currentQuestionIndex];
+    questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+    progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+    questionTextEl.textContent = questionObj.question;
+    scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+    optionsContainer.innerHTML = "";
+    errorMessage.style.display = "none";
+    nextBtn.style.display = "none";
+    restartBtn.style.display = "none";
+
+    // Handle both array-based options and object-based options (with A, B, C, D keys)
+    const options = Array.isArray(questionObj.options) 
+        ? questionObj.options 
+        : [questionObj.options.A, questionObj.options.B, questionObj.options.C, questionObj.options.D];
+
+    options.forEach((option, index) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.addEventListener("click", () => selectAnswer(button, index));
+        optionsContainer.appendChild(button);
+    });
+}
+
+function selectAnswer(button, index) {
+    const buttons = optionsContainer.querySelectorAll("button");
+    buttons.forEach(btn => btn.disabled = true);
+
+    // Make sure correctAnswer is a number
+    const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
+    if (index === correctIndex) {
+        button.classList.add("correct");
+        score++;
+    } else {
+        button.classList.add("wrong");
+        buttons[correctIndex].classList.add("correct");
+    }
+
+    scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+    if (currentQuestionIndex < allQuestions.length - 1) {
+        nextBtn.style.display = "inline-block";
+    } else {
+        restartBtn.style.display = "inline-block";
+    }
+}
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+</body>
+</html>

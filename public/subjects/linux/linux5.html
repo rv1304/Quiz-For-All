@@ -164,22 +164,22 @@
   },
   {
     "id": 2,
-    "question": "In the sequence of commands: mkdir testdir; chmod 0444 testdir; cd testdir; touch abc.txt, which line will give an error?",
+    "question": "Consider the commands for some user named 'rajat': mkdir testdir; chmod 0444 testdir; cd testdir; touch abc.txt. Which line will give an error?",
     "options": [
       "Line 1: wrong command syntax",
-      "Line 2: cannot change the permissions of the directory",
-      "Line 3: cannot change directory: permission denied",
-      "Line 4: cannot create file: permission denied"
+      "Line 2: can not change the permissions of the directory",
+      "Line 3: Can not change directory: permission denied",
+      "Line 4: can not create file: permission denied"
     ],
     "correctAnswer": 2,
     "subject": "Linux"
   },
   {
     "id": 3,
-    "question": "After executing touch myfile.c, cat > myfile.c with C code, Control + Z, vi myfile.c, yy, p, :wq, what will the file content be?",
+    "question": "Consider the commands: touch myfile.c; cat > myfile.c; #include <stdio.h> int main() { printf(\"Vi Editor\"); return 0; }; Control + Z; vi myfile.c; yy; p; :wq. After this, what will the file contain?",
     "options": [
       "Same as after cat command",
-      "First line will be duplicated: #include<stdio.h> #include<stdio.h>",
+      "First line will be duplicated #include<stdio.h> #include<stdio.h>",
       "First line of the file will be: yyp#include<stdio.h>",
       "First line will be deleted"
     ],
@@ -188,31 +188,31 @@
   },
   {
     "id": 4,
-    "question": "After creating names.txt with four names, copying to names2.txt, appending 'Anamika', and running diff names.txt names2.txt, what is the output?",
+    "question": "Consider the commands: cat > names.txt; Sumit; Rajan; Suresh; Anita; Control + Z; cp names.txt names2.txt; cat >> names2.txt; Anamika; Control + Z; diff names.txt names2.txt. What will be the output?",
     "options": [
-      "4a0 > Anamika",
-      "0d5 < Anamika",
-      "4c5 < Anamika",
-      "4a5 > Anamika"
+      "4a0> Anamika",
+      "0d5< Anamika",
+      "4c5< Anamika",
+      "4a5> Anamika"
     ],
     "correctAnswer": 3,
     "subject": "Linux"
   },
   {
     "id": 5,
-    "question": "In commands: mkdir foll; touch foll/abc.txt; cat > foll/abc.txt; content; Control + Z; cp foll/abc.txt fol2/abc.txt, which will give an error?",
+    "question": "Consider the commands executed with present working directory empty: mkdir foll; touch foll/abc.txt; cat > foll/abc.txt; this is the content.; Control + Z; cp foll/abc.txt fol2/abc.txt. Which command will give an error?",
     "options": [
-      "Line 2: cannot create file in some other folder",
-      "Line 3: cannot write to a file in some other folder",
-      "Line 6: cannot copy to some other folder",
-      "Line 6: Directory 'fol2' does not exist"
+      "Line 2: Can not create file in some other folder",
+      "Line 3: can not write to a file in some other folder",
+      "Line 6: can not copy to some other folder",
+      "Line 6: Directory 'fol2' does not exist. Hence Error"
     ],
     "correctAnswer": 3,
     "subject": "Linux"
   },
   {
     "id": 6,
-    "question": "In a Linux operating system, what is the default input and output device?",
+    "question": "In Linux operating system, the __ is the default input device and the __ is the default output device.",
     "options": [
       "Keyboard, printer",
       "Mouse, printer",
@@ -224,7 +224,7 @@
   },
   {
     "id": 7,
-    "question": "In the vi editor, what are the two modes?",
+    "question": "In vi editor, there are __ and __ modes.",
     "options": [
       "Insert, Execute",
       "Command, insert",
@@ -236,43 +236,43 @@
   },
   {
     "id": 8,
-    "question": "The cat command with which option is used for creating a new file, and which for appending to an existing file?",
+    "question": "The command cat with option __ is used for creating a new file whereas option __ is used for appending to the already existing file.",
     "options": [
-      ">, >>",
-      ">, <",
-      "<, >",
-      "<, >>"
+      ">,>>",
+      ">,<",
+      "<,>",
+      "<,>>"
     ],
     "correctAnswer": 0,
     "subject": "Linux"
   },
   {
     "id": 9,
-    "question": "In the chmod command, what is the octal value for read permission and for execute permission?",
+    "question": "In the chmod command, the octal value for read permission is __ and for execute is __.",
     "options": [
-      "4, 2",
-      "2, 1",
-      "4, 1",
-      "2, 4"
+      "4,2",
+      "2,1",
+      "4,1",
+      "2,4"
     ],
-    "correctAnswer": 2,
+    "correctAnswer": 2, // Document says "2,1" (index 1), but correct is "4,1" (index 2)
     "subject": "Linux"
   },
   {
     "id": 10,
-    "question": "Which filenames refer to the current working directory and the parent directory?",
+    "question": "The filename __ refers to the current working directory and the filename __ refers to the parent directory.",
     "options": [
-      "/, .",
-      ".., /",
-      "/, ..",
-      "., .."
+      "/,.",
+      ".,..",
+      "/,..",
+      "..,."
     ],
-    "correctAnswer": 3,
+    "correctAnswer": 1,
     "subject": "Linux"
   },
   {
     "id": 11,
-    "question": "Which command deletes all files in the current directory ending with '.html'?",
+    "question": "Which command deletes all files in the current directory whose filename ends with the characters .html?",
     "options": [
       "rm *.html",
       "rm -r *.html",
@@ -284,10 +284,10 @@
   },
   {
     "id": 12,
-    "question": "Which command searches for a pattern starting with 'new' followed by a number and an alphabet in file 'mona'?",
+    "question": "Which command is used to search for a pattern starting with new followed by a number and then an alphabet in file mona?",
     "options": [
       "grep \"New [0-z]\" mona",
-      "grep \"New [0-9] [a-z]\" mona",
+      "grep \"New [0-9][a-z]\" mona",
       "grep \"New 0-9 mona",
       "None of the above"
     ],
@@ -296,7 +296,7 @@
   },
   {
     "id": 13,
-    "question": "Which command writes the output to a new file 'output.txt' from 'file.txt'?",
+    "question": "Which of the following command is used to write the output to a new file, output.txt from file.txt?",
     "options": [
       "sort -o output.txt file.txt",
       "sort file.txt > output.txt",
@@ -308,7 +308,7 @@
   },
   {
     "id": 14,
-    "question": "Which command shows the content of 'text.txt' in octal form?",
+    "question": "Which command is used to show the content of text.txt file in octal form?",
     "options": [
       "od -b text.txt",
       "od -c text.txt",
@@ -320,7 +320,7 @@
   },
   {
     "id": 15,
-    "question": "Which command makes 'hello-world.sh' executable for owner, group, and others?",
+    "question": "Which command is used to make hello-world.sh file executable for owner, group, and others?",
     "options": [
       "chmod w+x hello-world.sh",
       "chmod a+x hello-world.sh",
@@ -344,7 +344,7 @@
   },
   {
     "id": 17,
-    "question": "Which file system is commonly used in Linux due to its robustness and journaling capabilities?",
+    "question": "Which file system is commonly used in Linux installations due to its robustness and journaling capabilities?",
     "options": [
       "FAT32",
       "NTFS",
@@ -356,7 +356,7 @@
   },
   {
     "id": 18,
-    "question": "What is the purpose of the swap partition during Linux installation?",
+    "question": "During Linux installation, what is the purpose of the swap partition?",
     "options": [
       "It stores user data and application files",
       "It acts as a backup of the Linux kernel",
@@ -368,7 +368,7 @@
   },
   {
     "id": 19,
-    "question": "Which Linux distribution is known for simplicity and ease of use, with the apt package manager?",
+    "question": "Which of the following is a Linux distribution known for its focus on simplicity and ease of use, comes with apt package manager making it a popular choice for beginners?",
     "options": [
       "Ubuntu",
       "CentOS",
@@ -392,7 +392,7 @@
   },
   {
     "id": 21,
-    "question": "Which is the default file system used in CentOS?",
+    "question": "Which is the default file system that is used in CentOS?",
     "options": [
       "Ext3",
       "Ext4",
@@ -404,19 +404,7 @@
   },
   {
     "id": 22,
-    "question": "What information does the traceroute command provide?",
-    "options": [
-      "Number of hops to the destination",
-      "Round-trip time for each hop",
-      "IP address of each intermediate router",
-      "All of the above"
-    ],
-    "correctAnswer": 3,
-    "subject": "Linux"
-  },
-  {
-    "id": 23,
-    "question": "Which option is not available from the Installation Summary screen in Linux installation?",
+    "question": "Which of the following options is not available from the Installation Summary screen?",
     "options": [
       "Time & Date",
       "Keyboard",
@@ -427,20 +415,20 @@
     "subject": "Linux"
   },
   {
-    "id": 24,
-    "question": "Which statement about the system language in Linux installation is not true?",
+    "id": 23,
+    "question": "Which statement about the system language is not true?",
     "options": [
-      "You can change the system language from the Installation Summary screen",
-      "You can change the system language directly after booting from the installation media",
-      "When setting the installation language, you can also select a keyboard layout",
-      "After installation, you cannot change the language settings"
+      "You can change the system language from the Installation Summary screen.",
+      "You can change the system language directly after booting from the installation media.",
+      "When setting the installation language, you can also select a keyboard layout.",
+      "After installation, you cannot change the language settings."
     ],
     "correctAnswer": 3,
     "subject": "Linux"
   },
   {
-    "id": 25,
-    "question": "Which command redirects both standard output and standard error to a file?",
+    "id": 24,
+    "question": "Which of the following commands enables you to redirect standard output as well as standard error to a file?",
     "options": [
       "1&2> file",
       "file 2>&1",
@@ -451,8 +439,8 @@
     "subject": "Linux"
   },
   {
-    "id": 26,
-    "question": "What is the primary function of the BIOS in the boot process?",
+    "id": 25,
+    "question": "What is the primary function of the BIOS (Basic Input/Output System) in the boot process?",
     "options": [
       "Manage installed applications",
       "Initialize hardware components and perform a Power-On Self-Test (POST)",
@@ -463,7 +451,7 @@
     "subject": "Linux"
   },
   {
-    "id": 27,
+    "id": 26,
     "question": "Which bootloader is commonly used in many Linux distributions to manage the boot process?",
     "options": [
       "GRUB (Grand Unified Bootloader)",
@@ -475,7 +463,7 @@
     "subject": "Linux"
   },
   {
-    "id": 28,
+    "id": 27,
     "question": "What is the purpose of the MBR (Master Boot Record) in the boot process?",
     "options": [
       "Store the operating system files",
@@ -487,8 +475,8 @@
     "subject": "Linux"
   },
   {
-    "id": 29,
-    "question": "In the boot process, what follows the BIOS and MBR?",
+    "id": 28,
+    "question": "In the boot process of a typical computer, what follows the BIOS and MBR?",
     "options": [
       "Loading the operating system kernel",
       "Running system diagnostics",
@@ -499,8 +487,20 @@
     "subject": "Linux"
   },
   {
+    "id": 29,
+    "question": "What is the purpose of the bootloader in the boot process?",
+    "options": [
+      "To manage user accounts and permissions",
+      "To load the operating system kernel into memory and start the OS",
+      "To perform virus scans on the system files",
+      "To create backup copies of user data"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
     "id": 30,
-    "question": "Which command is used to display the available disk space on filesystems in Linux?",
+    "question": "Which command is used in Linux to display the available disk space on the filesystems?",
     "options": [
       "df",
       "du",
@@ -560,7 +560,7 @@
   },
   {
     "id": 35,
-    "question": "Which package management system is commonly used in Debian-based Linux distributions?",
+    "question": "Which of the following is a commonly used package management system in Linux distributions, allowing users to install, update, and remove software packages in Debian Operating system?",
     "options": [
       "RPM",
       "APT",
@@ -584,7 +584,7 @@
   },
   {
     "id": 37,
-    "question": "What is the role of the root user during Linux installation?",
+    "question": "During Linux installation, what is the role of the root user?",
     "options": [
       "The root user is a regular user with elevated privileges",
       "The root user has complete control over the system and its configuration",
@@ -620,7 +620,7 @@
   },
   {
     "id": 40,
-    "question": "Which component stores the bootloader in UEFI systems?",
+    "question": "Which component is responsible for storing the bootloader in UEFI (Unified Extensible Firmware Interface) systems?",
     "options": [
       "MBR (Master Boot Record)",
       "GPT (GUID Partition Table)",
@@ -632,7 +632,7 @@
   },
   {
     "id": 41,
-    "question": "What does UEFI stand for in the context of modern computer boot processes?",
+    "question": "What does the acronym UEFI stand for in the context of modern computer boot processes?",
     "options": [
       "Universal Extensible Firmware Interface",
       "Unified Extensible Firmware Interface",
@@ -644,7 +644,7 @@
   },
   {
     "id": 42,
-    "question": "In a typical boot sequence, what loads after the bootloader to initialize user interface and system services?",
+    "question": "In a typical boot sequence, what loads after the bootloader, responsible for initializing the user interface and system services?",
     "options": [
       "Shell",
       "Kernel",
@@ -656,7 +656,7 @@
   },
   {
     "id": 43,
-    "question": "What is the purpose of the init system (e.g., systemd) in the Linux boot process?",
+    "question": "What is the purpose of the init system or its successor (such as systemd) in the Linux boot process?",
     "options": [
       "Manage user accounts and permissions",
       "Initialize hardware components",
@@ -704,7 +704,7 @@
   },
   {
     "id": 47,
-    "question": "Which file in Linux stores user account information, including encrypted passwords?",
+    "question": "Which file in Linux stores user account information, including usernames and encrypted passwords?",
     "options": [
       "/etc/passwd",
       "/etc/shadow",
@@ -764,7 +764,7 @@
   },
   {
     "id": 52,
-    "question": "What does LVM stand for in the context of Linux storage management?",
+    "question": "What does the acronym LVM stand for in the context of Linux storage management?",
     "options": [
       "Logical Volume Manager",
       "Linux Virtual Machine",
@@ -788,7 +788,7 @@
   },
   {
     "id": 54,
-    "question": "From /home/user/downloads, what is the correct relative path to /home/user/documents?",
+    "question": "You are currently in the directory /home/user/downloads in the Linux terminal. You want to move to the directory /home/user/documents. What is the correct relative path?",
     "options": [
       "/home/user/documents",
       "../documents",
@@ -848,7 +848,7 @@
   },
   {
     "id": 59,
-    "question": "Which command creates a new file named 'report.docx' in /var/reports?",
+    "question": "You want to create a new file named 'report.docx' in a specific directory, such as /var/reports, in the Linux terminal. What command should you use?",
     "options": [
       "create /var/reports/report.docx",
       "touch /var/reports/report.docx",
@@ -860,7 +860,19 @@
   },
   {
     "id": 60,
-    "question": "Which operating system influenced Linus Torvalds when he created Linux?",
+    "question": "In the Linux terminal, you need to create a new file named 'notes.txt' in the current directory. Which command should you use?",
+    "options": [
+      "create notes.txt",
+      "touch notes.txt",
+      "newfile notes.txt",
+      "makefile notes.txt"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 61,
+    "question": "Which operating system had a significant influence on Linus Torvalds when he created Linux?",
     "options": [
       "Minix",
       "Windows",
@@ -871,8 +883,8 @@
     "subject": "Linux"
   },
   {
-    "id": 61,
-    "question": "Which Linux component allows running Windows applications on Linux?",
+    "id": 62,
+    "question": "Which Linux component allows users to run Windows applications on Linux?",
     "options": [
       "Kernel",
       "Wine",
@@ -883,8 +895,8 @@
     "subject": "Linux"
   },
   {
-    "id": 62,
-    "question": "What is a possible consequence of a Linux system using swap partition extensively?",
+    "id": 63,
+    "question": "In a scenario where a Linux system is using a swap partition extensively, what can be a possible consequence for system performance?",
     "options": [
       "Increased speed of application execution",
       "Enhanced system responsiveness",
@@ -895,8 +907,8 @@
     "subject": "Linux"
   },
   {
-    "id": 63,
-    "question": "What happens when a Linux system exhausts swap space with high memory demand?",
+    "id": 64,
+    "question": "What happens when a Linux system exhausts its available swap space, and there is still high memory demand?",
     "options": [
       "Processes are terminated",
       "Additional swap space is automatically allocated",
@@ -907,7 +919,7 @@
     "subject": "Linux"
   },
   {
-    "id": 64,
+    "id": 65,
     "question": "In what year was the GNU General Public License (GPL) first applied to the Linux kernel?",
     "options": [
       "1990",
@@ -919,8 +931,8 @@
     "subject": "Linux"
   },
   {
-    "id": 65,
-    "question": "What is the primary purpose of the /mnt directory in a Linux file system?",
+    "id": 66,
+    "question": "What is the primary purpose of the /mnt directory in a Linux file system structure?",
     "options": [
       "Storing user files",
       "Managing system services",
@@ -931,8 +943,8 @@
     "subject": "Linux"
   },
   {
-    "id": 66,
-    "question": "What happens when a Linux system has high memory demand and insufficient RAM?",
+    "id": 67,
+    "question": "What happens when a Linux system experiences high memory demand, and available RAM is insufficient to accommodate all active processes?",
     "options": [
       "Processes are terminated",
       "Data is moved from RAM to swap space",
@@ -943,8 +955,8 @@
     "subject": "Linux"
   },
   {
-    "id": 67,
-    "question": "Which command creates a backup of 'document.txt' as 'document_backup.txt' in the same directory?",
+    "id": 68,
+    "question": "You have a file named 'document.txt' in your home directory, and you want to make a backup of it in the same directory with the name 'document_backup.txt.' What command should you use?",
     "options": [
       "cp document.txt document_backup.txt",
       "mv document.txt document_backup.txt",
@@ -955,8 +967,8 @@
     "subject": "Linux"
   },
   {
-    "id": 68,
-    "question": "Which Linux distribution is known for its rolling release model?",
+    "id": 69,
+    "question": "Which Linux distribution is known for its rolling release model, where software is continually updated?",
     "options": [
       "CentOS",
       "Fedora",
@@ -967,8 +979,8 @@
     "subject": "Linux"
   },
   {
-    "id": 69,
-    "question": "Which directory contains system configuration files in a Unix-like file system?",
+    "id": 70,
+    "question": "In a Unix-like file system structure, which directory contains system configuration files?",
     "options": [
       "/home",
       "/etc",
@@ -979,8 +991,8 @@
     "subject": "Linux"
   },
   {
-    "id": 70,
-    "question": "Which Linux directory contains dynamic runtime data and log files?",
+    "id": 71,
+    "question": "Which Linux directory contains dynamic runtime data and log files, such as system logs and mail spools?",
     "options": [
       "/mnt",
       "/var",
@@ -991,8 +1003,8 @@
     "subject": "Linux"
   },
   {
-    "id": 71,
-    "question": "Which component handles user authentication and authorization in Linux?",
+    "id": 72,
+    "question": "Which component in the Linux architecture handles user authentication and authorization?",
     "options": [
       "Kernel",
       "Shell",
@@ -1003,8 +1015,8 @@
     "subject": "Linux"
   },
   {
-    "id": 72,
-    "question": "Which Linux feature provides security by isolating processes?",
+    "id": 73,
+    "question": "Which Linux feature provides security by isolating processes and controlling access to system resources?",
     "options": [
       "Shell",
       "Kernel",
@@ -1015,8 +1027,8 @@
     "subject": "Linux"
   },
   {
-    "id": 73,
-    "question": "Which directory contains user-specific files and configurations in a Linux file system?",
+    "id": 74,
+    "question": "In a hierarchical file system structure, which directory contains the user-specific files and configurations?",
     "options": [
       "/var",
       "/etc",
@@ -1027,8 +1039,8 @@
     "subject": "Linux"
   },
   {
-    "id": 74,
-    "question": "What is the term for heavy reliance on swap space due to memory overcommitment?",
+    "id": 75,
+    "question": "What is the term for a situation in which a Linux system relies heavily on swap space due to memory overcommitment?",
     "options": [
       "Thrashing",
       "Swapping",
@@ -1039,8 +1051,8 @@
     "subject": "Linux"
   },
   {
-    "id": 75,
-    "question": "From /var/log, what is the relative path to /var/log/archives/syslog.log?",
+    "id": 76,
+    "question": "You are currently in the directory /var/log in the Linux terminal. To access a file named syslog.log located in the /var/log/archives directory, what is the correct relative path?",
     "options": [
       "/var/log/syslog.log",
       "archives/syslog.log",
@@ -1051,8 +1063,8 @@
     "subject": "Linux"
   },
   {
-    "id": 76,
-    "question": "Which command creates an empty directory named 'images' in the current location?",
+    "id": 77,
+    "question": "You want to create an empty directory named 'images' in your current location using the Linux terminal. What command should you use?",
     "options": [
       "touch images",
       "mkdir images",
@@ -1063,20 +1075,20 @@
     "subject": "Linux"
   },
   {
-    "id": 77,
-    "question": "What is the primary difference between the root directory (/) and the home directory (~)?",
+    "id": 78,
+    "question": "What is the primary difference between the root directory (/) and the home directory (~) in Linux?",
     "options": [
-      "Root is for system files, home is for user files",
-      "Root is for temporary files, home is for system files",
-      "Root is for user files, home is for system files",
-      "They are identical"
+      "The root directory is for system files, while the home directory is for user files",
+      "The root directory is for temporary files, while the home directory is for system files",
+      "The root directory is where user files are stored, while the home directory is for system files",
+      "They are identical and can be used interchangeably"
     ],
     "correctAnswer": 0,
     "subject": "Linux"
   },
   {
-    "id": 78,
-    "question": "How is the root directory represented in a Linux file system?",
+    "id": 79,
+    "question": "In a Linux file system, what is the root directory often represented by?",
     "options": [
       "/ (forward slash)",
       "\\ (backslash)",
@@ -1087,8 +1099,8 @@
     "subject": "Linux"
   },
   {
-    "id": 79,
-    "question": "Which method allows installing Linux alongside an existing OS without affecting it?",
+    "id": 80,
+    "question": "Which of the following methods allows you to install Linux alongside an existing operating system without affecting it?",
     "options": [
       "Dual boot",
       "Overwriting",
@@ -1099,8 +1111,8 @@
     "subject": "Linux"
   },
   {
-    "id": 80,
-    "question": "Which parameter can be adjusted to reduce swap space usage in Linux?",
+    "id": 81,
+    "question": "Which parameter can be adjusted in Linux to reduce swap space usage and prioritize keeping data in RAM?",
     "options": [
       "Swappiness",
       "Overcommit ratio",
@@ -1111,19 +1123,19 @@
     "subject": "Linux"
   },
   {
-    "id": 81,
-    "question": "From /home/user/music, which path navigates to 'photos' in the same directory?",
+    "id": 82,
+    "question": "In a Linux terminal, you are located in the directory /home/user/music. You want to navigate to a directory named photos located in the same directory. Which path should you use?",
     "options": [
       "/photos",
       "./photos",
-      "~/photos",
+      "/photos",
       "photos"
     ],
     "correctAnswer": 3,
     "subject": "Linux"
   },
   {
-    "id": 82,
+    "id": 83,
     "question": "What is the primary purpose of a Live CD or Live USB when installing Linux?",
     "options": [
       "It contains Linux system files",
@@ -1135,20 +1147,20 @@
     "subject": "Linux"
   },
   {
-    "id": 83,
-    "question": "From /home/user/documents, what is the relative path to /home/user/downloads/report.pdf?",
+    "id": 84,
+    "question": "In a Linux terminal, you are located in the directory /home/user/documents. You need to access a file named report.pdf in the directory /home/user/downloads. What is the correct relative path?",
     "options": [
       "/home/user/downloads/report.pdf",
       "../downloads/report.pdf",
       "downloads/report.pdf",
       "/downloads/report.pdf"
     ],
-    "correctAnswer": 2,
+    "correctAnswer": 1,
     "subject": "Linux"
   },
   {
-    "id": 84,
-    "question": "Which component manages system calls and provides an interface for user applications in Linux?",
+    "id": 85,
+    "question": "Which component in the Linux architecture is responsible for managing system calls and providing an interface for user applications?",
     "options": [
       "Kernel",
       "Shell",
@@ -1159,8 +1171,8 @@
     "subject": "Linux"
   },
   {
-    "id": 85,
-    "question": "What is the primary function of the /dev directory in a Linux file system?",
+    "id": 86,
+    "question": "What is the primary function of the /dev directory in a Linux file system structure?",
     "options": [
       "Storing device files",
       "Managing user permissions",
@@ -1171,22 +1183,22 @@
     "subject": "Linux"
   },
   {
-    "id": 86,
+    "id": 87,
     "question": "What is the primary difference between RAM and swap space in a Linux system?",
     "options": [
-      "RAM is permanent storage, swap is temporary",
-      "RAM is for running apps, swap stores user files",
-      "RAM is faster but limited, swap is slower but abundant",
-      "RAM and swap serve the same function"
+      "RAM is permanent storage, while swap space is temporary",
+      "RAM is used for running applications, while swap space stores user files",
+      "RAM is faster but limited, while swap space is slower but abundant",
+      "RAM and swap space serve the same function"
     ],
     "correctAnswer": 2,
     "subject": "Linux"
   },
   {
-    "id": 87,
-    "question": "Which command creates a subdirectory named 'pictures' in /var/www/html?",
+    "id": 88,
+    "question": "In the Linux terminal, you are in the directory /var/www/html and need to create a new subdirectory named 'pictures.' What command should you use?",
     "options": [
-      "make/pictures",
+      "make /pictures",
       "mkdir pictures",
       "create pictures",
       "mk pictures"
@@ -1195,8 +1207,8 @@
     "subject": "Linux"
   },
   {
-    "id": 88,
-    "question": "Which command navigates to the home directory in Ubuntu?",
+    "id": 89,
+    "question": "You want to navigate to your home directory in the Ubuntu terminal. What command will you use?",
     "options": [
       "goto",
       "cd /home",
@@ -1207,8 +1219,8 @@
     "subject": "Linux"
   },
   {
-    "id": 89,
-    "question": "What event led to the development of Linux by Linus Torvalds?",
+    "id": 90,
+    "question": "What event led to the development of the Linux operating system by Linus Torvalds?",
     "options": [
       "Frustration with Windows",
       "Need for a Unix-like OS",
@@ -1219,8 +1231,8 @@
     "subject": "Linux"
   },
   {
-    "id": 90,
-    "question": "What is the primary goal of the Linux Task Manager (e.g., top, htop)?",
+    "id": 91,
+    "question": "What is the primary goal of the Windows Task Manager and the Linux Task Manager (e.g., top, htop)?",
     "options": [
       "Managing hardware resources",
       "Monitoring and controlling running processes",
@@ -1231,8 +1243,8 @@
     "subject": "Linux"
   },
   {
-    "id": 91,
-    "question": "Which command creates a subdirectory 'work' in /home/user/documents without errors if it exists?",
+    "id": 92,
+    "question": "You are in the directory /home/user/documents in the Linux terminal, and you want to create a subdirectory named 'work' within this directory. However, you want to avoid any error messages if it already exists. What command should you use?",
     "options": [
       "mkdir -p work",
       "make work",
@@ -1243,8 +1255,8 @@
     "subject": "Linux"
   },
   {
-    "id": 92,
-    "question": "Which file specifies the location and size of the swap partition or file in Linux?",
+    "id": 93,
+    "question": "Which file in a Linux system is used to specify the location and size of the swap partition or swap file?",
     "options": [
       "/etc/partitions",
       "/etc/fstab",
@@ -1255,8 +1267,8 @@
     "subject": "Linux"
   },
   {
-    "id": 93,
-    "question": "What is the purpose of the /bin directory in a Linux file system?",
+    "id": 94,
+    "question": "What is the purpose of the /bin directory in a Linux file system structure?",
     "options": [
       "Storing system libraries",
       "Managing user home directories",
@@ -1267,8 +1279,8 @@
     "subject": "Linux"
   },
   {
-    "id": 94,
-    "question": "Which command creates a new file 'book.txt' in the home directory?",
+    "id": 95,
+    "question": "You need to create a new file named 'book.txt' in your home directory using the Linux terminal. What command should you use?",
     "options": [
       "new book.txt",
       "make book.txt",
@@ -1279,8 +1291,8 @@
     "subject": "Linux"
   },
   {
-    "id": 95,
-    "question": "Which command creates a file 'vacation.jpg' in /home/user/photos?",
+    "id": 96,
+    "question": "You are in the directory /home/user/photos in the Linux terminal, and you want to create a new file named 'vacation.jpg' within this directory. What command should you use?",
     "options": [
       "touch /home/user/photos/vacation.jpg",
       "newfile vacation.jpg",
@@ -1291,8 +1303,8 @@
     "subject": "Linux"
   },
   {
-    "id": 96,
-    "question": "What is the purpose of the /usr directory in Linux?",
+    "id": 97,
+    "question": "In Linux, what is the purpose of the /usr directory?",
     "options": [
       "User home directories",
       "System binaries and libraries",
@@ -1303,8 +1315,8 @@
     "subject": "Linux"
   },
   {
-    "id": 97,
-    "question": "Which command moves one directory up in Ubuntu?",
+    "id": 98,
+    "question": "In the Ubuntu terminal, you want to move one directory up from your current location. What command will you use?",
     "options": [
       "cd ..",
       "cd /",
@@ -1315,7 +1327,7 @@
     "subject": "Linux"
   },
   {
-    "id": 98,
+    "id": 99,
     "question": "What is the primary function of the Linux Kernel?",
     "options": [
       "Managing user applications",
@@ -1327,7 +1339,7 @@
     "subject": "Linux"
   },
   {
-    "id": 99,
+    "id": 100,
     "question": "Which programming language is primarily used for developing the Linux Kernel?",
     "options": [
       "C++",
@@ -1339,8 +1351,8 @@
     "subject": "Linux"
   },
   {
-    "id": 100,
-    "question": "What is the role of the init process in the Linux Kernel?",
+    "id": 101,
+    "question": "What is the role of init process in Linux Kernel?",
     "options": [
       "Handling user input",
       "Initializing the system",
@@ -1351,8 +1363,8 @@
     "subject": "Linux"
   },
   {
-    "id": 101,
-    "question": "Which is not a part of the Linux Kernel?",
+    "id": 102,
+    "question": "Which of the following is not the part of Linux Kernel?",
     "options": [
       "Device drivers",
       "System calls",
@@ -1363,8 +1375,8 @@
     "subject": "Linux"
   },
   {
-    "id": 102,
-    "question": "Which kernel architecture combines advantages of monolithic and microkernel designs?",
+    "id": 103,
+    "question": "Which type of kernel architecture combines the advantages of both monolithic and microkernel designs by providing a modular structure with certain essential functions running in kernel space?",
     "options": [
       "Monolithic kernel",
       "Micro kernel",
@@ -1375,8 +1387,8 @@
     "subject": "Linux"
   },
   {
-    "id": 103,
-    "question": "Which kernel architecture is associated with the Linux OS?",
+    "id": 104,
+    "question": "Which type of kernel architecture is often associated with the Linux OS?",
     "options": [
       "Monolithic kernel",
       "Micro kernel",
@@ -1387,8 +1399,8 @@
     "subject": "Linux"
   },
   {
-    "id": 104,
-    "question": "Which file system is commonly used in Linux OS?",
+    "id": 105,
+    "question": "Which file system is used in Linux OS?",
     "options": [
       "FAT",
       "FAT32",
@@ -1399,8 +1411,8 @@
     "subject": "Linux"
   },
   {
-    "id": 105,
-    "question": "Which bootloader is commonly used to load the Linux kernel?",
+    "id": 106,
+    "question": "Which bootloader is commonly used in Linux distributions to load the Linux kernel into memory during the boot process?",
     "options": [
       "LILO",
       "GRUB",
@@ -1411,8 +1423,8 @@
     "subject": "Linux"
   },
   {
-    "id": 106,
-    "question": "What is the final step in the Linux boot process after the kernel is loaded?",
+    "id": 107,
+    "question": "During the Linux boot process, what is the final step that occurs after the kernel is loaded and the init process starts?",
     "options": [
       "Running the first user-level program",
       "Initializing the hardware",
@@ -1423,8 +1435,8 @@
     "subject": "Linux"
   },
   {
-    "id": 107,
-    "question": "Which directory contains user-specific configuration files in a Linux system?",
+    "id": 108,
+    "question": "Which directory contains user-specific configuration files and data in a typical Linux system?",
     "options": [
       "/etc",
       "/var",
@@ -1435,8 +1447,8 @@
     "subject": "Linux"
   },
   {
-    "id": 108,
-    "question": "Where are device files typically located in a Linux file system?",
+    "id": 109,
+    "question": "In the Linux file system, where are all the device files typically located?",
     "options": [
       "/dev",
       "/var",
@@ -1447,8 +1459,8 @@
     "subject": "Linux"
   },
   {
-    "id": 109,
-    "question": "What is the purpose of the /tmp directory in a Linux system?",
+    "id": 110,
+    "question": "What is the purpose of /tmp directory in Linux system?",
     "options": [
       "Storing user home directories",
       "Holding temporary files and directories",
@@ -1459,8 +1471,8 @@
     "subject": "Linux"
   },
   {
-    "id": 110,
-    "question": "Which symbol represents the user's home directory in Linux?",
+    "id": 111,
+    "question": "What symbol is used to represent the user's home directory?",
     "options": [
       "# symbol",
       "~ symbol",
@@ -1471,7 +1483,7 @@
     "subject": "Linux"
   },
   {
-    "id": 111,
+    "id": 112,
     "question": "Which symbol represents the current directory in Linux?",
     "options": [
       "@ symbol",
@@ -1483,8 +1495,8 @@
     "subject": "Linux"
   },
   {
-    "id": 112,
-    "question": "Which command is typically used to change the ownership of a file in Linux?",
+    "id": 113,
+    "question": "To change the ownership of a file in Linux, which command is typically used?",
     "options": [
       "chmod",
       "chown",
@@ -1495,8 +1507,8 @@
     "subject": "Linux"
   },
   {
-    "id": 113,
-    "question": "Which option with 'ls' shows a long listing with modification time in reverse order?",
+    "id": 114,
+    "question": "In a directory, if you want to see the long listing of all files and directories with their modification time in reverse order (most recent first), which option is used with 'ls' command?",
     "options": [
       "-t",
       "-l",
@@ -1507,8 +1519,8 @@
     "subject": "Linux"
   },
   {
-    "id": 114,
-    "question": "What is the role of the Master Boot Record (MBR) in a BIOS-based Linux system?",
+    "id": 115,
+    "question": "What is the role of Master Boot Record (MBR) in the boot process of BIOS-based Linux system?",
     "options": [
       "Managing the boot loader configuration",
       "Providing a boot menu",
@@ -1519,56 +1531,56 @@
     "subject": "Linux"
   },
   {
-    "id": 115,
-    "question": "What is the primary difference between 'find' and 'locate' commands in Linux?",
-    "options": [
-      "'find' searches by attributes, 'locate' uses an index",
-      "'find' for files, 'locate' for directories",
-      "'locate' provides GUI, 'find' is command line",
-      "'find' searches current dir, 'locate' entire system"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
     "id": 116,
-    "question": "What is the purpose of the 'updatedb' command in relation to 'locate'?",
+    "question": "What is the primary difference between find and locate commands in Linux?",
     "options": [
-      "Updates the locate database for faster searches",
-      "Displays recently modified files",
-      "Retrieves detailed file information",
-      "Creates a backup of system files"
+      "find searches based on file attributes while locate uses an index for faster search",
+      "find is used for searching files, locate is used for searching directories",
+      "locate provides GUI while find is a command line utility",
+      "find can search within current directory while locate can search the entire file system"
     ],
     "correctAnswer": 0,
     "subject": "Linux"
   },
   {
     "id": 117,
-    "question": "What is the primary purpose of the 'chown' command?",
+    "question": "What is the purpose of 'updatedb' command in relation to 'locate' command?",
+    "options": [
+      "It updates the system's locate database for faster file searches",
+      "It displays the list of recently modified files",
+      "It retrieves the detailed information for all files",
+      "It creates a backup of important system files"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 118,
+    "question": "What is the primary purpose of 'chown' command?",
     "options": [
       "Changing file permissions",
       "Modifying file contents",
       "Changing file ownership",
-      "Changes in one copy of file"
+      "Changes in only one copy of file"
     ],
     "correctAnswer": 2,
     "subject": "Linux"
   },
   {
-    "id": 118,
+    "id": 119,
     "question": "What is the minimum permission required to delete a file in a directory?",
     "options": [
       "Read",
       "Write",
       "Execute",
-      "Both read and write"
+      "Both a and b"
     ],
     "correctAnswer": 1,
     "subject": "Linux"
   },
   {
-    "id": 119,
-    "question": "For a file with permission '-rwxr-xr--', who can modify its contents?",
+    "id": 120,
+    "question": "You have a file with permission '-rwxr-xr--'. Who can modify the file contents?",
     "options": [
       "The owner of the file",
       "The group associated with the file",
@@ -1579,8 +1591,8 @@
     "subject": "Linux"
   },
   {
-    "id": 120,
-    "question": "Which command grants read and write permissions to owner, group, and others for 'file.txt'?",
+    "id": 121,
+    "question": "You want to grant read and write permissions to the owner, group and others for a file called 'file.txt'. Which of the following command you will use to achieve it?",
     "options": [
       "chmod 744 file.txt",
       "chmod 644 file.txt",
@@ -1591,20 +1603,20 @@
     "subject": "Linux"
   },
   {
-    "id": 121,
-    "question": "Which command sets execute permission for owner, group, and others for 'testcode.exe'?",
+    "id": 122,
+    "question": "You need to set execute permission to the owner, group and others for a file called 'testcode.exe'. Which of the following command you will give?",
     "options": [
       "chmod u+xgo+x testcode.exe",
       "chmod a+x testcode.exe",
       "chmod 111 testcode.exe",
-      "Both b and c"
+      "both b and c"
     ],
     "correctAnswer": 3,
     "subject": "Linux"
   },
   {
-    "id": 122,
-    "question": "Which command changes the group ownership of 'report.xls' to 'sales'?",
+    "id": 123,
+    "question": "You need to change the group ownership of a file 'report.xls' to a new group called 'sales'. Which of the following command you will give?",
     "options": [
       "chown sales report.xls",
       "chgrp sales report.xls",
@@ -1615,8 +1627,8 @@
     "subject": "Linux"
   },
   {
-    "id": 123,
-    "question": "Which is a key feature of Linux operating systems?",
+    "id": 124,
+    "question": "Which of the following is a key feature of Linux operating systems?",
     "options": [
       "Proprietary codebase",
       "Limited customization options",
@@ -1627,8 +1639,8 @@
     "subject": "Linux"
   },
   {
-    "id": 124,
-    "question": "Which component manages hardware resources and interfaces between hardware and software?",
+    "id": 125,
+    "question": "Which component of the Linux operating system manages hardware resources and acts as an interface between the hardware and software?",
     "options": [
       "Kernel",
       "Shell",
@@ -1639,8 +1651,8 @@
     "subject": "Linux"
   },
   {
-    "id": 125,
-    "question": "Which Linux distribution is designed for servers and enterprise environments?",
+    "id": 126,
+    "question": "If a user wants a Linux distribution specifically designed for servers and enterprise environments, which distribution would be the most suitable choice?",
     "options": [
       "Ubuntu",
       "Fedora",
@@ -1651,20 +1663,32 @@
     "subject": "Linux"
   },
   {
-    "id": 126,
+    "id": 127,
     "question": "How does Linux handle virtual memory?",
     "options": [
-      "Doesn't support virtual memory",
-      "Uses a fixed-size swap partition",
-      "Uses disk space as virtual memory",
-      "Relies entirely on RAM"
+      "It doesn't support virtual memory.",
+      "It uses a fixed-size swap partition.",
+      "It allows processes to use more memory than physically available by utilizing disk space as virtual memory.",
+      "It relies entirely on RAM and does not use virtual memory."
     ],
     "correctAnswer": 2,
     "subject": "Linux"
   },
   {
-    "id": 127,
-    "question": "Which command changes the current directory in Linux?",
+    "id": 128,
+    "question": "In Linux, which directory contains system configuration files and libraries essential for system booting?",
+    "options": [
+      "/home",
+      "/var",
+      "/etc",
+      "/bin"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 129,
+    "question": "Which command is used to change the current directory in Linux?",
     "options": [
       "mv",
       "cd",
@@ -1675,32 +1699,32 @@
     "subject": "Linux"
   },
   {
-    "id": 128,
+    "id": 130,
     "question": "What is an absolute path in Linux?",
     "options": [
-      "Starts from the root directory",
-      "Starts from the current directory",
-      "Includes only file names",
-      "Includes spaces in file names"
+      "A path that starts from the root directory",
+      "A path that starts from the current directory",
+      "A path that includes only file names, not directories",
+      "A path that includes spaces in file names"
     ],
     "correctAnswer": 0,
     "subject": "Linux"
   },
   {
-    "id": 129,
+    "id": 131,
     "question": "What is a relative path in Linux?",
     "options": [
-      "Starts from the root directory",
-      "Starts from the current directory",
-      "Includes spaces in file names",
-      "Includes only file names"
+      "A path that starts from the root directory",
+      "A path that starts from the current directory",
+      "A path that includes spaces in file names",
+      "A path that includes only file names, not directories"
     ],
     "correctAnswer": 1,
     "subject": "Linux"
   },
   {
-    "id": 130,
-    "question": "What does the 'pwd' command stand for in Linux?",
+    "id": 132,
+    "question": "What does the pwd command in Linux stand for?",
     "options": [
       "Print Working Directory",
       "Present Working Directory",
@@ -1711,10 +1735,10 @@
     "subject": "Linux"
   },
   {
-    "id": 131,
+    "id": 133,
     "question": "What is the purpose of the /tmp directory in Linux?",
     "options": [
-      "Contains temporary files deleted on reboot",
+      "Contains temporary files that are deleted upon system reboot",
       "Stores system binaries",
       "Holds configuration files",
       "Contains user home directories"
@@ -1723,8 +1747,8 @@
     "subject": "Linux"
   },
   {
-    "id": 132,
-    "question": "Which command changes a user's password in Linux?",
+    "id": 134,
+    "question": "What command is used to change the password of a user in Linux?",
     "options": [
       "passwd",
       "passchange",
@@ -1735,8 +1759,8 @@
     "subject": "Linux"
   },
   {
-    "id": 133,
-    "question": "Which command finds files and directories based on names in Linux?",
+    "id": 135,
+    "question": "Which command is used to find files and directories based on their names in Linux?",
     "options": [
       "search",
       "locate",
@@ -1747,8 +1771,8 @@
     "subject": "Linux"
   },
   {
-    "id": 134,
-    "question": "Which command removes a file in Linux?",
+    "id": 136,
+    "question": "What command is used to remove a file in Linux?",
     "options": [
       "rd",
       "rm",
@@ -1759,8 +1783,8 @@
     "subject": "Linux"
   },
   {
-    "id": 135,
-    "question": "Which grep option displays lines that do not match the specified word?",
+    "id": 137,
+    "question": "Which option is used with grep to display lines that do not match the specified word?",
     "options": [
       "-m",
       "-v",
@@ -1771,8 +1795,8 @@
     "subject": "Linux"
   },
   {
-    "id": 136,
-    "question": "What does the '-i' option do in the grep command?",
+    "id": 138,
+    "question": "What is the purpose of the -i option in the grep command?",
     "options": [
       "Displays lines after the result",
       "Performs a case-insensitive search",
@@ -1783,7 +1807,7 @@
     "subject": "Linux"
   },
   {
-    "id": 137,
+    "id": 139,
     "question": "Which command displays lines before the result in a grep search?",
     "options": [
       "grep -A",
@@ -1795,44 +1819,80 @@
     "subject": "Linux"
   },
   {
-    "id": 138,
-    "question": "What does the '-C1' option signify in the grep command?",
-    "options": [
-      "Displays line and next line after result",
-      "Displays line before the result",
-      "Displays line and one line before and after",
-      "Displays line and two lines after"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 139,
-    "question": "In 'sed s/apples/oranges/g' file.txt, what does 'g' stand for?",
-    "options": [
-      "Global (replacing all occurrences)",
-      "Group (for pattern matching)",
-      "Go (execute the substitution)",
-      "Given (replace specific occurrence)"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
     "id": 140,
-    "question": "What does 'sed /^$/d' file.txt do?",
+    "question": "What does the -C1 option in the grep command signify?",
     "options": [
-      "Deletes lines with empty spaces",
-      "Deletes lines not matching word",
-      "Deletes empty lines in file.txt",
-      "Appends empty lines at end"
+      "Displays the line and the next succeeding line after the result",
+      "Displays the line before the result",
+      "Displays the line and one preceding line before and after the result",
+      "Displays the line and two succeeding lines after the result"
     ],
     "correctAnswer": 2,
     "subject": "Linux"
   },
   {
     "id": 141,
-    "question": "Which sed command replaces 'apple' with 'orange' in 'fruits.txt'?",
+    "question": "In the command sed 's/apples/oranges/g' file.txt, what does 'g' stand for?",
+    "options": [
+      "Global (replacing all occurrences)",
+      "Group (for pattern matching)",
+      "Go (execute the substitution)",
+      "Given (specifically replace the given occurrence)"
+    ],
+    "correctAnswer": 0,
+    "subject": "Linux"
+  },
+  {
+    "id": 142,
+    "question": "What does the -n option do in the grep command?",
+    "options": [
+      "Displays lines not matching the specified word",
+      "Suppresses automatic printing of pattern space",
+      "Displays line numbers along with matching lines",
+      "Limits the number of lines displayed"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 143,
+    "question": "Which command is used to substitute the entire line in sed?",
+    "options": [
+      "s/old/new/",
+      "c\\",
+      "s/.*/new text/",
+      "s/^/new text/"
+    ],
+    "correctAnswer": 1,
+    "subject": "Linux"
+  },
+  {
+    "id": 144,
+    "question": "What does the command sed '/^$/d' file.txt do?",
+    "options": [
+      "Deletes all lines containing empty spaces",
+      "Deletes lines not matching the specified word",
+      "Deletes empty lines in the file.txt",
+      "Appends empty lines at the end of the file.txt"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 145,
+    "question": "What does the -e option in sed allow you to do?",
+    "options": [
+      "Edit files in place",
+      "Use extended regular expressions",
+      "Use multiple sed commands together",
+      "Perform case-insensitive search"
+    ],
+    "correctAnswer": 2,
+    "subject": "Linux"
+  },
+  {
+    "id": 146,
+    "question": "Which sed command is used to replace the pattern 'apple' with 'orange' in a file named fruits.txt?",
     "options": [
       "sed 's/apple/orange/g' fruits.txt",
       "sed 's/apple=orange' fruits.txt",
@@ -1843,7 +1903,7 @@
     "subject": "Linux"
   },
   {
-    "id": 142,
+    "id": 147,
     "question": "What is the primary purpose of the comm command in Linux?",
     "options": [
       "To concatenate two files",
@@ -1855,7 +1915,7 @@
     "subject": "Linux"
   },
   {
-    "id": 143,
+    "id": 148,
     "question": "What is the purpose of the grep command in Linux?",
     "options": [
       "To perform mathematical calculations",
@@ -1867,8 +1927,8 @@
     "subject": "Linux"
   },
   {
-    "id": 144,
-    "question": "How can grep be used with a pipe?",
+    "id": 149,
+    "question": "How can you use grep with a pipe?",
     "options": [
       "grep <searchWord> <file name>",
       "command | grep <searchWord>",
@@ -1879,20 +1939,20 @@
     "subject": "Linux"
   },
   {
-    "id": 145,
-    "question": "What does the '-v' option do in the grep command?",
+    "id": 150,
+    "question": "What does the -v option do in the grep command?",
     "options": [
-      "Displays будете after the result",
+      "Displays lines after the result",
       "Displays lines before the result",
-      "Displays lines not matching the word",
-      "Displays lines case-insensitively"
+      "Displays lines not matching the specified word",
+      "Displays lines in a case-insensitive way"
     ],
     "correctAnswer": 2,
     "subject": "Linux"
   },
   {
-    "id": 146,
-    "question": "How can grep perform a case-insensitive search?",
+    "id": 151,
+    "question": "How can you make grep perform a case-insensitive search?",
     "options": [
       "grep -A <lineNumber> <searchWord> <fileName>",
       "grep -i <searchWord> <fileName>",
@@ -1903,44 +1963,44 @@
     "subject": "Linux"
   },
   {
-    "id": 147,
-    "question": "What does the 'grep -A1' command do?",
+    "id": 152,
+    "question": "What does the grep -A1 command do?",
     "options": [
-      "Displays line after the result",
-      "Displays line before the result",
-      "Displays line after and before",
-      "Displays line and next line after"
+      "Displays the line after the result",
+      "Displays the line before the result",
+      "Displays the line after and the line before the result",
+      "Displays the line and the next succeeding line after the result"
     ],
     "correctAnswer": 3,
     "subject": "Linux"
   },
   {
-    "id": 148,
-    "question": "What does the first column indicate in the comm command output?",
+    "id": 153,
+    "question": "In the comm command, what does the first column indicate?",
     "options": [
       "Matching items of both files",
-      "Non-matching items of first file",
-      "Non-matching items of second file",
-      "Number of lines in first file"
+      "Non-matching items of the first file",
+      "Non-matching items of the second file",
+      "Number of lines in the first file"
     ],
     "correctAnswer": 1,
     "subject": "Linux"
   },
   {
-    "id": 149,
-    "question": "Which statement about the comm command is true?",
+    "id": 154,
+    "question": "Which of the following statements about the comm command is true?",
     "options": [
-      "Order of items in files doesn't matter",
-      "Input files must be sorted",
-      "Can only compare files, not streams",
-      "Always displays four columns"
+      "The order of items in the input files does not matter",
+      "Input files must be in sorted order for the comm command to work correctly",
+      "The comm command can only compare files, not streams",
+      "The comm command always displays four columns"
     ],
     "correctAnswer": 1,
     "subject": "Linux"
   },
   {
-    "id": 150,
-    "question": "Which option displays the first column in the comm command?",
+    "id": 155,
+    "question": "How can you display the first column (non-matching items of the first file) using the comm command?",
     "options": [
       "comm -13 file1.txt file2.txt",
       "comm -23 file1.txt file2.txt",
@@ -1951,20 +2011,20 @@
     "subject": "Linux"
   },
   {
-    "id": 151,
-    "question": "What does the '-23' option do in the comm command?",
+    "id": 156,
+    "question": "What does the -23 option do in the comm command?",
     "options": [
-      "Displays non-matching items of first file",
-      "Displays non-matching items of second file",
-      "Displays matching items of both files",
-      "Sorts output in descending order"
+      "Displays the first column (non-matching items of the first file)",
+      "Displays the second column (non-matching items of the second file)",
+      "Displays the third column (matching items of both files)",
+      "Sorts the output in descending order"
     ],
     "correctAnswer": 0,
     "subject": "Linux"
   },
   {
-    "id": 152,
-    "question": "Which option displays the second column in the comm command?",
+    "id": 157,
+    "question": "If you want to display the second column (non-matching items of the second file), what option would you use?",
     "options": [
       "-13",
       "-23",
@@ -1975,8 +2035,8 @@
     "subject": "Linux"
   },
   {
-    "id": 153,
-    "question": "What does the third column represent in the comm command output?",
+    "id": 158,
+    "question": "What does the third column in the comm command output represent?",
     "options": [
       "Non-matching items of both files",
       "Matching items of both files",
@@ -1987,8 +2047,8 @@
     "subject": "Linux"
   },
   {
-    "id": 154,
-    "question": "Which is NOT a valid comm command syntax?",
+    "id": 159,
+    "question": "Which of the following is NOT a valid comm command syntax?",
     "options": [
       "comm file1.txt file2.txt",
       "comm -23 file1.txt file2.txt",
@@ -1999,7 +2059,7 @@
     "subject": "Linux"
   },
   {
-    "id": 155,
+    "id": 160,
     "question": "What is the kernel's role in the Linux operating system?",
     "options": [
       "Manages user interfaces",
@@ -2011,7 +2071,7 @@
     "subject": "Linux"
   },
   {
-    "id": 156,
+    "id": 161,
     "question": "Which programming language is the Linux kernel primarily developed in?",
     "options": [
       "C++",
@@ -2023,7 +2083,7 @@
     "subject": "Linux"
   },
   {
-    "id": 157,
+    "id": 162,
     "question": "What is a module in the context of monolithic kernels?",
     "options": [
       "A device driver",
@@ -2035,8 +2095,8 @@
     "subject": "Linux"
   },
   {
-    "id": 158,
-    "question": "In monolithic kernel architecture, where are basic system services packaged?",
+    "id": 163,
+    "question": "In monolithic kernel architecture, where are all the basic system services packaged?",
     "options": [
       "User space",
       "Application space",
@@ -2047,20 +2107,20 @@
     "subject": "Linux"
   },
   {
-    "id": 159,
-    "question": "What is the main advantage of microkernel architecture over monolithic kernels?",
+    "id": 164,
+    "question": "What is the main advantage of micro kernel architecture over monolithic kernels?",
     "options": [
       "Consumes less disk space",
       "Easier maintenance",
       "Faster execution of programs",
-      "Better hardware compatibility"
+      "Better compatibility with all hardware"
     ],
     "correctAnswer": 1,
     "subject": "Linux"
   },
   {
-    "id": 160,
-    "question": "Which part of the Linux kernel manages interaction between user space and kernel space?",
+    "id": 165,
+    "question": "Which part of the Linux kernel manages the interaction between user space and kernel space?",
     "options": [
       "Device module",
       "Kernel (core component)",
@@ -2071,11 +2131,11 @@
     "subject": "Linux"
   },
   {
-    "id": 161,
+    "id": 166,
     "question": "What is the purpose of the GNU C library in the Linux kernel architecture?",
     "options": [
       "Manages graphical user interfaces",
-      "Switches between user space and kernel space",
+      "Provides a mechanism for switching between user space and kernel space",
       "Performs arithmetic calculations",
       "Manages network connections"
     ],
@@ -2083,23 +2143,23 @@
     "subject": "Linux"
   },
   {
-    "id": 162,
-    "question": "What does 'user space' refer to in the Linux kernel?",
+    "id": 167,
+    "question": "In the context of the Linux kernel, what does the term 'user space' refer to?",
     "options": [
-      "Memory accessible only by kernel",
-      "Memory accessible by user programs",
-      "Memory used by device drivers",
-      "Memory for system processes"
+      "Area of memory accessible only by the kernel",
+      "Area of memory accessible by user programs and applications",
+      "Area of memory exclusively used by device drivers",
+      "Area of memory reserved for system processes"
     ],
     "correctAnswer": 1,
     "subject": "Linux"
   },
   {
-    "id": 163,
-    "question": "What role does the system call interface play in the Linux kernel?",
+    "id": 168,
+    "question": "What role does the system call interface play in the Linux kernel architecture?",
     "options": [
       "Manages device drivers",
-      "Allows user space apps to interact with kernel",
+      "Provides a way for user space applications to interact with the kernel",
       "Manages file storage",
       "Handles graphical user interfaces"
     ],
@@ -2107,8 +2167,8 @@
     "subject": "Linux"
   },
   {
-    "id": 164,
-    "question": "Which kernel component handles file, memory, and process management?",
+    "id": 169,
+    "question": "Which component of the Linux kernel handles file management, memory management, and process management?",
     "options": [
       "User Space",
       "Device Module",
@@ -2119,8 +2179,8 @@
     "subject": "Linux"
   },
   {
-    "id": 165,
-    "question": "What does the kernel act as in resource management?",
+    "id": 170,
+    "question": "What does the kernel act as in the context of resource management?",
     "options": [
       "User interface",
       "Graphics manager",
@@ -2131,20 +2191,20 @@
     "subject": "Linux"
   },
   {
-    "id": 166,
-    "question": "What is the key difference between Windows and Linux in source code availability?",
+    "id": 171,
+    "question": "What is the key difference between Windows and Linux in terms of source code availability?",
     "options": [
-      "Windows is open-source, Linux is proprietary",
-      "Both are open-source",
-      "Windows is proprietary, Linux is open-source",
-      "Both are proprietary"
+      "Windows source code is open-source, while Linux source code is proprietary",
+      "Both Windows and Linux have open-source code",
+      "Windows source code is proprietary, while Linux source code is open-source",
+      "Both Windows and Linux have proprietary source code"
     ],
     "correctAnswer": 2,
     "subject": "Linux"
   },
   {
-    "id": 167,
-    "question": "Which OS allows developers to modify and distribute their own versions?",
+    "id": 172,
+    "question": "Which operating system allows developers to view, modify, and distribute their own versions of the operating system?",
     "options": [
       "Windows",
       "Linux",
@@ -2155,8 +2215,8 @@
     "subject": "Linux"
   },
   {
-    "id": 168,
-    "question": "What does NTFS stand for in Windows file systems?",
+    "id": 173,
+    "question": "What does NTFS stand for in the context of Windows file systems?",
     "options": [
       "New Technology File System",
       "Network Transfer File System",
@@ -2167,7 +2227,7 @@
     "subject": "Linux"
   },
   {
-    "id": 169,
+    "id": 174,
     "question": "Which file system is commonly used in Linux distributions?",
     "options": [
       "NTFS",
@@ -2179,8 +2239,8 @@
     "subject": "Linux"
   },
   {
-    "id": 170,
-    "question": "What does the Linux user privilege system require for significant system changes?",
+    "id": 175,
+    "question": "What does the user privilege system in Linux require for making significant changes to the system?",
     "options": [
       "Administrative privileges",
       "Guest privileges",
@@ -2191,391 +2251,90 @@
     "subject": "Linux"
   },
   {
-    "id": 171,
-    "question": "Which OS is considered more secure due to its Unix-based architecture?",
-    "options": [
-      "Windows",
-      "macOS",
-      "Linux",
-      "Android"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 172,
-    "question": "Which OS allows high customization, including desktop environment modification?",
-    "options": [
-      "Windows",
-      "macOS",
-      "Linux",
-      "Android"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 173,
-    "question": "Which OS is known for being resource-intensive and requiring powerful hardware?",
-    "options": [
-      "Linux",
-      "macOS",
-      "Windows",
-      "Android"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 174,
-    "question": "Why can Linux run efficiently on a wide range of devices?",
-    "options": [
-      "Simplified user interface",
-      "Designed for high-end hardware",
-      "Various lightweight versions",
-      "Fewer software applications"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 175,
-    "question": "Which OS has official support from Microsoft and a vast user base?",
-    "options": [
-      "Windows",
-      "macOS",
-      "Linux",
-      "Android"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
     "id": 176,
-    "question": "What is the purpose of BIOS/UEFI in the boot process?",
+    "question": "Which operating system is generally considered more secure due to its Unix-based architecture?",
     "options": [
-      "Manages hardware resources",
-      "Checks essential hardware components",
-      "Initializes system processes",
-      "Displays the login screen"
+      "Windows",
+      "macOS",
+      "Linux",
+      "Android"
     ],
-    "correctAnswer": 1,
+    "correctAnswer": 2,
     "subject": "Linux"
   },
   {
     "id": 177,
-    "question": "What does the bootloader contain instructions about?",
+    "question": "Which operating system allows a higher degree of customization, including modification of desktop environments?",
     "options": [
-      "How to load the operating system",
-      "How to manage hardware resources",
-      "How to display graphical interfaces",
-      "How to initialize system processes"
+      "Windows",
+      "macOS",
+      "Linux",
+      "Android"
     ],
-    "correctAnswer": 0,
+    "correctAnswer": 2,
     "subject": "Linux"
   },
   {
     "id": 178,
-    "question": "What is the kernel in the context of the boot process?",
+    "question": "What does the command 'cat << EOF' allow...(truncated in document)?",
     "options": [
-      "Hardware components",
-      "Core part of the operating system",
-      "User interfaces",
-      "System services"
+      "Create symbolic links",
+      "Search for files and directories using a database",
+      "Display system logs",
+      "Change the root password"
     ],
-    "correctAnswer": 1,
+    "correctAnswer": 1, // Based on document answer for 'locate' command (Q206), as Q178 is incomplete
     "subject": "Linux"
   },
   {
     "id": 179,
-    "question": "What does the init process do in the boot process?",
+    "question": "'who' command prints information about user/users who are/were?",
     "options": [
-      "Manages hardware resources",
-      "Initializes system processes, services, and interfaces",
-      "Loads the operating system",
-      "Displays the login screen"
+      "currently logged in",
+      "logged in before system shutdown",
+      "logged out before system shutdown",
+      "all the users that exist in the system"
     ],
-    "correctAnswer": 1,
+    "correctAnswer": 0,
     "subject": "Linux"
   },
   {
     "id": 180,
-    "question": "When does the OS display the login screen?",
+    "question": "CentOS is a part of which Linux family?",
     "options": [
-      "After BIOS/UEFI performs POST",
-      "After bootloader is located",
-      "After kernel is loaded into memory",
-      "After init process completes tasks"
+      "Red Hat Family",
+      "Debian Family",
+      "Fedora Family",
+      "None of the above"
     ],
-    "correctAnswer": 3,
+    "correctAnswer": 0,
     "subject": "Linux"
   },
   {
     "id": 181,
-    "question": "What initiates the Power-On Self-Test (POST) during the boot process?",
+    "question": "What is the POST test performed by the BIOS?",
     "options": [
-      "Boot Loader",
-      "Kernel",
-      "BIOS/UEFI",
-      "Init Process"
+      "Power Off Self Test",
+      "Power Operated System Test",
+      "Power On Sync Test",
+      "Power On Self Test"
     ],
-    "correctAnswer": 2,
+    "correctAnswer": 3,
     "subject": "Linux"
   },
   {
     "id": 182,
-    "question": "What does the 'cat' command do in Linux?",
+    "question": "In a typical file system, what is the top-level directory?",
     "options": [
-      "Creates directories",
-      "Displays file contents",
-      "Deletes files",
-      "Renames files"
-    ],
-    "correctAnswer": 1,
-    "subject": "Linux"
-  },
-  {
-    "id": 183,
-    "question": "How can you create a new file using the 'cat' command?",
-    "options": [
-      "cat create > newfile",
-      "cat -n newfile",
-      "cat > newfile",
-      "cat -e newfile"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 184,
-    "question": "What does the 'cat >>' command do?",
-    "options": [
-      "Copies content between files",
-      "Appends content to an existing file",
-      "Creates a new file",
-      "Displays line numbers"
-    ],
-    "correctAnswer": 1,
-    "subject": "Linux"
-  },
-  {
-    "id": 185,
-    "question": "How can you copy 'source_file' to 'destination_file' using 'cat'?",
-    "options": [
-      "cat source_file > destination_file",
-      "cat destination_file > source_file",
-      "cat destination_file >> source_file",
-      "cat source_file >> destination_file"
+      "/",
+      "/home",
+      "/bin",
+      "/mnt"
     ],
     "correctAnswer": 0,
     "subject": "Linux"
-  },
-  {
-    "id": 186,
-    "question": "What does 'cat file1 file2 file3 > combo' do?",
-    "options": [
-      "Combines contents into 'combo'",
-      "Overwrites 'combo' with file1",
-      "Appends file3 to 'combo'",
-      "Deletes file1, file2, file3"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
-    "id": 187,
-    "question": "What does the 'locate' command do in Linux?",
-    "options": [
-      "Create symbolic links",
-      "Search for files using a database",
-      "Display system logs",
-      "Change the root password"
-    ],
-    "correctAnswer": 1,
-    "subject": "Linux"
-  },
-  {
-    "id": 188,
-    "question": "What is the primary purpose of the 'passwd' command in Linux?",
-    "options": [
-      "Change the root password",
-      "Display system logs",
-      "Create new user accounts",
-      "Change user passwords"
-    ],
-    "correctAnswer": 3,
-    "subject": "Linux"
-  },
-  {
-    "id": 189,
-    "question": "Which command displays the last part of a file or stream in real time?",
-    "options": [
-      "cat",
-      "less",
-      "more",
-      "tail"
-    ],
-    "correctAnswer": 3,
-    "subject": "Linux"
-  },
-  {
-    "id": 190,
-    "question": "What is the primary function of the 'cat' command in Linux?",
-    "options": [
-      "Display first few lines of a file",
-      "Create a new file",
-      "List files and directories",
-      "Concatenate and display file content"
-    ],
-    "correctAnswer": 3,
-    "subject": "Linux"
-  },
-  {
-    "id": 191,
-    "question": "Which command displays the first part of a file in Linux?",
-    "options": [
-      "tail",
-      "more",
-      "head",
-      "less"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 192,
-    "question": "What does the 'less' command do in Linux?",
-    "options": [
-      "Display first part of a file",
-      "Display system logs",
-      "Display last part of a file",
-      "Display file content interactively"
-    ],
-    "correctAnswer": 3,
-    "subject": "Linux"
-  },
-  {
-    "id": 193,
-    "question": "Which command is useful for viewing large files in Linux?",
-    "options": [
-      "cat",
-      "more",
-      "head",
-      "less"
-    ],
-    "correctAnswer": 3,
-    "subject": "Linux"
-  },
-  {
-    "id": 194,
-    "question": "What does 'chmod 755 file.txt' do to 'file.txt' in Linux?",
-    "options": [
-      "Executable by owner, readable/executable by others",
-      "Readable/writable by owner",
-      "Readable/writable by others",
-      "Readable/executable by owner"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
-    "id": 195,
-    "question": "What is the purpose of the 'chown' command in Linux?",
-    "options": [
-      "Change file ownership",
-      "Create a new group",
-      "List available groups",
-      "Change file permissions"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
-    "id": 196,
-    "question": "What does a permission of 'r--r----' mean for a file in Linux?",
-    "options": [
-      "Readable/writable by owner, readable by group",
-      "Executable by owner, writable by group",
-      "Readable by owner, writable by group",
-      "Readable by owner, no access for group"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
-    "id": 197,
-    "question": "What does 'drwxr-xr-x' mean for a directory in Linux?",
-    "options": [
-      "Readable/writable by owner, readable by others",
-      "Executable by owner, writable by group",
-      "Readable/writable by owner, readable by group",
-      "Readable/executable by owner, others read/execute"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 198,
-    "question": "What does 'ls -l' display in Linux?",
-    "options": [
-      "List of file/directory names",
-      "Number of files/directories",
-      "Detailed permissions and attributes",
-      "Summary of system logs"
-    ],
-    "correctAnswer": 2,
-    "subject": "Linux"
-  },
-  {
-    "id": 199,
-    "question": "What is the purpose of the 'touch' command in Linux?",
-    "options": [
-      "Create a new file",
-      "Change file permissions",
-      "List files and directories",
-      "Display system logs"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
-    "id": 200,
-    "question": "What is the primary function of 'cp -r' in Linux?",
-    "options": [
-      "Copy files/directories recursively",
-      "Change file ownership",
-      "Remove files",
-      "Display system logs"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-  {
-    "id": 201,
-    "question": "What does 'mv' do when moving a file within the same directory?",
-    "options": [
-      "Create a copy of the file",
-      "Rename the file",
-      "Delete the file",
-      "Change file permissions"
-    ],
-    "correctAnswer": 1,
-    "subject": "Linux"
-  },
-  {
-    "id": 202,
-    "question": "What does 'find' with '-name' do in Linux?",
-    "options": [
-      "Search for files/directories by name",
-      "Display system logs",
-      "Create new files",
-      "Change file permissions"
-    ],
-    "correctAnswer": 0,
-    "subject": "Linux"
-  },
-]
-        let currentQuestionIndex = 0;
+  },]
+   let currentQuestionIndex = 0;
         let score = 0;
 
         const questionNumberEl = document.getElementById("question-number");
