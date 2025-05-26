@@ -29,6 +29,53 @@
             border-radius: 16px;
             box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
             animation: fadeIn 0.5s ease;
+            display: none; /* Initially hidden */
+        }
+    
+        #password-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+        }
+    
+        #password-error {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+            display: none;
+        }
+    
+        #password-input {
+            padding: 10px;
+            margin: 10px 0;
+            width: 100%;
+            max-width: 300px;
+            border: 1px solid #374151;
+            border-radius: 8px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            font-size: 1em;
+        }
+    
+        #submit-password {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+    
+        #submit-password:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e9;
         }
     
         h1 {
@@ -118,7 +165,7 @@
         }
     
         @media (max-width: 600px) {
-            #quiz-container {
+            #quiz-container, #password-container {
                 padding: 20px;
             }
     
@@ -130,14 +177,18 @@
                 font-size: 1.1em;
             }
     
-            #next-btn {
+            #next-btn, #submit-password {
                 width: 100%;
             }
         }
     </style>
-    
-</head>
 <body>
+    <div id="password-container">
+        <h1>Enter Password</h1>
+        <input type="password" id="password-input" placeholder="Enter password">
+        <p id="password-error">Incorrect password. Please try again.</p>
+        <button id="submit-password">Submit</button>
+    </div>
     <h1>Comprehensive Networking Quiz</h1>
     <div id="quiz-container">
         <p id="question-number"></p>
@@ -151,6 +202,31 @@
         <button id="continue-btn" style="display: none;">Continue with More Questions</button>
     </div>
     <script>
+        const CORRECT_PASSWORD = "network123"; // Define your password here
+        const passwordContainer = document.getElementById("password-container");
+        const quizContainer = document.getElementById("quiz-container");
+        const passwordInput = document.getElementById("password-input");
+        const passwordError = document.getElementById("password-error");
+        const submitPasswordBtn = document.getElementById("submit-password");
+
+        submitPasswordBtn.addEventListener("click", () => {
+            if (passwordInput.value === CORRECT_PASSWORD) {
+                passwordContainer.style.display = "none";
+                quizContainer.style.display = "block";
+                loadQuestion(); // Start the quiz
+            } else {
+                passwordError.style.display = "block";
+                passwordInput.value = "";
+            }
+        });
+
+        // Allow Enter key to submit password
+        passwordInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                submitPasswordBtn.click();
+            }
+        });
+    
         const allQuestions = [
     {
         question: "What are the primary purposes of computer networks?",

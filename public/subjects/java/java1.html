@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Java Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+            white-space: pre-wrap; /* Preserve whitespace for code formatting */
+            text-align: left;
+        }
+
+        #question-text code {
+            display: block;
+            background-color: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d1d5db;
+            margin-top: 10px;
+        }
+
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        #next-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        #next-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e8;
+        }
+
+        #error-message {
+            color: #f87171;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            #question-text {
+                font-size: 1.1em;
+            }
+
+            #next-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Java Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number"></p>
+        <p id="progress-display"></p>
+        <p id="score-display">Score: 0 / 0</p>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="error-message" style="display: none;"></p>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <script>
+        const allQuestions = [
+    {
+        id: 1,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    int x = 5;\n    System.out.println(x++ + ++x);\n}\n```",
+        options: ["11", "12", "13", "14"],
+        correctAnswer: 1, // 5 + 7 = 12 (x++ uses 5, then increments to 6; ++x increments to 7)
+        subject: "Java"
+    },
+    {
+        id: 2,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    int x = 10;\n    int y = x > 5 ? (x < 20 ? 15 : 25) : 5;\n    System.out.println(y);\n}\n```",
+        options: ["5", "10", "15", "25"],
+        correctAnswer: 2, // x > 5 is true, x < 20 is true, so y = 15
+        subject: "Java"
+    },
+    {
+        id: 3,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    int x = 10;\n    System.out.println(\"One\");\n    case 2:\n    System.out.println(\"Two\");\n    case 3:\n    System.out.println(\"Three\");\n    default:\n    System.out.println(\"Default\");\n}\n```",
+        options: ["Compilation error", "One", "Two", "Three"],
+        correctAnswer: 0, // case statements require a switch block
+        subject: "Java"
+    },
+    {
+        id: 4,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    int x = 10;\n    System.out.println(Array5.toString(arr));\n}\n```",
+        options: ["Compilation error", "Runtime error", "10", "null"],
+        correctAnswer: 0, // Array5 is undefined
+        subject: "Java"
+    },
+    {
+        id: 5,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    int x = 10;\n    system.out.println(Array5.toString(arr));\n}\n```",
+        options: ["Compilation error", "Runtime error", "10", "null"],
+        correctAnswer: 0, // system (lowercase) is undefined
+        subject: "Java"
+    },
+    {
+        id: 6,
+        question: "How do you access a class from a user-defined package in Java?",
+        options: ["import package.*; then use ClassName", "Just use ClassName", "import package.ClassName", "No import needed"],
+        correctAnswer: 0, // Correct: use import package.*; or import package.ClassName
+        subject: "Java"
+    },
+    {
+        id: 7,
+        question: "What is the correct way to import all classes from a package 'myPack' in Java?",
+        options: ["import myPackage;", "include myPackage.*;", "using myPackage.*;", "import myPackage.*;"],
+        correctAnswer: 3, // Correct: import myPackage.*; is the syntax
+        subject: "Java"
+    },
+    {
+        id: 8,
+        question: "What happens if a class is declared public but placed in a file with a different name?",
+        options: ["Compiles successfully", "Runtime error", "Compilation error", "No output"],
+        correctAnswer: 2, // Public class name must match file name
+        subject: "Java"
+    },
+    {
+        id: 9,
+        question: "Which of the following allows interfaces to have method bodies?",
+        options: ["static methods", "private methods", "abstract methods", "default methods"],
+        correctAnswer: 3, // default methods can have bodies in interfaces
+        subject: "Java"
+    },
+    {
+        id: 10,
+        question: "Can an interface inherit another interface?",
+        options: ["No", "Yes, only one", "Yes, multiple", "Only if abstract"],
+        correctAnswer: 2, // Interfaces can extend multiple interfaces
+        subject: "Java"
+    },
+    {
+        id: 11,
+        question: "What is the output of the 'javac' command?",
+        options: ["Class file", "JAR file", "Source code", "Executable file"],
+        correctAnswer: 0, // javac produces .class files
+        subject: "Java"
+    },
+    {
+        id: 12,
+        question: "Which loop executes at least once?",
+        options: ["for", "while", "do-while", "foreach"],
+        correctAnswer: 2, // do-while always executes at least once
+        subject: "Java"
+    },
+    {
+        id: 13,
+        question: "What is a jagged array in Java?",
+        options: ["An array with unequal columns", "A 3D array", "A sparse array", "A sorted array"],
+        correctAnswer: 0, // Jagged array has rows with different lengths
+        subject: "Java"
+    },
+    {
+        id: 14,
+        question: "What is the size of a char in Java?",
+        options: ["1 byte", "4 bytes", "8 bytes", "2 bytes"],
+        correctAnswer: 3, // char is 2 bytes in Java
+        subject: "Java"
+    },
+    {
+        id: 15,
+        question: "What is passed to the main() method in Java as arguments?",
+        options: ["Array of Strings", "Integer values", "Boolean values", "Object array"],
+        correctAnswer: 0, // String[] args
+        subject: "Java"
+    },
+    {
+        id: 16,
+        question: "Which operator is used to concatenate strings in Java?",
+        options: ["+", "concatenate()", "cat()", "&"],
+        correctAnswer: 0, // + operator for string concatenation
+        subject: "Java"
+    },
+    {
+        id: 17,
+        question: "Which of these is a checked exception?",
+        options: ["NullPointerException", "IOException", "ArithmeticException", "ArrayIndexOutOfBoundsException"],
+        correctAnswer: 1, // IOException is checked
+        subject: "Java"
+    },
+    {
+        id: 18,
+        question: "Which method gets the current time in Java 8 Date-Time API?",
+        options: ["LocalTime.now()", "Date.now()", "Time.now()", "Instant.now()"],
+        correctAnswer: 0, // LocalTime.now() gets current time
+        subject: "Java"
+    },
+    {
+        id: 19,
+        question: "Which class is used to read characters from a file?",
+        options: ["FileReader", "FileWriter", "File", "BufferedReader"],
+        correctAnswer: 0, // FileReader reads characters
+        subject: "Java"
+    },
+    {
+        id: 20,
+        question: "What is the correct way to write text to a file using character streams in Java?\n\n```java\n// Assume proper imports and exception handling\n```",
+        options: [
+            "FileWriter writer = new FileWriter(\"file.txt\"); writer.write(\"Hello\"); writer.close();",
+            "FileOutputStream out = new FileOutputStream(\"file.txt\"); out.write(\"Hello\".getBytes()); out.close();",
+            "PrintWriter writer = new PrintWriter(\"file.txt\"); writer.println(\"Hello\"); writer.close();",
+            "BufferedWriter writer = new BufferedWriter(new FileWriter(\"file.txt\")); writer.write(\"Hello\"); writer.close();"
+        ],
+        correctAnswer: 0, // FileWriter is the simplest correct way to write characters
+        subject: "Java"
+    },
+    {
+        id: 21,
+        question: "Which stream should be used to write binary data?",
+        options: ["FileWriter", "PrintWriter", "FileOutputStream", "BufferedWriter"],
+        correctAnswer: 2, // FileOutputStream for binary data
+        subject: "Java"
+    },
+    {
+        id: 22,
+        question: "What is required for a class to be serializable?",
+        options: ["Implements Serializable", "Extends Thread", "Implements Closeable", "Implements Runnable"],
+        correctAnswer: 0, // Implements Serializable
+        subject: "Java"
+    },
+    {
+        id: 23,
+        question: "What does the 'StringTokenizer' class do?",
+        options: ["Sorts strings", "Reverses strings", "Splits strings using delimiters", "Joins strings"],
+        correctAnswer: 2, // Splits strings using delimiters
+        subject: "Java"
+    },
+    {
+        id: 24,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    StringBuilder sb1 = new StringBuilder(\"abc\");\n    StringBuilder sb2 = new StringBuilder(\"abc\");\n    System.out.println(sb1.equals(sb2));\n}\n```",
+        options: ["true", "false", "Compilation error", "Runtime error"],
+        correctAnswer: 1, // StringBuilder.equals() checks reference equality
+        subject: "Java"
+    },
+    {
+        id: 25,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    StringBuilder sb = new StringBuilder(\"abcdef\");\n    sb.delete(2, 5);\n    System.out.println(sb);\n}\n```",
+        options: ["abf", "abc", "def", "ab"],
+        correctAnswer: 0, // Deletes indices 2 to 4, resulting in "abf"
+        subject: "Java"
+    },
+    {
+        id: 26,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    StringBuffer sb = new StringBuffer(\"Coding\");\n    sb.setLength(2);\n    System.out.println(sb);\n}\n```",
+        options: ["Co", "Coding", "ding", "C"],
+        correctAnswer: 0, // Truncates to first 2 characters: "Co"
+        subject: "Java"
+    },
+    {
+        id: 27,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    StringTokenizer st = new StringTokenizer(\"a:b:c\", \":\");\n    System.out.println(st.nextToken() + st.nextToken());\n}\n```",
+        options: ["ab", "a:b", "bc", "a"],
+        correctAnswer: 0, // Concatenates "a" + "b" = "ab"
+        subject: "Java"
+    },
+    {
+        id: 28,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    String s1 = \"hello\";\n    String s2 = \"hello\";\n    System.out.println(s1 == s2);\n}\n```",
+        options: ["true", "false", "Compilation error", "Runtime error"],
+        correctAnswer: 0, // String literals use the same object (string pool)
+        subject: "Java"
+    },
+    {
+        id: 29,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    String s = \"Java\";\n    s += \"DSA\";\n    System.out.println(s);\n}\n```",
+        options: ["Java", "DSA", "Error", "Java DSA"],
+        correctAnswer: 3, // Concatenates to "Java DSA"
+        subject: "Java"
+    },
+    {
+        id: 30,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    String s1 = \"abc\";\n    String s2 = \"a\" + \"b\" + \"c\";\n    System.out.println(s1.equals(s2));\n}\n```",
+        options: ["FALSE", "TRUE", "Compilation error", "Runtime error"],
+        correctAnswer: 1, // .equals() compares content, so true
+        subject: "Java"
+    },
+    {
+        id: 31,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    StringTokenizer st = new StringTokenizer(\"a:b:c\");\n    while (st.hasMoreTokens()) {\n        System.out.println(st.nextToken());\n    }\n}\n```",
+        options: ["a:b:c", "a\nb\nc", "a", "error"],
+        correctAnswer: 1, // Prints each token on a new line: "a\nb\nc"
+        subject: "Java"
+    },
+    {
+        id: 32,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    StringBuffer sb1 = new StringBuffer(\"abc\");\n    StringBuffer sb2 = new StringBuffer(\"abc\");\n    System.out.println(sb1.equals(sb2));\n}\n```",
+        options: ["TRUE", "FALSE", "Compilation error", "Runtime error"],
+        correctAnswer: 1, // StringBuffer.equals() checks reference equality
+        subject: "Java"
+    },
+    {
+        id: 33,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    StringBuilder sb = new StringBuilder(\"abcdef\");\n    sb.replace(2, 3, \"wxyz\");\n    System.out.println(sb);\n}\n```",
+        options: ["abwdef", "abwxyzef", "abwxyz", "abwxyzdef"],
+        correctAnswer: 3, // Replaces index 2 with "wxyz", resulting in "abwxyzdef"
+        subject: "Java"
+    },
+    {
+        id: 34,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    String s1 = \"Java\";\n    String s2 = \"Java\";\n    String s3 = new String(\"Java\");\n    System.out.println(s1 == s3);\n}\n```",
+        options: ["TRUE", "FALSE", "Compilation Error", "Runtime Error"],
+        correctAnswer: 1, // == checks reference; s3 is a new object
+        subject: "Java"
+    },
+    {
+        id: 35,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String[] args) {\n    StringTokenizer st = new StringTokenizer(\"A,B,C\", \",\");\n    System.out.println(st.countTokens());\n}\n```",
+        options: ["2", "3", "5", "4"],
+        correctAnswer: 1, // 3 tokens: "A", "B", "C"
+        subject: "Java"
+    },
+    {
+        id: 36,
+        question: "What is the output of the following Java code?\n\n```java\npublic class Main {\n    Main(int x) {}\n    public static void main(String[] args) {\n        Main t = new Main();\n    }\n}\n```",
+        options: ["Compilation error", "Runtime error", "10", "null"],
+        correctAnswer: 0, // No default constructor
+        subject: "Java"
+    },
+    {
+        id: 37,
+        question: "What is the output of the following Java code?\n\n```java\npublic class Main {\n    void print() {\n        System.out.println(\"Hello World\");\n    }\n    public static void main(String[] args) {\n        print();\n    }\n}\n```",
+        options: ["Hello World", "Compilation error", "Runtime error", "null"],
+        correctAnswer: 1, // Cannot call non-static method statically
+        subject: "Java"
+    },
+    {
+        id: 38,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String args[]) {\n    for (byte b = 0; b < 128; b++) {\n        System.out.println(b);\n    }\n}\n```",
+        options: ["0 to 127", "Compilation error", "Runtime error", "Infinite loop"],
+        correctAnswer: 0, // byte range is -128 to 127; prints 0 to 127
+        subject: "Java"
+    },
+    {
+        id: 39,
+        question: "What will be the result of (7 >> 2) in Java?",
+        options: ["1", "2", "3", "4"],
+        correctAnswer: 2, // 7 >> 2 = 1 (7 / 2^2 = 1)
+        subject: "Java"
+    },
+    {
+        id: 40,
+        question: "What is the output of the following Java code?\n\n```java\ntry {\n    int arr[] = new int[5];\n    arr[5] = 100;\n} catch (ArrayIndexOutOfBoundsException e) {\n    System.out.println(\"Exception caught\");\n}\n```",
+        options: ["100", "Exception caught", "Compilation error", "Runtime error"],
+        correctAnswer: 1, // ArrayIndexOutOfBoundsException is caught
+        subject: "Java"
+    },
+    {
+        id: 41,
+        question: "What is the purpose of the 'finally' block?",
+        options: ["Handle runtime error", "Execute code after catch", "Clean up resources", "Declare exceptions"],
+        correctAnswer: 2, // finally block is for cleanup (e.g., closing resources)
+        subject: "Java"
+    },
+    {
+        id: 42,
+        question: "What is the output of the following Java code?\n\n```java\ntry {\n    System.out.println(\"A\");\n} finally {\n    System.out.println(\"B\");\n}\n```",
+        options: ["A", "B", "A\nB", "Compilation error"],
+        correctAnswer: 2, // Both try and finally execute: "A\nB"
+        subject: "Java"
+    },
+    {
+        id: 43,
+        question: "Which is faster for single-threaded operations?",
+        options: ["StringBuffer", "StringTokenizer", "StringBuilder", "String"],
+        correctAnswer: 2, // StringBuilder is not synchronized, so faster
+        subject: "Java"
+    },
+    {
+        id: 44,
+        question: "Which of these declarations will cause a compilation error?",
+        options: ["int[] arr = new int[3];", "int[] arr = new int[3];", "int[] arr = new int[3];", "III[] arr = new int[3];"],
+        correctAnswer: 3, // III is not a valid type
+        subject: "Java"
+    },
+    {
+        id: 45,
+        question: "Which is true about multiple catch blocks?",
+        options: ["Only one is executed", "All are executed", "They are optional", "Must be followed by finally"],
+        correctAnswer: 0, // Only the first matching catch block is executed
+        subject: "Java"
+    },
+    {
+        id: 46,
+        question: "What is the output of the following Java code?\n\n```java\npublic static void main(String args[]) {\n    int a = 10;\n    String b = \"10+10\";\n    System.out.println(a + b);\n}\n```",
+        options: ["20", "10+10", "1010+10", "1010"],
+        correctAnswer: 3, // int + String concatenates to "1010"
+        subject: "Java"
+    },
+    {
+        id: 47,
+        question: "Can interfaces have variables? For example:\n\n```java\ninterface A { int x = 5; }\n```",
+        options: ["Yes", "No", "Only if final", "Only if static"],
+        correctAnswer: 0, // Interface variables are implicitly public static final
+        subject: "Java"
+    },
+    {
+        id: 48,
+        question: "What is the output of the following Java code?\n\n```java\npublic class Main {\n    static int function() { return 10; }\n    static String function() { return \"20\"; }\n    public static void main(String[] args) {\n        int a = function();\n        System.out.println(a);\n    }\n}\n```",
+        options: ["Compilation error", "10", "20", "Runtime error"],
+        correctAnswer: 0, // Cannot overload by return type alone
+        subject: "Java"
+    },
+    {
+        id: 49,
+        question: "What is the output of the following Java code?\n\n```java\nclass parent {\n    final void display() { System.out.println(\"parent\"); }\n}\nclass child extends parent {\n    void display() { System.out.println(\"child\"); }\n}\npublic class Main {\n    public static void main(String[] args) {\n        child c = new child();\n        c.display();\n    }\n}\n```",
+        options: ["parent", "child", "Compilation error", "Runtime error"],
+        correctAnswer: 2, // Cannot override final method
+        subject: "Java"
+    },
+    {
+        id: 50,
+        question: "What is the output of the following Java code?\n\n```java\nabstract class test {\n    int a;\n}\npublic class Main {\n    public static void main(String[] args) {\n        test t = new test();\n        t.a = 10;\n        System.out.println(t.a);\n    }\n}\n```",
+        options: ["Compilation error", "10", "Runtime error", "0"],
+        correctAnswer: 0, // Cannot instantiate abstract class
+        subject: "Java"
+    },
+    {
+        id: 51,
+        question: "What is the output of the following Java code?\n\n```java\nclass parent {\n    void display() { System.out.println(\"parent class\"); }\n}\nclass child extends parent {\n    int display() { System.out.println(\"child class\"); return 10; }\n}\npublic class Main {\n    public static void main(String[] args) {\n        child c = new child();\n        c.display();\n    }\n}\n```",
+        options: ["parent class", "child class", "Compilation error", "Runtime error"],
+        correctAnswer: 2, // Cannot override with different return type
+        subject: "Java"
+    },
+    {
+        id: 52,
+        question: "What is the output of the following Java code?\n\n```java\npublic class Main {\n    int x;\n    Main() { x = 10; }\n    public static void main(String[] args) {\n        Main m1 = new Main();\n        Main m2 = new Main(m1);\n        m1.x = 20;\n        System.out.println(m2.x);\n}\n```",
+        options: ["20", "10", "Compilation error", "Runtime error"],
+        correctAnswer: 2, // No constructor Main(Main) exists
+        subject: "Java"
+    },
+    {
+        id: 53,
+        question: "What does the following code do?\n\n```java\nFile file = new File(\"data.txt\");\nfile.createNewFile();\n```",
+        options: ["Creates a new file", "Deletes the file", "Reads file content", "Renames the file"],
+        correctAnswer: 0, // Creates a new file if it doesn’t exist
+        subject: "Java"
+    },
+    {
+        id: 54,
+        question: "What is the output of the following Java code when the file doesn't exist?\n\n```java\nSystem.out.println(new File(\"test.txt\").exists());\n```",
+        options: ["TRUE", "FALSE", "Error", "null"],
+        correctAnswer: 1, // Returns false if the file doesn’t exist
+        subject: "Java"
+    },
+    {
+        id: 55,
+        question: "What is the output of the following Java code?\n\n```java\npublic class Test {\n    public static void main(String args[]) {\n        try {\n            int data = 50 / 0;\n        } catch(ArithmeticException e) {\n            System.out.println(\"Exception caught\");\n        }\n    }\n}\n```",
+        options: ["Exception caught", "Compile error", "0", "Runtime error"],
+        correctAnswer: 0, // ArithmeticException is caught
+        subject: "Java"
+    },
+    {
+        id: 56,
+        question: "What is the output of the following Java code?\n\n```java\nimport java.util.regex.*;\npublic class Test {\n    public static void main(String[] args) {\n        Pattern p = Pattern.compile(\"a*b\");\n        Matcher m = p.matcher(\"aaab\");\n        System.out.println(m.matches());\n    }\n}\n```",
+        options: ["TRUE", "FALSE", "Compile error", "Runtime error"],
+        correctAnswer: 0, // Pattern "a*b" matches "aaab"
+        subject: "Java"
+    },
+    {
+        id: 57,
+        question: "What is the output of the following Java code?\n\n```java\nimport java.time.*;\npublic class Test {\n    public static void main(String[] args) {\n        LocalDate date = LocalDate.of(2023, 4, 19);\n        System.out.println(date.getYear());\n    }\n}\n```",
+        options: ["2022", "2023", "2024", "Compile Error"],
+        correctAnswer: 1, // Prints 2023
+        subject: "Java"
+    }
+];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplay = document.getElementById("score-display");
+        const progressDisplay = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+        const errorMessage = document.getElementById("error-message");
+
+        function loadQuestion() {
+            const questionObj = allQuestions[currentQuestionIndex];
+            questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+            progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+            
+            // Process question text to wrap code blocks in <code> tags
+            const questionText = questionObj.question.replace(/```java\n([\s\S]*?)\n```/, '<code>$1</code>');
+            questionTextEl.innerHTML = questionText;
+            
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            optionsContainer.innerHTML = "";
+            errorMessage.style.display = "none";
+            nextBtn.style.display = "none";
+            restartBtn.style.display = "none";
+
+            // Handle both array-based options and object-based options
+            const options = Array.isArray(questionObj.options) 
+                ? questionObj.options 
+                : [questionObj.options.A, questionObj.options.B, questionObj.options.C, questionObj.options.D];
+
+            options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.addEventListener("click", () => selectAnswer(button, index));
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, index) {
+            const buttons = optionsContainer.querySelectorAll("button");
+            buttons.forEach(btn => btn.disabled = true);
+
+            const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
+            if (index === correctIndex) {
+                button.classList.add("correct");
+                score++;
+            } else {
+                button.classList.add("wrong");
+                buttons[correctIndex].classList.add("correct");
+            }
+
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                nextBtn.style.display = "inline-block";
+            } else {
+                restartBtn.style.display = "inline-block";
+            }
+        }
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        // Initialize quiz
+        loadQuestion();
+    </script>
+</body>
+</html>
