@@ -568,7 +568,7 @@
         subject: "Java"
     }
 ];
-        let currentQuestionIndex = 0;
+let currentQuestionIndex = 0;
         let score = 0;
 
         const questionNumberEl = document.getElementById("question-number");
@@ -578,41 +578,42 @@
         const progressDisplay = document.getElementById("progress-display");
         const nextBtn = document.getElementById("next-btn");
         const restartBtn = document.getElementById("restart-btn");
-        const errorMessage = document.getElementById("error-message");
 
         function loadQuestion() {
             const questionObj = allQuestions[currentQuestionIndex];
             questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
             progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
             
             // Process question text to wrap code blocks in <code> tags
             const questionText = questionObj.question.replace(/```java\n([\s\S]*?)\n```/, '<code>$1</code>');
             questionTextEl.innerHTML = questionText;
             
-            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
             optionsContainer.innerHTML = "";
-            errorMessage.style.display = "none";
             nextBtn.style.display = "none";
             restartBtn.style.display = "none";
 
-            // Handle both array-based options and object-based options
-            const options = Array.isArray(questionObj.options) 
-                ? questionObj.options 
-                : [questionObj.options.A, questionObj.options.B, questionObj.options.C, questionObj.options.D];
-
-            options.forEach((option, index) => {
+            questionObj.options.forEach((option, index) => {
                 const button = document.createElement("button");
                 button.textContent = option;
+                button.setAttribute("role", "button");
+                button.setAttribute("tabindex", "0");
                 button.addEventListener("click", () => selectAnswer(button, index));
+                button.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        selectAnswer(button, index);
+                    }
+                });
                 optionsContainer.appendChild(button);
             });
         }
 
         function selectAnswer(button, index) {
             const buttons = optionsContainer.querySelectorAll("button");
+            const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
+
             buttons.forEach(btn => btn.disabled = true);
 
-            const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
             if (index === correctIndex) {
                 button.classList.add("correct");
                 score++;
@@ -642,7 +643,6 @@
             loadQuestion();
         });
 
-        // Initialize quiz
         loadQuestion();
     </script>
 </body>

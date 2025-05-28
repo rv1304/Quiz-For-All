@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Java Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        #question-text code {
+            display: block;
+            background-color: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d1d5db;
+            margin-top: 10px;
+        }
+
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        #next-btn, #restart-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        #next-btn:hover, #restart-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e8;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            #question-text {
+                font-size: 1.1em;
+            }
+
+            #next-btn, #restart-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Java Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number" aria-live="polite"></p>
+        <p id="progress-display" aria-live="polite"></p>
+        <p id="score-display" aria-live="polite">Score: 0 / 0</p>
+        <p id="question-text" aria-live="assertive"></p>
+        <div id="options-container"></div>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <script>
+        const allQuestions = [
+            {
+                id: 1,
+                question: "Which operator is used for concatenating Strings in Java?",
+                options: ["&", "+", ",", "++"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 2,
+                question: "What is the difference between `default` and `static` methods in interfaces in Java?",
+                options: ["`default` methods can be overridden by implementing classes, `static` methods cannot.", "`static` methods can be overridden by implementing classes, `default` methods cannot.", "`default` methods can access instance variables, `static` methods cannot.", "`static` methods can access interface constants, `default` methods cannot."],
+                correctAnswer: 3 // D
+            },
+            {
+                id: 3,
+                question: "How can you restrict a method from being overridden?",
+                options: ["By declaring it final", "By declaring it static", "By declaring it abstract", "By declaring it private"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 4,
+                question: "Which block must be used with try to handle exceptions?",
+                options: ["catch", "finally", "throw", "throws"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 5,
+                question: "Which of the following is a correct generic class definition?",
+                options: ["class MyClass<T> {}", "class MyClass[] {}", "class MyClass<> {}", "class MyClass<?> {}"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 6,
+                question: "What is the main benefit of inheritance?",
+                options: ["Improved performance", "Code reuse", "Better readability", "Faster execution"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 7,
+                question: "Which of the following classes is used for handling byte streams in Java?",
+                options: ["InputStream", "Reader", "OutputStream", "Writer"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 8,
+                question: "What is the correct way to declare a variable in Java?",
+                options: ["int 1x=10;", "int x=10;", "int x=10;", "x int=10;"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 9,
+                question: "How do you create a jagged array in Java?",
+                options: ["int[][] jaggedArray = new int[3][];", "int[][] jaggedArray = {{1, 2}, {3, 4, 5}, {6}};", "int[][] jaggedArray = new int[][3];", "Both a and b"],
+                correctAnswer: 3 // D
+            },
+            {
+                id: 10,
+                question: "How do you declare a 3D array in Java?",
+                options: ["int[][][] array3D;", "int array3D[][][];", "int[][] array3D[];", "All of the above"],
+                correctAnswer: 3 // D
+            },
+            {
+                id: 11,
+                question: "What happens if you try to access an array element outside its bounds?",
+                options: ["It returns null", "It returns 0", "It throws an ArrayIndexOutOfBoundsException", "It wraps around to the beginning of the array"],
+                correctAnswer: 2 // C
+            },
+            {
+                id: 12,
+                question: "Which class in Java implements the List interface and uses a resizable array?",
+                options: ["LinkedList", "ArrayList", "Vector", "Stack"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 13,
+                question: "What does the `>>>` operator do in Java?",
+                options: ["Right shift with zero fill", "Right shift with sign extension", "Left shift with zero fill", "Left shift with sign extension"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 14,
+                question: "Which interface is used to execute SQL queries in JDBC?",
+                options: ["Statement", "ResultSet", "Connection", "PreparedStatement"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 15,
+                question: "How do you call a parent class constructor from a subclass?",
+                options: ["this()", "super()", "parent()", "base()"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 16,
+                question: "What is the primary purpose of multithreading?",
+                options: ["To increase code complexity", "To make use of multiple processors", "To handle multiple tasks concurrently", "To use more memory"],
+                correctAnswer: 2 // C
+            },
+            {
+                id: 17,
+                question: "What is the main purpose of a constructor?",
+                options: ["To perform I/O operations", "To initialize objects", "To compare objects", "To destroy objects"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 18,
+                question: "How do you declare a method that can be accessed without creating an instance of the class?",
+                options: ["void method()", "static void method()", "final void method()", "abstract void method()"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 19,
+                question: "What is the correct syntax for a while loop in Java?",
+                options: ["while condition { }", "while (condition) { }", "while { condition }", "while (condition);"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 20,
+                question: "Can a constructor be inherited?",
+                options: ["Yes", "No", "Only static constructors", "Only private constructors"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 21,
+                question: "Can a generic class have multiple type parameters?",
+                options: ["Yes", "No", "Only two parameters", "Only three parameters"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 22,
+                question: "Can interfaces be generic in Java?",
+                options: ["Yes", "No", "Only in JDK 10", "Only in JDK 11"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 23,
+                question: "In Java, can an abstract class extend another abstract class?",
+                options: ["Yes, and it must implement all abstract methods of the superclass.", "No, abstract classes cannot extend other abstract classes.", "Yes, but it can only extend one abstract class at a time.", "Yes, and it inherits the abstract methods without implementing them."],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 24,
+                question: "Which of the following is a correct way to create an empty String object in Java?",
+                options: ["`String str = null;`", "`String str = \"\";`", "`String str;`", "`String str = new String();`"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 25,
+                question: "Which method is used to extract a substring from a String in Java?",
+                options: ["`substring()`", "`extract()`", "`slice()`", "`subString()`"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 26,
+                question: "Which method is used to convert all characters in a String to lowercase?",
+                options: ["`toLower()`", "`toLowerCase()`", "`lowerCase()`", "`caseLower()`"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 27,
+                question: "Which of the following statements is true about Java packages?",
+                options: ["A class can belong to only one package.", "All classes within a package must have the same access modifier.", "Two classes in the same package can have the same name.", "Packages are used for code optimization purposes only."],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 28,
+                question: "Which of the following cannot be marked as `final` in Java?",
+                options: ["Abstract class", "Interface", "Constructor", "Method"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 29,
+                question: "Which statement can be used to skip the current iteration of a loop?",
+                options: ["break", "continue", "return", "skip"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 30,
+                question: "What happens if a superclass and subclass have a static method with the same name and signature?",
+                options: ["Compile-time error", "The superclass method is called", "The subclass method hides the superclass method", "Runtime error"],
+                correctAnswer: 2 // C
+            },
+            {
+                id: 31,
+                question: "Which of the following statements is used to exit from a loop in Java?",
+                options: ["exit", "stop", "break", "terminate"],
+                correctAnswer: 2 // C
+            },
+            {
+                id: 32,
+                question: "Which method is called to handle an exception in Java?",
+                options: ["handleException", "processException", "exceptionHandle", "getMessage"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 33,
+                question: "Which keyword is used to implement decision-making in Java?",
+                options: ["switch", "case", "for", "while"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 34,
+                question: "Which of the following is true about constructors in Java?",
+                options: ["They can be inherited", "They must have a return type", "They can be overloaded", "They can be abstract"],
+                correctAnswer: 2 // C
+            },
+            {
+                id: 35,
+                question: "What is the purpose of the `StringBuffer` class in Java?",
+                options: ["To create immutable sequences of characters.", "To represent fixed-size sequences of characters.", "To create mutable sequences of characters with synchronized operations.", "To handle formatted output of characters."],
+                correctAnswer: 2 // C
+            },
+            {
+                id: 36,
+                question: "What is the purpose of the wildcard ? in Java generics?",
+                options: ["To represent any type", "To represent a subclass", "To represent a superclass", "To represent an interface"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 37,
+                question: "Can you handle Error in a catch block in Java?",
+                options: ["Yes", "No", "Only in finally", "Only in try"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 38,
+                question: "Can an interface extend multiple interfaces in Java?",
+                options: ["Yes, using the `extends` keyword.", "No, interfaces can only extend one interface.", "Yes, but only if all extended interfaces are `default`.", "No, interfaces cannot extend other interfaces."],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 39,
+                question: "What will be the output of the following code?\n```java\npublic class Test {\n    int x;\n    public Test() {\n        x = 5;\n    }\n    public static void main(String[] args) {\n        Test t = new Test();\n        System.out.println(t.x);\n    }\n}\n```",
+                options: ["0", "5", "Compilation error", "Runtime error"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 40,
+                question: "What is the output of the following code?\n```java\nint[][] matrix = {{1, 2}, {3, 4}, {5, 6}};\nSystem.out.println(matrix[1][1]);\n```",
+                options: ["1", "2", "3", "4"],
+                correctAnswer: 3 // D
+            },
+            {
+                id: 41,
+                question: "What will be the output of the following code?\n```java\nint x = 5;\nSystem.out.println(x++);\n```",
+                options: ["6", "5", "4", "Error"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 42,
+                question: "What is the value of the expression 10 + 20 + \"30\" + 40 in Java?",
+                options: ["100", "\"10203040\"", "\"30\"", "\"303040\""],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 43,
+                question: "Which bitwise operator is used to check if a number is odd or even efficiently?",
+                options: ["&", "|", "^", "~"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 44,
+                question: "Which bitwise operator is used to check if two numbers are equal in Java?",
+                options: ["&", "|", "^", "Operator =="],
+                correctAnswer: 3 // D
+            },
+            {
+                id: 45,
+                question: "Which bitwise operator is used to toggle specific bits in a number to their opposite values?",
+                options: ["&", "|", "^", "~"],
+                correctAnswer: 2 // C
+            },
+            {
+                id: 46,
+                question: "Which class represents a mutable sequence of characters in Java?",
+                options: ["`String`", "`StringBuilder`", "`StringBuffer`", "`CharArray`"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 47,
+                question: "What will be the output of the following code?\n```java\nfor (int i = 0; i < 5; i++) {\n    System.out.print(i + \" \");\n}\n```",
+                options: ["0 1 2 3 4", "1 2 3 4 5", "0 1 2 3 4 5", "1 2 3 4"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 48,
+                question: "Which keyword is used to define a generic constructor in Java?",
+                options: ["class", "method", "constructor", "<T>"],
+                correctAnswer: 3 // D
+            },
+            {
+                id: 49,
+                question: "What is method overriding?",
+                options: ["Defining a method with the same name but different parameters", "Defining a method with the same name and same parameters in a subclass", "Calling a method", "Hiding a method"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 50,
+                question: "What are the major challenges in handling transactions across multiple databases using JDBC?",
+                options: ["Ensuring atomicity and consistency across databases.", "Managing distributed transaction failures.", "Coordinating rollback operations across multiple databases.", "All of the above"],
+                correctAnswer: 3 // D
+            },
+            {
+                id: 51,
+                question: "Which of the following cannot have an implementation in Java?",
+                options: ["Interface", "Abstract class", "Concrete class", "Method"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 52,
+                question: "What is the purpose of the `ConcurrentHashMap` class in Java?",
+                options: ["It allows concurrent access and modification of elements.", "It maintains elements in sorted order.", "It ensures unique elements in the collection.", "It allows null elements."],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 53,
+                question: "Which keyword is used to define a method in a class?",
+                options: ["method", "def", "func", "void"],
+                correctAnswer: 3 // D
+            },
+            {
+                id: 54,
+                question: "Which Java class is used for reading serialized objects from a file?",
+                options: ["ObjectInputStream", "ObjectReader", "DataInputStream", "Deserializer"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 55,
+                question: "What is the type of inheritance where a class is derived from more than one class?",
+                options: ["Single inheritance", "Multiple inheritance", "Multilevel inheritance", "Hierarchical inheritance"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 56,
+                question: "What happens if a thread calls `notify()` on an object, but no thread is waiting on that object?",
+                options: ["The thread that called `notify()` is terminated", "The notify() call is ignored", "An IllegalMonitorStateException is thrown", "The JVM crashes"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 57,
+                question: "Which keyword is used to explicitly throw an exception in Java?",
+                options: ["throw", "exception", "catch", "throws"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 58,
+                question: "What is the superclass of all exception classes in Java?",
+                options: ["Throwable", "Exception", "Error", "Runtime"],
+                correctAnswer: 0 // A
+            },
+            {
+                id: 59,
+                question: "What is the purpose of a generic method in Java?",
+                options: ["To define a method", "To handle multiple exceptions", "To accept any type parameter", "To override methods"],
+                correctAnswer: 2 // C
+            },
+            {
+                id: 60,
+                question: "What is the purpose of the finally block in exception handling?",
+                options: ["To execute code before catching exceptions", "To ensure code always executes", "To throw exceptions", "To skip exceptions"],
+                correctAnswer: 1 // B
+            },
+            {
+                id: 61,
+                question: "What is the purpose of the finally block in exception handling?",
+                options: ["To execute code before catching exceptions", "To ensure code always executes", "To throw exceptions", "To skip exceptions"],
+                correctAnswer: 1 // B
+            }
+        ];
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplay = document.getElementById("score-display");
+        const progressDisplay = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+
+        function loadQuestion() {
+            const questionObj = allQuestions[currentQuestionIndex];
+            questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+            progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            
+            // Process question text to wrap code blocks in <code> tags
+            const questionText = questionObj.question.replace(/```java\n([\s\S]*?)\n```/, '<code>$1</code>');
+            questionTextEl.innerHTML = questionText;
+            
+            optionsContainer.innerHTML = "";
+            nextBtn.style.display = "none";
+            restartBtn.style.display = "none";
+
+            questionObj.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.setAttribute("role", "button");
+                button.setAttribute("tabindex", "0");
+                button.addEventListener("click", () => selectAnswer(button, index));
+                button.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        selectAnswer(button, index);
+                    }
+                });
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, index) {
+            const buttons = optionsContainer.querySelectorAll("button");
+            const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
+
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (index === correctIndex) {
+                button.classList.add("correct");
+                score++;
+            } else {
+                button.classList.add("wrong");
+                buttons[correctIndex].classList.add("correct");
+            }
+
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                nextBtn.style.display = "inline-block";
+            } else {
+                restartBtn.style.display = "inline-block";
+            }
+        }
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Java Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        #question-text code {
+            display: block;
+            background-color: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d1d5db;
+            margin-top: 10px;
+        }
+
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        #next-btn, #restart-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        #next-btn:hover, #restart-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e8;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            #question-text {
+                font-size: 1.1em;
+            }
+
+            #next-btn, #restart-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Java Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number" aria-live="polite"></p>
+        <p id="progress-display" aria-live="polite"></p>
+        <p id="score-display" aria-live="polite">Score: 0 / 0</p>
+        <p id="question-text" aria-live="assertive"></p>
+        <div id="options-container"></div>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <script>
+        const allQuestions = [
+            {
+                id: 1,
+                question: "Which of the following statements about constructors is true?\n\n```java\nclass Student {\n    Student() {\n\n    }\n}\n```",
+                options: [
+                    "A constructor must have the same name as the class.",
+                    "A constructor can have a different name than the class.",
+                    "A constructor must have a return type.",
+                    "A constructor cannot have parameters."
+                ],
+                correctAnswer: 0 // Constructor must have the same name as the class
+            },
+            {
+                id: 2,
+                question: "What will happen if a class does not have a constructor?",
+                options: [
+                    "Compilation error",
+                    "Runtime error",
+                    "A default constructor is provided by Java",
+                    "The program will not execute"
+                ],
+                correctAnswer: 2 // Java provides a default constructor
+            },
+            {
+                id: 3,
+                question: "Which keyword is used to call the parent class constructor in Java?",
+                options: ["this", "super", "extends", "parent"],
+                correctAnswer: 1 // super is used to call parent constructor
+            },
+            {
+                id: 4,
+                question: "What is the purpose of the this keyword in a constructor?",
+                options: [
+                    "To call a method inside the constructor",
+                    "To create an object of the same class",
+                    "To call another constructor of the same class",
+                    "To call the parent class constructor"
+                ],
+                correctAnswer: 2 // this calls another constructor in the same class
+            },
+            {
+                id: 5,
+                question: "What will be the output of the following code?\n\n```java\nclass Demo {\n    Demo() {\n        System.out.println(\"Default Constructor\");\n    }\n    Demo(int x) {\n        this();\n        System.out.println(\"Parameterized Constructor: \" + x);\n    }\n}\npublic class Test {\n    public static void main(String[] args) {\n        Demo obj = new Demo(10);\n    }\n}\n```",
+                options: [
+                    "Default Constructor",
+                    "Parameterized Constructor: 10",
+                    "Compilation Error",
+                    "Default Constructor\nParameterized Constructor: 10"
+                ],
+                correctAnswer: 3 // this() calls default constructor, then parameterized
+            },
+            {
+                id: 6,
+                question: "What will be the output of the following code?\n\n```java\nclass Example {\n    private Example() {\n        System.out.println(\"Private Constructor\");\n    }\n}\npublic class Test {\n    public static void main(String[] args) {\n        Example obj = new Example();\n    }\n}\n```",
+                options: ["Private Constructor", "Compilation Error", "No output", "Runtime Error"],
+                correctAnswer: 1 // Private constructor can't be accessed from outside
+            },
+            {
+                id: 7,
+                question: "How many constructors can a class have?",
+                options: ["Only one", "Only two", "Any number", "At most five"],
+                correctAnswer: 2 // A class can have multiple constructors (overloading)
+            },
+            {
+                id: 8,
+                question: "Which statement about constructors in Java is false?",
+                options: [
+                    "Constructors can be overloaded.",
+                    "A constructor can be static.",
+                    "Constructors do not have a return type.",
+                    "A constructor can have parameters."
+                ],
+                correctAnswer: 1 // Constructors cannot be static
+            },
+            {
+                id: 9,
+                question: "What is constructor chaining?",
+                options: [
+                    "Calling multiple constructors from main() method",
+                    "Calling another constructor of the same class from a constructor",
+                    "Creating multiple objects using the same constructor",
+                    "Inheriting constructors from a parent class"
+                ],
+                correctAnswer: 1 // Constructor chaining uses this() or super()
+            },
+            {
+                id: 10,
+                question: "Can we override a constructor in Java?",
+                options: ["Yes", "No", "Only in subclasses", "Only if it is public"],
+                correctAnswer: 1 // Constructors cannot be overridden
+            },
+            {
+                id: 11,
+                question: "What will be the output of the following code?\n\n```java\nclass Parent {\n    Parent() {\n        System.out.println(\"Parent Constructor\");\n    }\n}\nclass Child extends Parent {\n    Child() {\n        System.out.println(\"Child Constructor\");\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        Child obj = new Child();\n    }\n}\n```",
+                options: [
+                    "Parent Constructor\nChild Constructor",
+                    "Child Constructor\nParent Constructor",
+                    "Compilation Error",
+                    "No output"
+                ],
+                correctAnswer: 0 // Parent constructor is called first
+            },
+            {
+                id: 12,
+                question: "What is inheritance in Java?",
+                options: [
+                    "A way to create multiple objects from a single class",
+                    "A mechanism where one class acquires properties of another class",
+                    "A method to declare variables in Java",
+                    "A way to prevent overriding methods"
+                ],
+                correctAnswer: 1 // Inheritance allows property acquisition
+            },
+            {
+                id: 13,
+                question: "Which keyword is used to inherit a class in Java?",
+                options: ["implements", "extends", "inherits", "parent"],
+                correctAnswer: 1 // extends is used for class inheritance
+            },
+            {
+                id: 14,
+                question: "What is the base class in Java called?",
+                options: ["Derived class", "Child class", "Parent class", "Abstract class"],
+                correctAnswer: 2 // Parent class is the base class
+            },
+            {
+                id: 15,
+                question: "How many classes can a single Java class extend?",
+                options: ["One", "Two", "Any number", "Zero"],
+                correctAnswer: 0 // Java supports single inheritance for classes
+            },
+            {
+                id: 16,
+                question: "Which of the following is an example of single inheritance?\n\n```java\nclass A {}\nclass B extends A {}\n```",
+                options: ["Yes", "No"],
+                correctAnswer: 0 // B extends A is single inheritance
+            },
+            {
+                id: 17,
+                question: "What type of inheritance is represented by the following code?\n\n```java\nclass A {}\nclass B extends A {}\nclass C extends B {}\n```",
+                options: ["Single Inheritance", "Multilevel Inheritance", "Hierarchical Inheritance", "Multiple Inheritance"],
+                correctAnswer: 1 // C extends B extends A is multilevel
+            },
+            {
+                id: 18,
+                question: "What happens if a child class does not override a method from the parent class?",
+                options: [
+                    "It throws an error",
+                    "The parent class method is inherited and can be used",
+                    "The method is deleted",
+                    "Java compiler will prevent compilation"
+                ],
+                correctAnswer: 1 // Parent method is inherited
+            },
+            {
+                id: 19,
+                question: "What is hierarchical inheritance?",
+                options: [
+                    "One child class inherits from multiple parent classes",
+                    "Multiple child classes inherit from a single parent class",
+                    "One class extends another class, forming a chain",
+                    "Java does not support hierarchical inheritance"
+                ],
+                correctAnswer: 1 // Multiple children from one parent
+            },
+            {
+                id: 20,
+                question: "Can we achieve multiple inheritance in Java?",
+                options: [
+                    "Yes, using interfaces",
+                    "Yes, using extends keyword",
+                    "No, Java does not support multiple inheritance",
+                    "Yes, but only with abstract classes"
+                ],
+                correctAnswer: 0 // Multiple inheritance via interfaces
+            },
+            {
+                id: 21,
+                question: "What will be the output of the following Java code?\n\n```java\nclass A {\n    void show() {\n        System.out.println(\"A\");\n    }\n}\nclass B extends A {\n    void show() {\n        System.out.println(\"B\");\n    }\n}\npublic class Main {\n    public static void main(String[] args) {\n        A obj = new B();\n        obj.show();\n    }\n}\n```",
+                options: ["A", "B", "Compilation Error", "Runtime Error"],
+                correctAnswer: 1 // Method overriding calls B's show()
+            },
+            {
+                id: 22,
+                question: "What will happen if a class is marked final?",
+                options: [
+                    "It cannot be instantiated",
+                    "It cannot be inherited",
+                    "It cannot contain constructors",
+                    "It must have abstract methods"
+                ],
+                correctAnswer: 1 // Final class cannot be extended
+            },
+            {
+                id: 23,
+                question: "Which of the following is used to create a string in Java?",
+                options: ["new String()", "String literals (e.g., \"Hello\")", "Both a and b", "None of the above"],
+                correctAnswer: 2 // Both new String() and literals create strings
+            },
+            {
+                id: 24,
+                question: "Which method is used to find the length of a string in Java?",
+                options: ["size()", "length()", "count()", "len()"],
+                correctAnswer: 1 // length() returns string length
+            },
+            {
+                id: 25,
+                question: "Strings in Java are:",
+                options: ["Mutable", "Immutable", "Both Mutable and Immutable", "None of the above"],
+                correctAnswer: 1 // Strings are immutable
+            },
+            {
+                id: 26,
+                question: "What is the output of the following code?\n\n```java\nString str = \"Hello\";\nSystem.out.println(str.charAt(1));\n```",
+                options: ["H", "e", "l", "o"],
+                correctAnswer: 1 // charAt(1) returns 'e'
+            },
+            {
+                id: 27,
+                question: "Which method is used to concatenate two strings in Java?",
+                options: ["concat()", "append()", "merge()", "combine()"],
+                correctAnswer: 0 // concat() concatenates strings
+            },
+            {
+                id: 28,
+                question: "What is the output of the following code?\n\n```java\nString str = \"Java\";\nSystem.out.println(str.toUpperCase());\n```",
+                options: ["java", "JAVA", "Java", "None of the above"],
+                correctAnswer: 1 // toUpperCase() returns "JAVA"
+            },
+            {
+                id: 29,
+                question: "What will be the output of the following code?\n\n```java\nString str = \"Learn Java\";\nSystem.out.println(str.substring(6));\n```",
+                options: ["Java", "Learn", "Learn J", "Error"],
+                correctAnswer: 0 // substring(6) returns "Java"
+            },
+            {
+                id: 30,
+                question: "How do you compare two strings in Java for equality?",
+                options: ["Using ==", "Using equals() method", "Using compareTo() method", "Both b and c"],
+                correctAnswer: 3 // equals() and compareTo() compare content
+            },
+            {
+                id: 31,
+                question: "What does the trim() method do in Java?",
+                options: [
+                    "Removes all characters from a string",
+                    "Removes whitespace from both ends of a string",
+                    "Removes whitespace from the middle of a string",
+                    "Converts the string to lowercase"
+                ],
+                correctAnswer: 1 // trim() removes leading/trailing whitespace
+            },
+            {
+                id: 32,
+                question: "What will be the output of the following code?\n\n```java\nString str = \"Hello\";\nSystem.out.println(str.equalsIgnoreCase(\"hello\"));\n```",
+                options: ["true", "false", "Error", "None of the above"],
+                correctAnswer: 0 // equalsIgnoreCase ignores case
+            },
+            {
+                id: 33,
+                question: "What will be the output of the following code?\n\n```java\nString str = \"Java\";\nSystem.out.println(str.replace('a', 'o'));\n```",
+                options: ["Jovo", "Javo", "JoVo", "Error"],
+                correctAnswer: 0 // replace('a', 'o') yields "Jovo"
+            },
+            {
+                id: 34,
+                question: "Which of the following method can be used to compare strings lexicographically?",
+                options: ["compareTo()", "compareToIgnoreCase()", "Both a and b", "None of the above"],
+                correctAnswer: 2 // Both compare lexicographically
+            },
+            {
+                id: 35,
+                question: "What does the startsWith() method do in Java?",
+                options: [
+                    "Checks if a string starts with a specific substring",
+                    "Checks if a string ends with a specific substring",
+                    "Converts the string to lowercase",
+                    "None of the above"
+                ],
+                correctAnswer: 0 // startsWith checks prefix
+            },
+            {
+                id: 36,
+                question: "Which of these methods is not present in the String class?",
+                options: ["reverse()", "substring()", "toCharArray()", "indexOf()"],
+                correctAnswer: 0 // reverse() is not in String class
+            },
+            {
+                id: 37,
+                question: "What will be the output of the following code?\n\n```java\nString str = \" \";\nSystem.out.println(str.isBlank());\n```",
+                options: ["true", "false", "Error", "None of the above"],
+                correctAnswer: 0 // isBlank() returns true for whitespace
+            },
+            {
+                id: 38,
+                question: "The StringBuffer class in Java is:",
+                options: ["Mutable", "Immutable", "Both Mutable and Immutable", "None of the above"],
+                correctAnswer: 0 // StringBuffer is mutable
+            },
+            {
+                id: 39,
+                question: "What will the following code snippet return?\n\n```java\nString str = \"Hello\";\nSystem.out.println(str.indexOf('l'));\n```",
+                options: ["2", "3", "4", "1"],
+                correctAnswer: 0 // indexOf('l') returns 2
+            },
+            {
+                id: 40,
+                question: "What is the output of the following code?\n\n```java\nString str = \"Learn\";\nSystem.out.println(str + \" Java\");\n```",
+                options: ["Learn Java", "LearnJava", "Error", "Learn + Java"],
+                correctAnswer: 0 // Concatenation yields "Learn Java"
+            },
+            {
+                id: 41,
+                question: "Which method splits a string into an array of substrings?",
+                options: ["split()", "divide()", "partition()", "tokenize()"],
+                correctAnswer: 0 // split() creates array of substrings
+            },
+            {
+                id: 42,
+                question: "What does the intern() method do in Java?",
+                options: [
+                    "Converts a string to uppercase",
+                    "Returns a canonical representation of the string",
+                    "Splits the string into tokens",
+                    "Converts the string to lowercase"
+                ],
+                correctAnswer: 1 // intern() returns string from pool
+            },
+            {
+                id: 43,
+                question: "What will the following code print?\n\n```java\nString str = \"\";\nSystem.out.println(str.isEmpty());\n```",
+                options: ["true", "false", "Error", "null"],
+                correctAnswer: 0 // isEmpty() returns true for empty string
+            },
+            {
+                id: 44,
+                question: "Which class provides a mutable sequence of characters?",
+                options: ["String", "StringBuffer", "StringBuilder", "Both b and c"],
+                correctAnswer: 3 // Both StringBuffer and StringBuilder
+            },
+            {
+                id: 45,
+                question: "What will be the output of the following code?\n\n```java\nString str = \"abcd\";\nSystem.out.println(str.substring(1, 3));\n```",
+                options: ["ab", "bc", "cd", "Error"],
+                correctAnswer: 1 // substring(1, 3) returns "bc"
+            },
+            {
+                id: 46,
+                question: "What does the equals() method compare in Java?",
+                options: ["Memory addresses", "Content of strings", "Hashcodes", "None of the above"],
+                correctAnswer: 1 // equals() compares string content
+            },
+            {
+                id: 47,
+                question: "What will be the output of the following code?\n\n```java\nString str = \"Hello World\";\nSystem.out.println(str.endsWith(\"World\"));\n```",
+                options: ["true", "false", "Error", "None of the above"],
+                correctAnswer: 0 // endsWith("World") returns true
+            },
+            {
+                id: 48,
+                question: "Which method converts all characters of a string to lowercase?",
+                options: ["toLowerCase()", "toLower()", "convertToLower()", "lower()"],
+                correctAnswer: 0 // toLowerCase() converts to lowercase
+            },
+            {
+                id: 49,
+                question: "What is the result of the following code?\n\n```java\nString str = \"   Java   \";\nSystem.out.println(str.trim());\n```",
+                options: ["   Java   ", "Java", " Java ", "Java"],
+                correctAnswer: 1 // trim() returns "Java"
+            },
+            {
+                id: 50,
+                question: "Which of the following methods converts a string into a sequence of characters?",
+                options: ["toCharArray()", "getChars()", "Both a and b", "None of the above"],
+                correctAnswer: 2 // Both toCharArray() and getChars()
+            },
+            {
+                id: 51,
+                question: "What will be the output of the following code?\n\n```java\nString str1 = \"Java\";\nString str2 = \"Java\";\nSystem.out.println(str1 == str2);\n```",
+                options: ["true", "false", "Error", "null"],
+                correctAnswer: 0 // String literals use string pool, so == is true
+            },
+            {
+                id: 52,
+                question: "How do you check if a string contains a specific substring?",
+                options: ["contains()", "search()", "match()", "find()"],
+                correctAnswer: 0 // contains() checks for substring
+            },
+            {
+                id: 53,
+                question: "What will be the output of the following code?\n\n```java\nString str = \"abcdef\";\nSystem.out.println(str.charAt(4));\n```",
+                options: ["a", "d", "e", "f"],
+                correctAnswer: 2 // charAt(4) returns 'e'
+            },
+            {
+                id: 54,
+                question: "Which method is used to concatenate two strings in Java?",
+                options: ["concat()", "append()", "join()", "add()"],
+                correctAnswer: 0 // concat() is used for concatenation
+            },
+            {
+                id: 55,
+                question: "What does the substring(int beginIndex) method return?",
+                options: [
+                    "A new string starting from the beginIndex to the end of the string",
+                    "A substring from beginIndex to beginIndex+1",
+                    "A substring of a specified length",
+                    "None of the above"
+                ],
+                correctAnswer: 0 // substring(beginIndex) returns string from beginIndex to end
+            },
+            {
+                id: 56,
+                question: "What happens if the charAt() method is called with an index out of range?",
+                options: [
+                    "Returns null",
+                    "Throws IndexOutOfBoundsException",
+                    "Returns an empty string",
+                    "None of the above"
+                ],
+                correctAnswer: 1 // Throws IndexOutOfBoundsException
+            },
+            {
+                id: 57,
+                question: "How do you compare two strings ignoring case differences?",
+                options: ["equalsIgnoreCase()", "equals()", "compareToIgnoreCase()", "Both a and c"],
+                correctAnswer: 3 // Both equalsIgnoreCase() and compareToIgnoreCase()
+            },
+            {
+                id: 58,
+                question: "What will the following code return?\n\n```java\nString str = \"ABCDE\";\nSystem.out.println(str.toLowerCase());\n```",
+                options: ["abcde", "ABCDE", "Error", "None of the above"],
+                correctAnswer: 0 // toLowerCase() returns "abcde"
+            },
+            {
+                id: 59,
+                question: "What does the length() method return?",
+                options: [
+                    "The number of characters in the string",
+                    "The size of the string in bytes",
+                    "The length of the memory address",
+                    "None of the above"
+                ],
+                correctAnswer: 0 // length() returns character count
+            },
+            {
+                id: 60,
+                question: "Which method checks if a string is empty in Java?",
+                options: ["isEmpty()", "length()", "checkEmpty()", "None of the above"],
+                correctAnswer: 0 // isEmpty() checks for empty string
+            },
+            {
+                id: 61,
+                question: "What will the following code output?\n\n```java\nString str = \"Welcome\";\nSystem.out.println(str.replace(\"e\", \"a\"));\n```",
+                options: ["Walcoma", "Walcama", "Error", "null"],
+                correctAnswer: 0 // replace("e", "a") yields "Walcoma"
+            },
+            {
+                id: 62,
+                question: "What is the output of this code?\n\n```java\nString str = \"Java Programming\";\nSystem.out.println(str.lastIndexOf(\"a\"));\n```",
+                options: ["1", "2", "13", "Error"],
+                correctAnswer: 2 // lastIndexOf("a") returns 13
+            },
+            {
+                id: 63,
+                question: "What is the memory location where String literals are stored in Java?",
+                options: ["Stack", "Heap", "String Pool", "Garbage Collection"],
+                correctAnswer: 2 // String literals are stored in String Pool
+            },
+            {
+                id: 64,
+                question: "What is the result of the following code?\n\n```java\nString s1 = \"Hello\";\nString s2 = \"Hello\";\nSystem.out.println(s1 == s2);\n```",
+                options: ["true", "false", "Compilation Error", "Runtime Exception"],
+                correctAnswer: 0 // String literals use same pool reference
+            },
+            {
+                id: 65,
+                question: "Which of the following is true about String objects in Java?",
+                options: [
+                    "Strings are mutable.",
+                    "Strings are immutable.",
+                    "Strings are stored only in the stack memory.",
+                    "Strings are not allowed in the heap memory."
+                ],
+                correctAnswer: 1 // Strings are immutable
+            },
+            {
+                id: 66,
+                question: "What happens if you create a new String object explicitly, like new String(\"Java\")?",
+                options: [
+                    "It will reuse the existing literal from the String pool.",
+                    "It will create a new object in the heap.",
+                    "It will create a new object in the String pool.",
+                    "It will throw an exception."
+                ],
+                correctAnswer: 1 // new String("Java") creates new heap object
+            },
+            {
+                id: 67,
+                question: "What does the following code print?\n\n```java\nString s1 = new String(\"Java\");\nString s2 = \"Java\";\nSystem.out.println(s1 == s2);\n```",
+                options: ["true", "false", "Compilation Error", "Runtime Exception"],
+                correctAnswer: 1 // Different references, so == is false
+            },
+            {
+                id: 68,
+                question: "How does Java optimize memory when it comes to Strings?",
+                options: [
+                    "By making Strings mutable.",
+                    "By storing all Strings in the stack memory.",
+                    "By maintaining a String pool for literals.",
+                    "By storing Strings in the garbage collector area."
+                ],
+                correctAnswer: 2 // String pool optimizes memory
+            },
+            {
+                id: 69,
+                question: "Which of the following code snippets demonstrates the correct way to intern a String?",
+                options: [
+                    "String s = new String(\"Java\").toUpperCase();",
+                    "String s = new String(\"Java\").intern();",
+                    "String s = \"Java\".intern();",
+                    "String s = new String(\"Java\").concat(\"Language\");"
+                ],
+                correctAnswer: 1 // intern() moves string to pool
+            },
+            {
+                id: 70,
+                question: "What will happen in the following code snippet?\n\n```java\nString s1 = new String(\"World\");\nString s2 = s1.intern();\nSystem.out.println(s1 == s2);\n```",
+                options: ["true", "false", "Compilation Error", "Runtime Exception"],
+                correctAnswer: 1 // s1 is heap object, s2 is pool reference
+            },
+            {
+                id: 71,
+                question: "How does the String.intern() method help in memory management?",
+                options: [
+                    "It converts all strings to uppercase to save memory.",
+                    "It checks if a string already exists in the String pool and reuses it.",
+                    "It ensures all strings are stored on the stack.",
+                    "It automatically garbage-collects unused strings."
+                ],
+                correctAnswer: 1 // intern() reuses pool strings
+            },
+            {
+                id: 72,
+                question: "What is the default value of a String reference variable in Java?",
+                options: ["null", "\"\" (empty string)", "\"undefined\"", "0"],
+                correctAnswer: 0 // Default is null
+            },
+            {
+                id: 73,
+                question: "Which of the following operations creates a new String object in memory?",
+                options: [
+                    "String s = \"Java\";",
+                    "String s = \"Java\".toUpperCase();",
+                    "String s = \"Java\".substring(0, 2);",
+                    "String s = \"Java\".concat(\" Programming\");"
+                ],
+                correctAnswer: 3 // concat() creates new string
+            },
+            {
+                id: 74,
+                question: "What does the String class in Java inherit from?",
+                options: ["Object", "StringBuilder", "StringBuffer", "CharSequence"],
+                correctAnswer: 0 // String inherits from Object
+            },
+            {
+                id: 75,
+                question: "What will the following code output?\n\n```java\nString s1 = \"Hello\";\nString s2 = \"Hel\" + \"lo\";\nSystem.out.println(s1 == s2);\n```",
+                options: ["true", "false", "Compilation Error", "Runtime Exception"],
+                correctAnswer: 0 // Compiler optimizes to same pool reference
+            },
+            {
+                id: 76,
+                question: "What will the following code output?\n\n```java\nString s1 = \"Test\";\nString s2 = new String(\"Test\");\nSystem.out.println(s1.equals(s2));\n```",
+                options: ["true", "false", "Compilation Error", "Runtime Exception"],
+                correctAnswer: 0 // equals() compares content
+            },
+            {
+                id: 77,
+                question: "Which of the following statements is false about String Pool?",
+                options: [
+                    "It is a special memory area in the JVM.",
+                    "It stores all String objects created using the new keyword.",
+                    "It helps reduce memory usage.",
+                    "Interned strings are stored in the String Pool."
+                ],
+                correctAnswer: 1 // new keyword creates heap objects
+            },
+            {
+                id: 78,
+                question: "What will the following code output?\n\n```java\nString s1 = \"Java\";\nString s2 = s1.concat(\" Programming\");\nSystem.out.println(s1);\n```",
+                options: ["Java Programming", "Java", "Compilation Error", "Runtime Exception"],
+                correctAnswer: 1 // s1 remains unchanged due to immutability
+            },
+            {
+                id: 79,
+                question: "How is memory handled when using StringBuffer or StringBuilder instead of String?",
+                options: [
+                    "They use stack memory for all operations.",
+                    "They create new objects in the heap for every modification.",
+                    "They modify the existing object in the heap.",
+                    "They allocate memory in the String Pool."
+                ],
+                correctAnswer: 2 // StringBuffer/StringBuilder are mutable
+            },
+            {
+                id: 80,
+                question: "What does the following code output?\n\n```java\nString s1 = \"Hello\";\nString s2 = new String(\"Hello\").intern();\nSystem.out.println(s1 == s2);\n```",
+                options: ["true", "false", "Compilation Error", "Runtime Exception"],
+                correctAnswer: 0 // intern() returns pool reference
+            },
+            {
+                id: 81,
+                question: "What is the primary purpose of the intern() method in the String class?",
+                options: [
+                    "To make strings mutable.",
+                    "To move a string from the heap to the stack.",
+                    "To store a string in the String Pool if it doesn't already exist.",
+                    "To convert a string to its uppercase form."
+                ],
+                correctAnswer: 2 // intern() manages String Pool
+            },
+            {
+                id: 82,
+                question: "Which of the following ensures efficient memory usage in Java?",
+                options: [
+                    "Using StringBuffer or StringBuilder for frequent string modifications.",
+                    "Always using new String() for creating strings.",
+                    "Avoiding the use of String.intern().",
+                    "Using a new object for every string operation."
+                ],
+                correctAnswer: 0 // StringBuffer/StringBuilder are efficient
+            },
+            {
+                id: 83,
+                question: "What happens when a String is concatenated using the + operator inside a loop?",
+                options: [
+                    "A new String object is created for every iteration.",
+                    "The original String is modified.",
+                    "The concatenation happens in the String Pool.",
+                    "The JVM optimizes memory by using the same String object."
+                ],
+                correctAnswer: 0 // New String per iteration
+            },
+            {
+                id: 84,
+                question: "What will be the output?\n\n```java\nclass Parent {\n    Parent() {\n        System.out.println(\"Parent Constructor\");\n    }\n}\nclass Child extends Parent {\n    Child() {\n        System.out.println(\"Child Constructor\");\n    }\n    public static void main(String[] args) {\n        Child obj = new Child();\n    }\n}\n```",
+                options: [
+                    "Child Constructor\nParent Constructor",
+                    "Parent Constructor\nChild Constructor",
+                    "Compilation Error",
+                    "Runtime Error"
+                ],
+                correctAnswer: 1 // Parent constructor runs first
+            },
+            {
+                id: 85,
+                question: "What will be the output?\n\n```java\nclass Test {\n    void display() {\n        System.out.println(\"Test display method\");\n    }\n    public static void main(String[] args) {\n        Test obj = null;\n        obj.display();\n    }\n}\n```",
+                options: [
+                    "Test display method",
+                    "Compilation Error",
+                    "Runtime Error - NullPointerException",
+                    "No Output"
+                ],
+                correctAnswer: 2 // NullPointerException at runtime
+            },
+            {
+                id: 86,
+                question: "What will be the output?\n\n```java\nclass MyClass {\n    public static void main(String[] args) {\n        System.out.println(10 + 20 + \"Hello\" + 30 + 40);\n    }\n}\n```",
+                options: ["30Hello3040", "10 + 20Hello30 + 40", "30Hello70", "Compilation Error"],
+                correctAnswer: 0 // 10+20=30, then concatenation
+            },
+            {
+                id: 87,
+                question: "What will be the output?\n\n```java\nclass Test {\n    static int a = 10;\n    static {\n        a = 20;\n    }\n    public static void main(String[] args) {\n        System.out.println(\"a = \" + a);\n    }\n}\n```",
+                options: ["a = 10", "a = 20", "Compilation Error", "Runtime Error"],
+                correctAnswer: 1 // Static block sets a = 20
+            },
+            {
+                id: 88,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        System.out.println(5 + 10 + \"Java\" + 10 + 5);\n    }\n}\n```",
+                options: ["15Java105", "5 + 10Java10 + 5", "15Java15", "Compilation Error"],
+                correctAnswer: 0 // 5+10=15, then concatenation
+            },
+            {
+                id: 89,
+                question: "What will be the output?\n\n```java\nclass Demo {\n    static int x = 5;\n    static {\n        x += 10;\n    }\n    public static void main(String[] args) {\n        System.out.println(\"x = \" + x);\n    }\n}\n```",
+                options: ["x = 5", "x = 10", "x = 15", "Compilation Error"],
+                correctAnswer: 2 // Static block sets x = 15
+            },
+            {
+                id: 90,
+                question: "What will be the output?\n\n```java\nclass A {\n    static void methodA() {\n        System.out.println(\"Static method of class A\");\n    }\n}\nclass B extends A {\n    static void methodA() {\n        System.out.println(\"Static method of class B\");\n    }\n    public static void main(String[] args) {\n        A obj = new B();\n        obj.methodA();\n    }\n}\n```",
+                options: ["Static method of class A", "Static method of class B", "Compilation Error", "Runtime Error"],
+                correctAnswer: 0 // Static method uses reference type
+            },
+            {
+                id: 91,
+                question: "What will be the output?\n\n```java\nclass Parent {\n    void display() {\n        System.out.println(\"Parent display\");\n    }\n}\nclass Child extends Parent {\n    void display() {\n        System.out.println(\"Child display\");\n    }\n    public static void main(String[] args) {\n        Parent obj = new Child();\n        obj.display();\n    }\n}\n```",
+                options: ["Parent display", "Child display", "Compilation Error", "Runtime Error"],
+                correctAnswer: 1 // Method overriding calls Child's display()
+            },
+            {
+                id: 92,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        int a = 10;\n        int b = 20;\n        {\n            int c = a + b;\n            System.out.println(\"c = \" + c);\n        }\n        System.out.println(\"c = \" + c);\n    }\n}\n```",
+                options: ["c = 30 (twice)", "Compilation Error", "c = 30, followed by NullPointerException", "Runtime Error"],
+                correctAnswer: 1 // c is out of scope outside block
+            },
+            {
+                id: 93,
+                question: "What will be the output?\n\n```java\nclass Example {\n    public static void main(String[] args) {\n        int x = 5;\n        int y = x++;\n        System.out.println(\"x = \" + x + \", y = \" + y);\n    }\n}\n```",
+                options: ["x = 5, y = 5", "x = 6, y = 5", "x = 6, y = 6", "Compilation Error"],
+                correctAnswer: 1 // x++ assigns 5 to y, then x becomes 6
+            },
+            {
+                id: 94,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        System.out.println(true + \"Hello\");\n        System.out.println(10 + \"World\");\n        System.out.println(5 + 2 + \"Java\");\n        System.out.println(\"Java\" + 5 + 2);\n    }\n}\n```",
+                options: [
+                    "Compilation Error",
+                    "trueHello\n10World\n7Java\nJava52",
+                    "trueHello\n10World\n52Java\nJava7",
+                    "Runtime Error"
+                ],
+                correctAnswer: 1 // Concatenation based on operator precedence
+            },
+            {
+                id: 95,
+                question: "What will be the output?\n\n```java\nclass Demo {\n    int num = 10;\n    public static void main(String[] args) {\n        Demo obj1 = new Demo();\n        Demo obj2 = obj1;\n        obj2.num = 20;\n        System.out.println(\"obj1.num = \" + obj1.num);\n        System.out.println(\"obj2.num = \" + obj2.num);\n    }\n}\n```",
+                options: [
+                    "obj1.num = 10\nobj2.num = 20",
+                    "obj1.num = 20\nobj2.num = 20",
+                    "Compilation Error",
+                    "Runtime Error"
+                ],
+                correctAnswer: 1 // obj1 and obj2 reference same object
+            },
+            {
+                id: 96,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        System.out.println(10 * 20 + \"Java\" + 10 + 20);\n    }\n}\n```",
+                options: ["200Java30", "200Java1020", "Java2001020", "Compilation Error"],
+                correctAnswer: 1 // 10*20=200, then concatenation
+            },
+            {
+                id: 97,
+                question: "What will be the output?\n\n```java\nclass Test {\n    static int x = 10;\n    static {\n        x = x * 2;\n    }\n    public static void main(String[] args) {\n        System.out.println(\"x = \" + x);\n    }\n}\n```",
+                options: ["x = 10", "x = 20", "x = 0", "Compilation Error"],
+                correctAnswer: 1 // Static block sets x = 20
+            },
+            {
+                id: 98,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        int a = 5;\n        int b = a++ + ++a;\n        System.out.println(\"a = \" + a + \", b = \" + b);\n    }\n}\n```",
+                options: ["a = 7, b = 11", "a = 6, b = 10", "a = 5, b = 10", "Compilation Error"],
+                correctAnswer: 0 // a++ returns 5, ++a returns 7
+            },
+            {
+                id: 99,
+                question: "What will be the output?\n\n```java\nclass Parent {\n    void show() {\n        System.out.println(\"Parent\");\n    }\n}\nclass Child extends Parent {\n    void show() {\n        System.out.println(\"Child\");\n    }\n    public static void main(String[] args) {\n        Parent obj = new Child();\n        obj.show();\n    }\n}\n```",
+                options: ["Parent", "Child", "Compilation Error", "Runtime Error"],
+                correctAnswer: 1 // Method overriding calls Child's show()
+            },
+            {
+                id: 100,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        System.out.println(100 / 0);\n    }\n}\n```",
+                options: ["Infinity", "Compilation Error", "0", "ArithmeticException"],
+                correctAnswer: 3 // Integer division by zero throws ArithmeticException
+            },
+            {
+                id: 101,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        String str = \"Java\";\n        str.concat(\"Programming\");\n        System.out.println(str);\n    }\n}\n```",
+                options: ["JavaProgramming", "Java", "Compilation Error", "null"],
+                correctAnswer: 1 // String is immutable, concat() doesn't modify
+            },
+            {
+                id: 102,
+                question: "What will be the output?\n\n```java\nclass Test {\n    static int a = 5;\n    static {\n        a += 10;\n    }\n    public static void main(String[] args) {\n        System.out.println(\"a = \" + a);\n    }\n}\n```",
+                options: ["a = 5", "a = 10", "a = 15", "Compilation Error"],
+                correctAnswer: 2 // Static block sets a = 15
+            },
+            {
+                id: 103,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        int x = 10;\n        int y = 20;\n        int z = (x > y) ? x : y;\n        System.out.println(\"z = \" + z);\n    }\n}\n```",
+                options: ["z = 10", "z = 20", "Compilation Error", "Runtime Error"],
+                correctAnswer: 1 // Ternary operator assigns y to z
+            },
+            {
+                id: 104,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        String s1 = \"Hello\";\n        String s2 = new String(\"Hello\");\n        System.out.println(s1 == s2);\n        System.out.println(s1.equals(s2));\n    }\n}\n```",
+                options: ["true true", "false true", "true false", "false false"],
+                correctAnswer: 1 // == compares references, equals() compares content
+            },
+            {
+                id: 105,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        for (int i = 0; i < 5; i++) {\n            if (i == 3) continue;\n            System.out.print(i + \" \");\n        }\n    }\n}\n```",
+                options: ["0 1 2 3 4", "0 1 2 4", "0 1 2", "Compilation Error"],
+                correctAnswer: 1 // continue skips i=3
+            },
+            {
+                id: 106,
+                question: "What will be the output?\n\n```java\nclass Test {\n    public static void main(String[] args) {\n        int i = 0;\n        while (i < 3) {\n            System.out.print(i + \" \");\n            i++;\n        }\n    }\n}\n```",
+                options: ["0 1 2", "1 2 3", "0 1 2 3", "Infinite Loop"],
+                correctAnswer: 0 // while loop prints 0 1 2
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplay = document.getElementById("score-display");
+        const progressDisplay = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+
+        function loadQuestion() {
+            const questionObj = allQuestions[currentQuestionIndex];
+            questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+            progressDisplay.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            
+            const questionText = questionObj.question.replace(/```java\n([\s\S]*?)\n```/, '<code>$1</code>');
+            questionTextEl.innerHTML = questionText;
+            
+            optionsContainer.innerHTML = "";
+            nextBtn.style.display = "none";
+            restartBtn.style.display = "none";
+
+            questionObj.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.setAttribute("role", "button");
+                button.setAttribute("tabindex", "0");
+                button.addEventListener("click", () => selectAnswer(button, index));
+                button.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        selectAnswer(button, index);
+                    }
+                });
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, index) {
+            const buttons = optionsContainer.querySelectorAll("button");
+            const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
+            
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (index === correctIndex) {
+                button.classList.add("correct");
+                score++;
+            } else {
+                button.classList.add("wrong");
+                buttons[correctIndex].classList.add("correct");
+            }
+
+            scoreDisplay.textContent = `Score: ${score} / ${allQuestions.length}`;
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                nextBtn.style.display = "inline-block";
+            } else {
+                restartBtn.style.display = "inline-block";
+            }
+        }
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
