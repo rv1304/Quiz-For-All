@@ -1,0 +1,1307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Software Engineering Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+        }
+
+        #quiz-container {
+            background: rgba(30, 41, 59, 0.9);
+            width: 90%;
+            max-width: 700px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.15);
+            animation: fadeIn 0.5s ease;
+        }
+
+        h1 {
+            color: #06b6d4;
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        #question-text {
+            font-size: 1.3em;
+            margin: 25px 0;
+            color: #eeeeee;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        #question-text code {
+            display: block;
+            background-color: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            color: #d1d5db;
+            margin-top: 10px;
+        }
+
+        #options-container button {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            margin: 10px auto;
+            padding: 14px 20px;
+            font-size: 1em;
+            border: 1px solid #374151;
+            border-radius: 10px;
+            background-color: #1e293b;
+            color: #d1d5db;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #options-container button:hover:not(:disabled) {
+            background-color: #2563eb;
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #3b82f6;
+        }
+
+        #options-container button:disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .correct {
+            background-color: #10b981 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #10b981;
+        }
+
+        .wrong {
+            background-color: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        #next-btn, #restart-btn {
+            padding: 12px 28px;
+            font-size: 1em;
+            background-color: #06b6d4;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        #next-btn:hover, #restart-btn:hover {
+            background-color: #0ea5e9;
+            transform: translateY(-2px);
+            box-shadow: 0 0 10px #0ea5e8;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-2);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 600px) {
+            #quiz-container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            #question-text {
+                font-size: 1.1em;
+            }
+
+            #next-btn, #restart-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Comprehensive Software Engineering Quiz</h1>
+    <div id="quiz-container">
+        <p id="question-number" aria-live="polite"></p>
+        <p id="progress-display"></p>
+        <p id="score-display">Score: 0 / 0</p>
+        <div id="question-text"></div>
+        <div id="options-container"></div>
+        <button id="next-btn" style="display: none;">Next</button>
+        <button id="restart-btn" style="display: none;">Restart Quiz</button>
+    </div>
+    <script>
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        const questionNumberEl = document.getElementById("question-number");
+        const questionTextEl = document.getElementById("question-text");
+        const optionsContainer = document.getElementById("options-container");
+        const scoreDisplayEl = document.getElementById("score-display");
+        const progressDisplayEl = document.getElementById("progress-display");
+        const nextBtn = document.getElementById("next-btn");
+        const restartBtn = document.getElementById("restart-btn");
+
+        const allQuestions = [
+            {
+                question: "Which of the following is NOT a key principle of software design?",
+                options: ["Abstraction", "Modularity", "Redundancy", "Cohesion"],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the primary purpose of modularity in software design?",
+                options: [
+                    "To increase the system’s complexity",
+                    "To divide a system into smaller, manageable components",
+                    "To duplicate code for better performance",
+                    "To avoid encapsulation"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which principle of Object-Oriented Design promotes code reusability?",
+                options: ["Encapsulation", "Polymorphism", "Inheritance", "Cohesion"],
+                correctAnswer: "2"
+            },
+            {
+                question: "What does an interface define in a system?",
+                options: [
+                    "The hardware of a system",
+                    "The interaction between system components",
+                    "The number of users in a system",
+                    "The programming languages used"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "What does the architecture of a system define?",
+                options: [
+                    "The programming language used",
+                    "The structure, behavior, and views of the system",
+                    "The cost of development",
+                    "The number of users"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Why is system architecture important?",
+                options: [
+                    "It provides a high-level blueprint of how the system is structured",
+                    "It ensures that all code is written in the same language",
+                    "It guarantees system security",
+                    "It eliminates the need for testing"
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "The _____________ identifies software work as a system.",
+                options: ["Detailed design", "High level design", "Architectural design", "None"],
+                correctAnswer: "2"
+            },
+            {
+                question: "What does coupling refer to in software design?",
+                options: [
+                    "The strength of a module’s internal relationships",
+                    "The degree of interdependence between modules",
+                    "The number of functions within a module",
+                    "The amount of data stored in a module"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "What is the ideal combination for good software design?",
+                options: [
+                    "High cohesion and high coupling",
+                    "Low cohesion and low coupling",
+                    "Low cohesion and high coupling",
+                    "High cohesion and low coupling"
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "If a module passes a flag variable to another module to control its behavior, this is an example of:",
+                options: ["Control Coupling", "Data Coupling", "Content Coupling", "Procedural Coupling"],
+                correctAnswer: "0"
+            },
+            {
+                question: "___________________ can be called as the global coupling.",
+                options: ["Data coupling", "Common coupling", "Content coupling", "Stamp coupling"],
+                correctAnswer: "1"
+            },
+            {
+                question: "What is the most appropriate word to describe the significance of software design in the SDLC?",
+                options: ["Accuracy", "Efficiency", "Quality", "Complexity"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which of the following is not a common characteristic of all design methods?",
+                options: [
+                    "Functional component representation",
+                    "Configuration management",
+                    "Quality assessment guidelines",
+                    "Refinement heuristics"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "What type of cohesion is being exhibited, if all tasks must be executed in the same time-span?",
+                options: ["Functional Cohesion", "Temporal Cohesion", "Communicational Cohesion", "Sequential Cohesion"],
+                correctAnswer: "1"
+            },
+            {
+                question: "What is the key characteristic of a well-designed data model?",
+                options: [
+                    "High complexity and redundancy",
+                    "Low maintainability",
+                    "Efficient organization and minimal redundancy",
+                    "No relationships between data elements"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the most desirable form of coupling in software design?",
+                options: ["Common Coupling", "Stamp Coupling", "Data Coupling", "Content Coupling"],
+                correctAnswer: "2"
+            },
+            {
+                question: "A team is developing an API for an e-commerce platform. They notice that the interface between the payment gateway and the order processing system is poorly defined, leading to failed transactions and incorrect order statuses. Which step should the team take to fix this issue?",
+                options: [
+                    "Clearly define interface specifications and how data will be exchanged",
+                    "Remove API dependencies and handle payments manually",
+                    "Allow all modules to modify each other’s data directly",
+                    "Ignore interface design and focus only on back-end logic"
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "Coupling and cohesion metrics are the metrics in which of the following design level?",
+                options: ["Architectural design", "User interface design", "Component level design", "Pattern based design"],
+                correctAnswer: "2"
+            },
+            {
+                question: "A software development team is working on a customer support system. They find that the ticket management module is tightly coupled with the notification module, meaning any change in ticket management logic affects the notification system. What should the team do to improve the design?",
+                options: [
+                    "Reduce coupling by introducing an intermediary service for notifications",
+                    "Merge both modules into one class for simplicity",
+                    "Make the ticket management module dependent on multiple modules",
+                    "Keep the design as it is because tight coupling is beneficial"
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "Which of the following represents the worst type of coupling in software design, leading to the highest level of dependency between modules?",
+                options: ["Content Coupling", "Control Coupling", "Stamp Coupling", "Data Coupling"],
+                correctAnswer: "0"
+            },
+            {
+                question: "Which of the following is NOT a valid component of a class diagram?",
+                options: ["Attributes", "Operations", "Use cases", "Associations"],
+                correctAnswer: "2"
+            },
+            {
+                question: "In a class diagram, which relationship represents a 'whole-part' association?",
+                options: ["Aggregation", "Inheritance", "Dependency", "Association"],
+                correctAnswer: "0"
+            },
+            {
+                question: "Which type of relationship is depicted using a solid line with a hollow triangle in a class diagram?",
+                options: ["Generalization", "Aggregation", "Composition", "Association"],
+                correctAnswer: "0"
+            },
+            {
+                question: "In a Banking System class diagram, which of the following is a suitable relationship?",
+                options: [
+                    "Customer ⟶ has-a ⟶ Account",
+                    "Bank ⟶ owns ⟶ Customer",
+                    "Transaction ⟶ inherits ⟶ Customer",
+                    "Account ⟶ manages ⟶ Bank"
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "Which of the following is NOT a level of software testing?",
+                options: ["Unit Testing", "Integration Testing", "Structural Testing", "System Testing"],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the primary focus of unit testing?",
+                options: [
+                    "Testing the entire system",
+                    "Testing individual components or modules",
+                    "Testing interactions between modules",
+                    "Testing real-world scenarios"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "What is the primary purpose of a class diagram in UML?",
+                options: [
+                    "To show interactions between objects over time",
+                    "To describe the static structure of a system",
+                    "To represent the sequence of events in a process",
+                    "To define user interactions with the system"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "If a Department can exist without a College, but a College consists of multiple Departments, which relationship should be used?",
+                options: ["Generalization", "Aggregation", "Composition", "Association"],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which testing level ensures that different modules or components work together correctly?",
+                options: ["Unit Testing", "System Testing", "Integration Testing", "Regression Testing"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which of the following is NOT a benefit of unit testing?",
+                options: [
+                    "Helps identify bugs early in development",
+                    "Improves code quality and maintainability",
+                    "Replaces the need for integration testing",
+                    "Facilitates code refactoring with confidence"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the best time to perform unit testing in the software development lifecycle (SDLC)?",
+                options: [
+                    "After integration testing",
+                    "After system testing",
+                    "During the development phase",
+                    "At the end of the project"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "In Test-Driven Development (TDD), when are unit tests written?",
+                options: [
+                    "After coding is completed",
+                    "Before writing the actual code",
+                    "During system testing",
+                    "Only after user acceptance testing"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "What kind of errors does unit testing help to detect early?",
+                options: [
+                    "Integration errors",
+                    "System-wide performance issues",
+                    "Logic errors in individual functions or modules",
+                    "Security vulnerabilities"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "A software development team is designing a class diagram for a Car Rental System. They need to represent the relationship between a Car and an Engine, where an engine cannot exist independently of a car. Which type of relationship should they use?",
+                options: ["Association", "Aggregation", "Composition", "Generalization"],
+                correctAnswer: "2"
+            },
+            {
+                question: "In a Library Management System, a librarian needs to keep track of books borrowed by members. Each member can borrow multiple books, but a book can only be borrowed by one member at a time. Which class diagram relationship best represents this scenario?",
+                options: ["One-to-One", "One-to-Many", "Many-to-Many", "Aggregation"],
+                correctAnswer: "1"
+            },
+            {
+                question: "A developer is working on a Login Module that verifies usernames and passwords. He wants to test individual functions like validateUsername() and checkPassword() before integrating them with the database. Which type of testing is most appropriate?",
+                options: ["Unit Testing", "System Testing", "Integration Testing", "Acceptance Testing"],
+                correctAnswer: "0"
+            },
+            {
+                question: "A Hospital Management System needs to represent the relationship between Doctors, Patients, and Appointments. A doctor can have multiple appointments with different patients, and a patient can have multiple appointments with different doctors. How should this be represented in a class diagram?",
+                options: [
+                    "Direct many-to-many association between Doctor and Patient",
+                    "Introduce an Appointment class associating Doctor and Patient",
+                    "Use inheritance between Doctor and Patient",
+                    "Aggregation relationship between Doctor and Patient"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "In a Library Management System, each Book can have multiple Authors, and each Author can write multiple Books. Additionally, each Book has a unique ISBN and can have multiple Copies, each identified by a unique CopyID. How should these relationships be represented in a class diagram?",
+                options: [
+                    "Book and Author have a one-to-many association; Book and Copy have a one-to-many association.",
+                    "Book and Author have a many-to-many association; Book and Copy have a one-to-many aggregation.",
+                    "Book and Author have a many-to-many association; Book and Copy have a one-to-many composition.",
+                    "Book and Author have a one-to-one association; Book and Copy have a one-to-one composition."
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "In a complex Employee Management System, there are multiple types of employees such as FullTimeEmployee, PartTimeEmployee, and ContractEmployee. Each type has unique attributes and methods, but they also share common characteristics from a general Employee class. How should these relationships be represented in a class diagram?",
+                options: ["Aggregation", "Composition", "Inheritance", "Association"],
+                correctAnswer: "2"
+            },
+            {
+                question: "In an Online Shopping System, a Customer can place multiple Orders, and each Order can include multiple Products. Additionally, each Product can be part of multiple Orders. How should these relationships be represented in a class diagram?",
+                options: [
+                    "Customer and Order have a one-to-many association; Order and Product have a many-to-many association.",
+                    "Customer and Order have a many-to-many association; Order and Product have a one-to-many association.",
+                    "Customer and Order have a one-to-one association; Order and Product have a many-to-many association.",
+                    "Customer and Order have a one-to-many association; Order and Product have a one-to-one association."
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "What is the main feature of the Waterfall Model in software development?",
+                options: [
+                    "It allows for continuous development and iterations",
+                    "It is a linear and sequential model",
+                    "It uses multiple feedback loops for improvements",
+                    "It is focused on Agile principles"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which of the following best describes an evolutionary process model?",
+                options: [
+                    "The requirements are fully defined at the start",
+                    "The product is built in small, iterative steps with ongoing feedback",
+                    "The project is developed as a single complete version",
+                    "The model focuses on strict, defined phases"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "In the Incremental Model, how is software developed?",
+                options: [
+                    "All at once, after all requirements are gathered",
+                    "In small, manageable parts with frequent releases",
+                    "Only after final approval from clients",
+                    "Without gathering requirements in advance"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "The Spiral Model is a combination of which two models?",
+                options: [
+                    "Waterfall and Agile",
+                    "Incremental and Waterfall",
+                    "Waterfall and Evolutionary",
+                    "Prototyping and Iterative"
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "What is the duration of a typical sprint in a Scrum process?",
+                options: ["2-4 weeks", "1-2 days", "6 months", "1 year"],
+                correctAnswer: "0"
+            },
+            {
+                question: "What does agility refer to in the context of software development?",
+                options: [
+                    "Rapid project execution without any planning",
+                    "Detailed documentation and strict timelines",
+                    "Flexibility and adaptability to changes throughout the development process",
+                    "Limited involvement of customers during development"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the focus of the development process in Extreme Programming (XP)?",
+                options: [
+                    "High-level documentation and planning",
+                    "Fixed development phases",
+                    "Customer collaboration and quick releases",
+                    "Avoiding changes in requirements"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which of the following is a disadvantage of the Waterfall Model in software development?",
+                options: [
+                    "It lacks a structured approach",
+                    "It does not allow for changes during the development process",
+                    "It is too flexible for large-scale projects",
+                    "It encourages constant customer feedback throughout the development process"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "In the Incremental Model, which of the following is true about the delivery of the software product?",
+                options: [
+                    "The product is delivered in segments, where each segment adds more functionality",
+                    "The product is delivered as a single monolithic release after the entire development process",
+                    "The product is delivered without completing any functionality, with the focus on planning",
+                    "The product is released only after all requirements are fully defined"
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "Which of the following is NOT one of the Agile Manifesto principles?",
+                options: [
+                    "Customer collaboration over contract negotiation",
+                    "Responding to change over following a plan",
+                    "Processes and tools over individuals and interactions",
+                    "Working software over comprehensive documentation"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which of the following practices is emphasized in Extreme Programming (XP)?",
+                options: [
+                    "Comprehensive documentation before development starts",
+                    "Extensive upfront design before coding begins",
+                    "Fixed roles for developers with no flexibility",
+                    "Pair programming, where two developers work on the same code"
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "In Scrum, which of the following roles is responsible for defining the product backlog and ensuring it aligns with customer needs?",
+                options: ["Product Owner", "Scrum Master", "Development Team", "Stakeholder"],
+                correctAnswer: "0"
+            },
+            {
+                question: "How does the Incremental Model handle changes to requirements during the development process?",
+                options: [
+                    "Changes are impossible after the initial planning phase and are not considered.",
+                    "Changes are incorporated after a complete version of the software is delivered.",
+                    "Changes are implemented in successive increments, and each increment adds more functionality to the software.",
+                    "Changes are considered, but only after the final release of the software."
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the primary role of the 'planning' phase in each iteration in the Spiral Model?",
+                options: [
+                    "To identify potential risks, plan mitigation strategies, and define goals for the next iteration.",
+                    "To identify specific requirements and generate detailed documentation before moving to development.",
+                    "To gather feedback from customers and release a final version of the product.",
+                    "To focus only on the technical design of the software, disregarding user feedback."
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "How is the Product Backlog prioritized in Scrum?",
+                options: [
+                    "Based on the seniority of the development team.",
+                    "According to the project’s budget and timeline constraints.",
+                    "By the Product Owner, based on the needs and feedback from stakeholders and customers.",
+                    "By the Scrum Master, based on the team's workload capacity."
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "A development team is using an Evolutionary Process Model to build a customer management system. After releasing the first version of the software, the client provides feedback requesting new features and improvements, some of which are complex. How should the team respond to these changes in the next version of the system?",
+                options: [
+                    "The team should incorporate all requested changes into the next version, but complete the design and development before seeking further client feedback.",
+                    "The team should ignore the changes and proceed with the existing features, as any new features would disrupt the existing structure.",
+                    "The team should prioritize the most critical changes based on client feedback and release a new version of the software incrementally, continuously refining the product.",
+                    "The team should stop development until all client requests are fully understood and complete documentation is prepared."
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "A company is building a web application with a constantly changing user interface based on feedback from multiple stakeholders. The project is expected to involve regular changes in functionality and frequent interaction with the end users. The team works closely with the client throughout the project, regularly showcasing new functionality and adjusting priorities based on the latest feedback. They hold daily standup meetings and aim to have working software delivered at the end of every sprint. Which key characteristic of the Agile model best describes this approach?",
+                options: [
+                    "Detailed, upfront planning",
+                    "Strict adherence to initial requirements",
+                    "Iterative development with regular feedback loops",
+                    "Long development cycles without customer involvement"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "A software company is using the Spiral Model to develop a new mobile application. During one of the iterative cycles, they identify a significant risk regarding security vulnerabilities in the app. This risk was not anticipated in earlier iterations. How should the team handle the security risk in the current iteration of the Spiral Model?",
+                options: [
+                    "The team should wait until the next iteration to address the security risk after completing the current iteration's deliverables.",
+                    "The team should continue the iteration as planned and address security concerns in the final product’s release phase.",
+                    "The team should prioritize addressing the security vulnerabilities immediately, adjust the project’s goals for the next iteration, and plan for risk mitigation.",
+                    "The team should ignore the risk, as it will likely be resolved in the final product testing phase."
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "A development team is using Extreme Programming (XP) to build a web application. The team has been practicing pair programming and frequent releases, but they are struggling to meet deadlines due to the high volume of testing and code reviews. What should the team do to improve efficiency and stay on schedule in the context of XP?",
+                options: [
+                    "The team should reduce the frequency of releases and perform less rigorous testing to meet deadlines.",
+                    "The team should extend the duration of iterations to accommodate more time for testing and code reviews.",
+                    "The team should focus on delivering working software by reducing the amount of time spent on code reviews and tests.",
+                    "The team should continue with pair programming but streamline testing processes to ensure efficiency without compromising code quality."
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "During a Sprint Review meeting in Scrum, the product owner decides that some items in the Product Backlog need to be reprioritized due to market changes. This may affect the scope of the current sprint. What should the Scrum team do in this situation?",
+                options: [
+                    "Ignore the changes, as the sprint backlog should remain unchanged once it is finalized.",
+                    "The Scrum Master should cancel the current sprint and immediately initiate a new sprint with the updated backlog.",
+                    "The Development Team should adjust the current sprint backlog based on the updated priorities and complete as much as possible before the sprint ends.",
+                    "The Product Owner should complete the changes after the current sprint, and the Development Team will incorporate them in the next sprint."
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "The primary purpose of using a structure diagram in UML is ______________",
+                options: [
+                    "To represent the behavior of the system",
+                    "To document coding standards",
+                    "To visualize the static structure of the system",
+                    "To design user interfaces"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Identify the phase which is NOT a part in the Unified Process (UP)?",
+                options: ["Inception", "Elaboration", "Construction", "Implementation"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Identify invalid standard diagram in UML.",
+                options: ["Code Diagram", "Activity Diagram", "Class Diagram", "Sequence Diagram"],
+                correctAnswer: "0"
+            },
+            {
+                question: "When doing a requirement analysis, how many feasibility studies are carried out?",
+                options: ["2", "3", "4", "Can't say"],
+                correctAnswer: "1"
+            },
+            {
+                question: "Aggregation represents ____________",
+                options: ["is_a relationship", "part_of relationship", "composed_of relationship", "None of the mentioned"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Pseudocode can replace _________",
+                options: ["decision tables", "structure charts", "cause-effect graphs", "flowcharts"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Which of the following is not one of the context-free questions that would be used during project inception?",
+                options: [
+                    "What will be the economic benefit from a good solution?",
+                    "Who is against this project?",
+                    "Who will pay for the work?",
+                    "Who will use the solution?"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "The result of the requirements engineering elaboration task is an analysis model that defines which of the following problem domain(s)?",
+                options: ["information", "functional", "behavioral", "all of the mentioned"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Thing/s that make requirements elicitation difficult are problems of",
+                options: ["scope", "understanding", "volatility", "all of the mentioned"],
+                correctAnswer: "3"
+            },
+            {
+                question: "During project inception the intent of the tasks are to determine___",
+                options: [
+                    "basic problem understanding",
+                    "nature of the solution needed",
+                    "people who want a solution",
+                    "all of the mentioned"
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "How does software engineering define a use case?",
+                options: [
+                    "A description of the interactions between classes",
+                    "A diagram representing the flow of data in a system",
+                    "A representation of a sequence of actions a system performs",
+                    "A model representing the structure of a software system"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which type of relationship -------------> it represents in UML?",
+                options: ["Association", "Realization", "Dependency", "Generalization"],
+                correctAnswer: "1"
+            },
+            {
+                question: "The flow of activities in a system is represented by which UML diagram?",
+                options: ["Sequence Diagram", "Class Diagram", "Activity Diagram", "Code Diagram"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Determine which stakeholders are most and least important.\ni. Managers\nii. Entry level Personnel\niii. Users\niv. Middle level stakeholder",
+                options: ["i, ii, iv, iii", "ii, iv, i, iii", "i, ii, iii, iv", "None of the mentioned"],
+                correctAnswer: "1"
+            },
+            {
+                question: "Two issues of Requirement Analysis are _________ and _________.",
+                options: [
+                    "Performance, Design",
+                    "Functional, Non-Functional",
+                    "Stakeholder, Developer",
+                    "None of the mentioned"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which phase of software engineering is represented by Structured charts?",
+                options: ["requirements gathering", "design", "testing", "coding"],
+                correctAnswer: "1"
+            },
+            {
+                question: "The Data Flow Diagram is the basic component of …………… system.",
+                options: ["Logical", "Conceptual", "Physical", "None of the mentioned"],
+                correctAnswer: "0"
+            },
+            {
+                question: "Create and maintain a system requirements document is called ____________",
+                options: [
+                    "Design Engineering Process",
+                    "Requirements Engineering Process",
+                    "Analysis Engineering Process",
+                    "Requirements Analysis Process"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Use-case actors always represent ___________",
+                options: ["people", "system", "people and system", "Neither people nor system"],
+                correctAnswer: "2"
+            },
+            {
+                question: "During requirement elicitation, several work items will be created based on the ____",
+                options: [
+                    "size of the budget",
+                    "size of the product being built",
+                    "software process being used",
+                    "stakeholders needs"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which testing technique involves testing the software’s internal logic, code structure, and algorithms?",
+                options: ["White Box Testing", "Black Box Testing", "Functional Testing", "Regression Testing"],
+                correctAnswer: "0"
+            },
+            {
+                question: "The best type of module coupling is_________",
+                options: ["Control Coupling", "Stamp Coupling", "Data Coupling", "Content Coupling"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which of the following term describes testing?",
+                options: [
+                    "Finding broken code",
+                    "Evaluating deliverable to find errors",
+                    "A stage of all projects",
+                    "None"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which of the following issues must be addressed if a successful software testing strategy is to be implemented?",
+                options: [
+                    "Use effective formal technical reviews as a filter prior to testing",
+                    "Develop a testing plan that emphasizes rapid cycle testing",
+                    "State testing objectives explicitly",
+                    "All of the mentioned"
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "___________________ can be called as the global coupling.",
+                options: ["data coupling", "common coupling", "content coupling", "Stamp coupling"],
+                correctAnswer: "1"
+            },
+            {
+                question: "What type of cohesion is being exhibited, if all tasks must be executed in the same time-span?",
+                options: ["Functional Cohesion", "Temporal Cohesion", "Communicational Cohesion", "Sequential Cohesion"],
+                correctAnswer: "1"
+            },
+            {
+                question: "Total number of types of the association between the classes?",
+                options: ["1", "2", "3", "4"],
+                correctAnswer: "3"
+            },
+            {
+                question: "Coupling and cohesion metrics are the metrics in which of the following design level?",
+                options: ["Architectural design", "User interface design", "Component level design", "Pattern based design"],
+                correctAnswer: "2"
+            },
+            {
+                question: "We can define the relation of a class as",
+                options: [
+                    "A relationship between classes that tells how they are related",
+                    "A relationship between classes that tells how much power one class has over other class",
+                    "A relationship between classes that tells which parts of a class is visible to other classes",
+                    "All the mentioned"
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "Which of the following represents the relationship between two classes where one class is a specialized version of another class in a class diagram?",
+                options: ["Association", "Dependency", "Generalization", "Aggregation"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which of the following statement is not correct about Integration testing?",
+                options: [
+                    "Integration testing is a software testing technique that focuses on verifying the interactions and data exchange between different components or modules of a software application.",
+                    "The goal of integration testing is to identify any problems or bugs that arise when different components are combined and interact with each other.",
+                    "Integration testing is typically performed before unit testing and after system testing.",
+                    "It helps to identify and resolve integration issues early in the development cycle, reducing the risk of more severe and costly problems later on."
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Suppose you are planning to build a house and you are doing planning for the floor of a that house that is equivalent to which of the following design?",
+                options: ["Architectural design", "Component-level design", "Data design", "Interface design"],
+                correctAnswer: "0"
+            },
+            {
+                question: "When we are designing a system and we are taking it as the __________ box which specify the behaviour of a system.",
+                options: ["Clear Box", "Black Box", "State Box", "None"],
+                correctAnswer: "1"
+            },
+            {
+                question: "Composition is also a type of _______________ relationship.",
+                options: ["Aggregation", "Association", "Inheritance", "Both Aggregation and Association"],
+                correctAnswer: "1"
+            },
+            {
+                question: "Cyclomatic complexity is?",
+                options: ["White-box testing", "Black-box testing", "Grey-box testing", "None"],
+                correctAnswer: "0"
+            },
+            {
+                question: "The complete data structure is passed from one module to another, in which coupling?",
+                options: ["Control Coupling", "Stamp Coupling", "External Coupling", "Content Coupling"],
+                correctAnswer: "1"
+            },
+            {
+                question: "To model the vocabulary of a system, which of the following diagram is used in the design?",
+                options: ["Object Diagram", "Activity Diagram", "Interaction Diagram", "Class diagram"],
+                correctAnswer: "3"
+            },
+            {
+                question: "You are testing a new e-commerce website. A user reports that they are unable to add items to their shopping cart. What type of testing is most relevant to identify and resolve this issue?",
+                options: ["Unit Testing", "Integration Testing", "System Testing", "User Acceptance Testing (UAT)"],
+                correctAnswer: "2"
+            },
+            {
+                question: "A healthcare application is being tested to ensure that it remains responsive and stable even when there is a sudden increase in user activity, such as during a public health emergency. What type of testing is specifically focused on assessing the system's robustness under extreme conditions?",
+                options: ["Stress Testing", "System Testing", "Compatibility Testing", "Acceptance Testing"],
+                correctAnswer: "0"
+            },
+            {
+                question: "The detailed drawings of the access points and external utilities for a house is equivalent to which of the following design model?",
+                options: ["Architectural design", "Component-level design", "Data design", "Interface design"],
+                correctAnswer: "3"
+            },
+            {
+                question: "What is the primary goal of Unit Testing in Object-Oriented (OO) software?",
+                options: [
+                    "To test the entire system",
+                    "To test individual methods or classes in isolation",
+                    "To validate user requirements",
+                    "To perform integration testing"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which testing phase ensures that different modules or components work together correctly?",
+                options: ["Unit Testing", "Integration Testing", "System Testing", "Validation Testing"],
+                correctAnswer: "1"
+            },
+            {
+                question: "In Object-Oriented software, what is the smallest testable unit?",
+                options: ["Method", "Class", "Package", "Subsystem"],
+                correctAnswer: "0"
+            },
+            {
+                question: "Which of the following is NOT a type of testing in the OO context?",
+                options: ["Unit Testing", "Integration Testing", "System Testing", "Waterfall Testing"],
+                correctAnswer: "3"
+            },
+            {
+                question: "What is the main purpose of Validation Testing?",
+                options: [
+                    "To ensure the software meets user requirements",
+                    "To test individual components",
+                    "To integrate modules",
+                    "To debug the code"
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "Which of the following is a common strategy for Integration Testing in OO software?",
+                options: ["Big Bang Approach", "Waterfall Approach", "Spiral Approach", "Agile Approach"],
+                correctAnswer: "0"
+            },
+            {
+                question: "What is the focus of System Testing?",
+                options: [
+                    "Testing individual classes",
+                    "Testing the interaction between integrated components",
+                    "Testing the entire system as a whole",
+                    "Testing user interfaces only"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the term for a test that checks if a unit of code produces the expected output for a given input?",
+                options: ["Integration test", "Regression test", "Unit test", "Performance test"],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the main purpose of System Testing?",
+                options: [
+                    "To test individual methods or classes",
+                    "To ensure the entire system works as intended",
+                    "To validate user requirements",
+                    "To integrate modules"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which of the following is a key challenge in Integration Testing for OO software?",
+                options: [
+                    "Identifying individual methods to test",
+                    "Managing dependencies between classes",
+                    "Writing test cases for user interfaces",
+                    "Debugging the entire system"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which testing phase comes immediately after Unit Testing in the OO context?",
+                options: ["System Testing", "Validation Testing", "Integration Testing", "Regression Testing"],
+                correctAnswer: "2"
+            },
+            {
+                question: "What is the primary focus of test strategies for OO software?",
+                options: [
+                    "Ensuring code reusability",
+                    "Ensuring test coverage for classes and methods",
+                    "Reducing the number of test cases",
+                    "Focusing only on user interfaces"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which of the following is a benefit of automated Unit Testing?",
+                options: [
+                    "It reduces the need for Integration Testing",
+                    "It ensures faster execution of test cases",
+                    "It eliminates the need for System Testing",
+                    "It focuses only on user requirements"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "In OO software, what is the purpose of stubs in Integration Testing?",
+                options: [
+                    "To replace missing components or classes",
+                    "To test individual methods",
+                    "To validate user requirements",
+                    "To perform System Testing"
+                ],
+                correctAnswer: "0"
+            },
+            {
+                question: "Which of the following is a characteristic of System Testing?",
+                options: [
+                    "It is performed before Unit Testing",
+                    "It focuses on testing the entire system",
+                    "It is performed by developers",
+                    "It is used to test individual classes"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Scenario: A team is developing an OO-based e-commerce application. During Integration Testing, they encounter issues with the payment module interacting with the order processing module. What is the most likely cause of this issue?",
+                options: [
+                    "Lack of Unit Testing for individual classes",
+                    "Incompatible interfaces between modules",
+                    "Insufficient System Testing",
+                    "Poor user interface design"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Scenario: A developer writes Unit Tests for a class but forgets to test edge cases. What is the potential impact of this oversight?",
+                options: [
+                    "The class will fail during Integration Testing",
+                    "The class may produce incorrect results for unexpected inputs",
+                    "The System Testing phase will be delayed",
+                    "The user interface will not function properly"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Scenario: During System Testing, the team discovers that the application crashes when handling a large number of concurrent users. What type of testing was likely overlooked?",
+                options: ["Unit Testing", "Integration Testing", "Performance Testing", "Validation Testing"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Scenario: A team is using a bottom-up approach for Integration Testing in an OO project. What is the first step they should take?",
+                options: [
+                    "Test the user interface",
+                    "Test the lowest-level classes or methods",
+                    "Test the entire system",
+                    "Validate user requirements"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Scenario: A software team is preparing for Validation Testing. What is the most critical factor to ensure success?",
+                options: [
+                    "All Unit Tests have passed",
+                    "The software meets user requirements and expectations",
+                    "Integration Testing is complete",
+                    "The code is fully documented"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "What is the main objective of Basis Path Testing?",
+                options: [
+                    "To test the application’s user interface",
+                    "To test every possible input to the system",
+                    "To ensure all independent paths in the program are executed at least once",
+                    "To test external interfaces between systems"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which metric is used to measure the complexity of a program during Basis Path Testing?",
+                options: ["Test Coverage", "Cyclomatic Complexity", "Condition Testing", "Path Length"],
+                correctAnswer: "1"
+            },
+            {
+                question: "In Loop Testing, which type of loop is the easiest to test?",
+                options: ["Nested Loop", "Simple Loop", "Concatenated Loop", "Recursive Loop"],
+                correctAnswer: "1"
+            },
+            {
+                question: "What is a key characteristic of Condition Testing?",
+                options: [
+                    "It only verifies input/output interactions.",
+                    "It examines individual Boolean conditions in decision statements.",
+                    "It focuses on functional requirements.",
+                    "It tests loops with high iterations."
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which of the following techniques is NOT part of White-Box Testing?",
+                options: ["Basis Path Testing", "Loop Testing", "Boundary Value Analysis", "Condition Testing"],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which formula is used to calculate Cyclomatic Complexity?",
+                options: ["V(G) = E – N + 2P", "V(G) = N – E + 2P", "V(G) = N + E – 2P", "V(G) = E + N – 2P"],
+                correctAnswer: "0"
+            },
+            {
+                question: "In Loop Testing, what is the primary focus when testing nested loops?",
+                options: [
+                    "To test the inner loop only once",
+                    "To check loop boundaries independently",
+                    "To analyze all possible iterations of all loops",
+                    "To verify loop termination conditions"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which of the following is a valid test case for condition coverage?",
+                options: [
+                    "Executing one condition of a decision",
+                    "Evaluating all combinations of conditions",
+                    "Running the code without any conditions",
+                    "Checking only the 'True' outcome"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which white-box testing technique requires identifying the linearly independent paths in the code?",
+                options: ["Data Flow Testing", "Basis Path Testing", "Mutation Testing", "Error Guessing"],
+                correctAnswer: "1"
+            },
+            {
+                question: "Why is white box testing often referred to as 'glass box' testing?",
+                options: [
+                    "Because it involves testing transparent software",
+                    "Because the code is visible like glass",
+                    "Because it only tests the user interface",
+                    "Because it is fragile like glass"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which of the following correctly defines the independent paths in Basis Path Testing?",
+                options: [
+                    "The paths that include only conditional statements",
+                    "The paths that traverse each unique decision point at least once",
+                    "The paths that execute all possible input values",
+                    "The paths that contain only loop structures"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "What is the best way to test a nested loop using White-Box Testing?",
+                options: [
+                    "Test only the outer loop with boundary conditions",
+                    "Execute the inner loop once and the outer loop twice",
+                    "Perform zero iterations, one iteration, and maximum iterations for both loops",
+                    "Run the program with a single test case"
+                ],
+                correctAnswer: "2"
+            },
+            {
+                question: "Which statement about Cyclomatic Complexity is true?",
+                options: [
+                    "A higher complexity always means a program has more bugs",
+                    "It helps determine the number of independent test cases needed",
+                    "It is calculated using the number of function calls",
+                    "It is a measure of system performance"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Which of the following test cases is essential to check the loop termination condition?",
+                options: [
+                    "One test case where the loop runs zero times",
+                    "One test case where the loop runs at least once",
+                    "One test case where the loop executes the maximum number of iterations",
+                    "All of the above"
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "Which type of loop is the most complex to test in White-Box Testing?",
+                options: ["Simple loop", "Nested loop", "Concatenated loop", "Unstructured loop"],
+                correctAnswer: "1"
+            },
+            {
+                question: "Scenario: You are testing a payment processing system. The system applies a discount only if the user is a premium member and the purchase is above $100. Which conditions must you test for full decision coverage?",
+                options: [
+                    "(premium=True, amount=120), (premium=False, amount=90)",
+                    "(premium=True, amount=120), (premium=True, amount=80), (premium=False, amount=120)",
+                    "(premium=True, amount=100), (premium=False, amount=100)",
+                    "(premium=False, amount=80), (premium=True, amount=90)"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Scenario: A loop in your code processes incoming sensor data. It terminates if it receives an error or after 100 iterations. What is the best approach to test this loop?",
+                options: [
+                    "Execute the loop once with no error",
+                    "Inject an error on the 50th iteration and test boundary conditions (0, 100)",
+                    "Run the loop to 100 iterations without errors",
+                    "Check only the first and last iterations"
+                ],
+                correctAnswer: "1"
+            },
+            {
+                question: "Scenario: Consider a function that calculates taxes based on age:\nIf age < 18: No tax\nIf 18 ≤ age ≤ 60: 20% tax\nIf age > 60: 10% tax\nWhat test cases achieve full branch and condition coverage?",
+                options: [
+                    "(age=17), (age=25), (age=61)",
+                    "(age=18), (age=59), (age=60)",
+                    "(age=16), (age=30), (age=62)",
+                    "(age=17), (age=18), (age=60), (age=61)"
+                ],
+                correctAnswer: "3"
+            },
+            {
+                question: "A smart meter records energy consumption. A loop runs daily to verify the readings:\nIf consumption > threshold, alert is triggered.\nIf consumption < 0, an error is logged.\nWhich test cases ensure comprehensive loop and decision testing?",
+                options: [
+                    "(consumption=50), (consumption=150)",
+                    "(consumption=0), (consumption=-1), (consumption=100)",
+                    "(consumption=-5), (consumption=200)",
+                    "(consumption=-1), (consumption=0), (consumption=150)"
+                ],
+                correctAnswer: "3"
+            }
+        ];
+
+        function loadQuestion() {
+            const questionObj = allQuestions[currentQuestionIndex];
+            questionNumberEl.textContent = `Question ${currentQuestionIndex + 1} of ${allQuestions.length}`;
+            progressDisplayEl.textContent = `Progress: ${Math.round(((currentQuestionIndex + 1) / allQuestions.length) * 100)}%`;
+            scoreDisplayEl.textContent = `Score: ${score} / ${allQuestions.length}`;
+            
+            const questionText = questionObj.question.replace(/```java\n([\s\S]*?)\n```/g, '<code>$1</code>');
+            questionTextEl.innerHTML = questionText;
+            
+            optionsContainer.innerHTML = '';
+            nextBtn.style.display = "none";
+            restartBtn.style.display = "none";
+
+            questionObj.options.forEach((option, index) => {
+                const button = document.createElement("button");
+                button.textContent = option;
+                button.setAttribute("aria-label", `Option ${index + 1}: ${option}`);
+                button.addEventListener("click", () => selectAnswer(button, index));
+                button.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                        selectAnswer(button, index);
+                    }
+                });
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, index) {
+            const buttons = optionsContainer.querySelectorAll("button");
+            const correctIndex = Number(allQuestions[currentQuestionIndex].correctAnswer);
+            
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (index === correctIndex) {
+                button.classList.add("correct");
+                score++;
+            } else {
+                button.classList.add("wrong");
+                buttons[correctIndex].classList.add("correct");
+            }
+
+            scoreDisplayEl.textContent = `Score: ${score} / ${allQuestions.length}`;
+            if (currentQuestionIndex < allQuestions.length - 1) {
+                nextBtn.style.display = "block";
+            } else {
+                restartBtn.style.display = "block";
+            }
+        }
+
+        nextBtn.addEventListener("click", () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            }
+        });
+
+        restartBtn.addEventListener("click", () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            loadQuestion();
+        });
+
+        loadQuestion();
+    </script>
+</body>
+</html>
